@@ -81,17 +81,53 @@ Automate login and navigation to access cases requiring updates in the RDN Porta
     ```
   - **Note**: Click to sort in descending order (oldest updates first)
 
-### Step 6: Process Cases Iteratively
-- **Action**: Process multiple cases one by one
-- **Process**: 
-  1. Click first case ID number (bold link) in table
-  2. Process case data
-  3. Return to case listing
-  4. Repeat for next case (MVP: up to 10 cases)
+### Step 6: Navigate to Case Summary
+- **Action**: Click case ID number (bold link) in table
 - **Table**: `#casestable tbody tr:first-child` (inside mainFrame iframe)
 - **Link**: First case ID link - `a[href*="case_id="] b` (bold case number)
-- **Expected URL**: `/alpha_rdn/module/default/case2/?case_id={{case_id}}`
+- **Expected URL**: `https://app.recoverydatabase.net/alpha_rdn/module/default/case2/?case_id={{case_id}}#`
 - **Note**: Click the case ID number directly, not the "View Updates" link
+
+### Step 7: Navigate to Updates Tab
+- **Action**: Click the Updates tab on the case summary page
+- **Tab HTML**: 
+  ```html
+  <li class="nav-item" id="tab_6">
+      <a href="#" onclick="switchTab(6);return false;" class="nav-link">
+          <span id="tab_label_span_6">
+              <svg class="svg-inline--fa fa-info-circle fa-w-16 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="info-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                  <path fill="currentColor" d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"></path>
+              </svg>
+              <!-- <i class="fas fa-info-circle me-2"></i> Font Awesome fontawesome.com -->
+              <span class="js-label">Updates</span> 
+              <span class="js-count">
+                  <span class="badge rounded-pill d-inline-block ms-2 text-white">8</span>
+              </span>
+          </span>
+      </a>
+  </li>
+  ```
+- **Tab Selectors** (use any of these):
+  - `li#tab_6 a.nav-link`
+  - `a[onclick="switchTab(6);return false;"]`
+  - Target by Updates text: `span.js-label:contains("Updates")`
+- **Expected Result**: Updates tab content loads in the same page
+- **Note**: This triggers JavaScript function `switchTab(6)` - content loads dynamically
+
+### Step 8: Module 2 Handoff
+- **Action**: Module 2 takes over to process the updates
+- **Handoff Point**: Once Updates tab content is loaded
+- **Module 2 Tasks**: Handle all update operations within the tab
+- **Return Signal**: Module 2 signals completion to return to case listing
+
+### Step 9: Return to Case Listing and Iterate
+- **Action**: Navigate back to case update listing page
+- **Navigation**: Browser back or click "Case Update Needed Listing" link again
+- **Iteration**: 
+  1. Select next unprocessed case from the listing
+  2. Repeat Steps 6-8 for each case
+  3. Process up to 10 cases for MVP
+- **Tracking**: Mark processed cases to avoid duplicates
 
 ## Data Storage Schema
 
@@ -103,7 +139,9 @@ Automate login and navigation to access cases requiring updates in the RDN Porta
   - `last_update_date` (date)
   - `days_since_update` (integer)
   - `case_worker` (text)
-  - `status` (text)
+  - `status` (text) - Values: 'pending', 'in_progress', 'completed'
+  - `update_started_at` (timestamp) - When Module 2 starts processing
+  - `update_completed_at` (timestamp) - When Module 2 finishes
   - `extracted_at` (timestamp)
   - `created_at` (timestamp)
 
@@ -124,3 +162,19 @@ Automate login and navigation to access cases requiring updates in the RDN Porta
 - `{{password}}` - RDN Portal password
 - `{{security_code}}` - ID/Security code
 - `{{case_id}}` - Specific case number (extracted from listing)
+
+## Module Integration
+### Module 1 → Module 2 Handoff
+- **Handoff Point**: After clicking Updates tab (Step 7)
+- **Data Passed**: 
+  - Current `case_id`
+  - Session/authentication context
+  - Browser state with Updates tab loaded
+- **Module 2 Responsibilities**:
+  - Process all updates within the Updates tab
+  - Signal completion back to Module 1
+  
+### Module 2 → Module 1 Return
+- **Return Point**: After Module 2 completes update processing
+- **Return Action**: Navigate back to case listing
+- **Continue**: Process next case (up to 10 total)

@@ -2,6 +2,22 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Environment Setup
+
+1. Copy `.env.example` to `.env`:
+```bash
+cp .env.example .env
+```
+
+2. Add your RDN Portal credentials to the `.env` file:
+```
+RDN_USERNAME=your_username
+RDN_PASSWORD=your_password
+RDN_SECURITY_CODE=your_security_code
+```
+
+### Running the Application
+
 First, run the development server:
 
 ```bash

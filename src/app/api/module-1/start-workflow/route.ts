@@ -8,9 +8,13 @@ export async function POST() {
   try {
     // Get credentials from environment variables
     const credentials = {
-      username: 'Aayat',
-      password: 'ProTow4711!',
-      securityCode: '3107'
+      username: process.env.RDN_USERNAME || '',
+      password: process.env.RDN_PASSWORD || '',
+      securityCode: process.env.RDN_SECURITY_CODE || ''
+    }
+    
+    if (!credentials.username || !credentials.password || !credentials.securityCode) {
+      throw new Error('Missing RDN credentials in environment variables')
     }
     
     // Create new service instance

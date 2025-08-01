@@ -24,7 +24,7 @@ export function SignInForm() {
         redirectUrl: "/sso-callback",
         redirectUrlComplete: "/dashboard",
       });
-    } catch (_: unknown) {
+    } catch {
       setError("Failed to sign in with Microsoft");
       setIsLoading(false);
     }

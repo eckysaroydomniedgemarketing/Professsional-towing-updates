@@ -1,0 +1,444 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>DENNIS - 2174447548</title>
+    <style>
+        
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            #preview_label_image_print {
+                display: none;
+            }
+        }
+
+        #expiration_date {
+            display: none;
+        }
+
+        #sub_system_add {
+            display: none;
+        }
+
+        .warning {
+            background-image: url(/images/exclamation.png);
+            background-color: #fcc;
+            font-weight: bold;
+        }
+
+        .alert .error {
+            background-image: url(/images/exclamation.png);
+            background-color: #fcc;
+            font-weight: bold;
+        }
+
+        
+                
+        .section--top-margin .section {
+            margin-top: 1rem;
+        }
+
+        .nav-link {
+            color: #495057;
+        }
+
+        .modal-open{
+            overflow-y: auto !important;
+        }
+
+        .modal-content{
+            overflow-y: auto !important;
+        }
+        
+        /* Violence alert styling */
+        @keyframes flash-warning {
+            0%, 100% { background-color: #f8d7da; border-color: #f5c6cb; }
+            50% { background-color: #dc3545; border-color: #dc3545; color: white; }
+        }
+        .alert-violent {
+            animation: flash-warning 2s infinite;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .violence-level {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #dc3545;
+        }
+        .violence-details {
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+        .history-link {
+            float: right;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        
+    </style>
+
+
+    <link rel="stylesheet" type="text/css" href="/css/case_pages.css?v=2.78"/>
+
+            <link rel="stylesheet" href="/css/toolkit.css">
+    
+    <link type="text/css" rel="stylesheet" href="/css/facebox.css"/>
+    <link type="text/css" rel="stylesheet" href="/css/jquery.ui.all.css?v=2.78"/>
+    <link rel="stylesheet" type="text/css" href="/css/jquery.spellcheck.css">
+    <link rel="stylesheet" type="text/css" href="/css/case_color.css?v=2.78"/>
+    <link rel="stylesheet" type="text/css" href="/css/address_color.css?v=2.78"/>
+    <link rel="stylesheet" type="text/css" href="/css/skip/masterfiles.css?v=2.78"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/jquery-ui-timepicker-addon.css">
+    <link rel="stylesheet" type='text/css' href='/css/jquery.multiselect.css?v=2.78'>
+    <link rel="stylesheet" type='text/css' href='/css/jquery.multiselect.filter.css?v=2.78'>
+    <link href="/css/bootstrap5.multiselect.css" rel="stylesheet" type="text/css">
+    <script>
+        window.sfBaseUrl = '';
+    </script>
+    <link rel="stylesheet" href="/css/flatpickr.min.css">
+    <script src="/js/fontawesome/all.min.js" async></script>
+    <script src="/js/rdn.jquery-loader.js?v=2.78"></script>
+    <script src="/js/rdn.jquery-ui-loader.js?v=2.78"></script>
+    <script src="/js/alpha_rdn/service.js?v=2.78"></script>
+    <script src="/js/jquery.vertigro.js"></script>
+    <script src="/js/jquery.facebox.js"></script>
+    <script src="/js/jquery.spellcheck.js"></script>
+    <script src="/js/jquery.maskedinput.js"></script>
+    <script src="/js/jquery.send.js"></script>
+    <script src='/js/jstz.min.js?v=2.78'></script>
+    <script src='/js/rdn.json.js?v=2.78'></script>
+    <script src='/js/rdn.alert.js?v=2.78'></script>
+    <script src='/js/rdn.validate.js?v=2.78'></script>
+    <script src='/js/jquery.multiselect.min.js?v=2.78'></script>
+    <script src="/js/jquery.multiselect.filter.min.js?v=2.78"></script>
+    <script src='/js/support_widget.js?v=2.78'></script>
+    <script src="/js/jquery-ui-timepicker-addon.js"></script>
+    <script src="/js/plupload.full.min.2.3.9.js"></script>
+    <script src="/js/bootstrap5.bundle.min.js" defer></script>
+    <script src="/js/flatpickr.js"></script>
+    <script>
+        window.switchTabValue = '0';
+        window.current_tab = undefined;
+        window.case_id = 2174447548;
+        window.case_status = 'Open';
+        window.case_disp = '';
+        window.tabs = [];
+        window.disableTabs = false;
+
+                tabs[5] = [];
+        tabs[5]["label"] = "Print Order";
+        tabs[5]["isCustomHeader"] = "";
+                tabs[14] = [];
+        tabs[14]["label"] = "Photos / Docs";
+        tabs[14]["isCustomHeader"] = "";
+                tabs[7] = [];
+        tabs[7]["label"] = "Release";
+        tabs[7]["isCustomHeader"] = "";
+                tabs[85] = [];
+        tabs[85]["label"] = "Invoices";
+        tabs[85]["isCustomHeader"] = "";
+                tabs[8] = [];
+        tabs[8]["label"] = "Pay Adjuster";
+        tabs[8]["isCustomHeader"] = "";
+                tabs[9] = [];
+        tabs[9]["label"] = "Reminders";
+        tabs[9]["isCustomHeader"] = "";
+                tabs[3] = [];
+        tabs[3]["label"] = "Office Notes";
+        tabs[3]["isCustomHeader"] = "";
+                tabs[100] = [];
+        tabs[100]["label"] = "Bids / Auction";
+        tabs[100]["isCustomHeader"] = "";
+                tabs[11] = [];
+        tabs[11]["label"] = "Email / Faxes";
+        tabs[11]["isCustomHeader"] = "";
+                tabs[4] = [];
+        tabs[4]["label"] = "History";
+        tabs[4]["isCustomHeader"] = "";
+                tabs[13] = [];
+        tabs[13]["label"] = "Duplicate Case";
+        tabs[13]["isCustomHeader"] = "";
+                tabs[17] = [];
+        tabs[17]["label"] = "Skiptracing";
+        tabs[17]["isCustomHeader"] = "";
+                tabs[102] = [];
+        tabs[102]["label"] = "Complaints";
+        tabs[102]["isCustomHeader"] = "";
+                        tabs[12] = [];
+        tabs[12]["label"] = "Client";
+        tabs[12]["isCustomHeader"] = "";
+                tabs[10] = [];
+        tabs[10]["label"] = "Add Adjuster";
+        tabs[10]["isCustomHeader"] = "";
+                tabs[16] = [];
+        tabs[16]["label"] = "Adjusters";
+        tabs[16]["isCustomHeader"] = "";
+                tabs[6] = [];
+        tabs[6]["label"] = "Updates";
+        tabs[6]["isCustomHeader"] = "";
+                tabs[2] = [];
+        tabs[2]["label"] = "Recovery";
+        tabs[2]["isCustomHeader"] = "";
+                tabs[15] = [];
+        tabs[15]["label"] = "Forms";
+        tabs[15]["isCustomHeader"] = "";
+        
+        window.tz = jstz.determine();
+        window.user_timezone = tz.name();
+
+    </script>
+    <script src="/js/case_pages.js?v=2.78"></script>
+</head>
+<body>
+
+<div id="loading">
+    <div id="loading_inner" align="center">
+        <div><img src="/images/ajax_progress.gif"/> Loading...</div>
+    </div>
+</div>
+<div id="print_label_cover" style="z-index:100;"></div>
+<div id="print_label_prompt">
+    <table border="0" cellpadding="0" cellspacing="0" class="border">
+        <tr class="whitecell">
+            <td align="center" valign="middle">
+                <div class="text"><img src="/images/ajax_progress.gif"/> Loading...</div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="preview_label_prompt">
+    <table border="0" cellpadding="0" cellspacing="0" class="border" style="width:350px;">
+        <tr class="lightcell2">
+            <td class="sectiontitle" align="center" style="font-size: large; color: #FFF;">Label Preview</td>
+        </tr>
+        <tr class="lightcell2">
+            <td align="center" valign="middle" style="height:125px;">
+                <iframe id="preview_label_image" width="336" height="110" frameborder="0" marginwidth="0"
+                        marginheight="0" scrolling="no" src="/images/ajax_progress.gif"></iframe>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <iframe id="preview_label_image_print" width="1" height="1" frameborder="0" marginwidth="0"
+                        marginheight="0" scrolling="no" src=""></iframe>
+            </td>
+        </tr>
+        <tr class="lightcell2">
+            <td style="color: #FFF; font-family: verdana; font-size: 8pt;" align="center">This is a preview of how this
+                label will look<br>once printed using your Dymo label printer
+            </td>
+        </tr>
+        <tr class="lightcell2">
+            <td align="center">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td width="50%" align="center"><input id="printFileFolderButton" type="button"
+                                                              style="width:100px;" value="Print"
+                                                              onClick="printLabelPreview();"></td>
+                        <td width="50%" align="center"><input type="button" style="width:100px;" value="Done"
+                                                              onClick="hidePrompt('preview_label_prompt');"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="container-fluid">
+        <div class="section">
+        <div class="section__main">
+            <div class="row justify-content-between">
+                <div class='col-auto'><dt>Order Date</dt><dd class="" title="" style="width: auto; float: none; background: none;">2025-07-23</dd></div><div class='col-auto'><dt>Case #</dt><dd class="zero_to_thirty" title="This case is 0-30 days old" style="width: auto; float: none; background: none;">2174447548</dd></div><div class='col-auto'><dt>Ref. Number</dt><dd class="" title="" style="float: none; width: auto;">59692</dd></div>
+                <div class='col-auto'><dt>Client</dt><dd>ALS Resolvion (1st Placement)</dd></div><div class='col-auto'><dt>Collector</dt><dd>Automation ALSR</dd></div><div class='col-auto'><dt>Lien Holder</dt><dd>United Auto Credit Corporation</dd></div><div class='col-auto'><dt>Client Acct No</dt><dd>2172871113</dd></div><div class='col-auto'>
+					<dt>File Folder Labels</dt>
+					<dd class='text-center'><i class='btn-link fas fa-print' style='cursor:pointer' onclick="print_file_folder_label('print_label_prompt','2174447548','73054','MI7348541736');"></i></dd>
+              </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- cosigner violence banner -->
+        
+  
+        <div class="row flex-nowrap overflow-auto ms-0">
+        <div class="col-auto px-0 mt-3">
+            <ul class="nav nav-bar flex-column" id="newTabsLeft">
+                <li id="default" class="nav-item"><a class="nav-link active" onClick="switchTab(0);"
+                                                                   href="#"><i class="fas fa-home me-2"></i>My Summary</a></li>
+                                    <li id="tab_5" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(5);return
+                        false;" ><span
+                                id=tab_label_span_5><i class="fas me-2 fa-print"></i><span class="js-label">Print Order</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_14" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(14);return
+                        false;" ><span
+                                id=tab_label_span_14><i class="fas me-2 fa-camera"></i><span class="js-label">Photos / Docs</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_7" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(7);return
+                        false;" ><span
+                                id=tab_label_span_7><i class="fas me-2 fa-truck-loading"></i><span class="js-label">Release</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_85" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(85);return
+                        false;" ><span
+                                id=tab_label_span_85><i class="fas me-2 fa-file-invoice"></i><span class="js-label">Invoices</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_8" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(8);return
+                        false;" ><span
+                                id=tab_label_span_8><i class="fas me-2 fa-hand-holding-usd"></i><span class="js-label">Pay Adjuster</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_9" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(9);return
+                        false;" ><span
+                                id=tab_label_span_9><i class="fas me-2 fa-bell"></i><span class="js-label">Reminders</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_3" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(3);return
+                        false;" ><span
+                                id=tab_label_span_3><i class="fas me-2 fa-clipboard"></i><span class="js-label">Office Notes</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_100" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(100);return
+                        false;" ><span
+                                id=tab_label_span_100><i class="fas me-2 fa-gavel"></i><span class="js-label">Bids / Auction</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_11" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(11);return
+                        false;" ><span
+                                id=tab_label_span_11><i class="fas me-2 fa-mail-bulk"></i><span class="js-label">Email / Faxes</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_4" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(4);return
+                        false;" ><span
+                                id=tab_label_span_4><i class="fas me-2 fa-history"></i><span class="js-label">History</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_13" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(13);return
+                        false;" ><span
+                                id=tab_label_span_13><i class="fas me-2 fa-clone"></i><span class="js-label">Duplicate Case</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_17" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(17);return
+                        false;" ><span
+                                id=tab_label_span_17><i class="fas me-2 fa-fingerprint"></i><span class="js-label">Skiptracing</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_102" class="nav-item"><a class="nav-link"
+                                                                                 href="#"
+                        onclick="switchTab(102);return
+                        false;" ><span
+                                id=tab_label_span_102><i class="fas me-2 fa-exclamation-triangle"></i><span class="js-label">Complaints</span><span class="js-count"></span></span></a>
+                    </li>
+                            </ul>
+        </div>
+        <div class="col">
+            <!-- BEGIN TOP TABS -->
+            <div id="topcontainer">
+                <ul id="newTabsTop" class="nav nav-bar mt-3">
+                                            <li class="nav-item" id="tab_12">
+                            <a href="#" onclick="switchTab(12);return
+                            false;"  class="nav-link"><span
+                                    id=tab_label_span_12><i class="fas fa-university me-2"></i><span class="js-label">Client</span> <span class="js-count"></span> </span></a>
+                        </li>
+                                            <li class="nav-item" id="tab_10">
+                            <a href="#" onclick="switchTab(10);return
+                            false;"  class="nav-link"><span
+                                    id=tab_label_span_10><i class="fas fa-plus me-2"></i><span class="js-label">Add Adjuster</span> <span class="js-count"></span> </span></a>
+                        </li>
+                                            <li class="nav-item" id="tab_16">
+                            <a href="#" onclick="switchTab(16);return
+                            false;"  class="nav-link"><span
+                                    id=tab_label_span_16><i class="fas fa-users me-2"></i><span class="js-label">Adjusters</span> <span class="js-count"></span> </span></a>
+                        </li>
+                                            <li class="nav-item" id="tab_6">
+                            <a href="#" onclick="switchTab(6);return
+                            false;"  class="nav-link"><span
+                                    id=tab_label_span_6><i class="fas fa-info-circle me-2"></i><span class="js-label">Updates</span> <span class="js-count"></span> </span></a>
+                        </li>
+                                            <li class="nav-item" id="tab_2">
+                            <a href="#" onclick="switchTab(2);return
+                            false;"  class="nav-link"><span
+                                    id=tab_label_span_2><i class="fas fa-truck-pickup me-2"></i><span class="js-label">Recovery</span> <span class="js-count"></span> </span></a>
+                        </li>
+                                            <li class="nav-item" id="tab_15">
+                            <a href="#" onclick="switchTab(15);return
+                            false;"  class="nav-link"><span
+                                    id=tab_label_span_15><i class="fas fa-folder-open me-2"></i><span class="js-label">Forms</span> <span class="js-count"></span> </span></a>
+                        </li>
+                                    </ul>
+            </div>
+
+            <!-- BEGIN NEW CONTENT BOX -->
+            <div id="ContentBox">
+                <div id="modalDialog" class="section mt-3" style="display: none">
+                    <div class="section__main">
+                        <h1 id="modalDialog_title" class="section__title"></h1>
+                        <div id="modalDialog_html"></div>
+                        <input class="btn btn-warning mt-2" type="button"
+                                onClick="if (modalDialogSubmit())modalDialogSubmitDefault();$('#module_10110').load('_module.php?case_id='+case_id+'&module_id=10110');"
+                                value="Submit">
+                        <input class="btn btn-outline-secondary mt-2" type="button"
+                                onClick="if (modalDialogCancel()) modalDialogCancelDefault();"
+                                value="Cancel">
+                    </div>
+                </div>
+                <div id="ContentLoader" class="section--top-margin"></div>
+            </div>
+            <!-- END NEW CONTENT BOX -->
+
+
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <div>Powered By RDN &copy;1998-2025 Recovery Database Network, Inc. All rights reserved.</div>
+        <div><a href="https://www.recoverydatabase.net/privacy" target="_blank">Privacy Policy</a> | <a href="setup.php?case_ID=2174447548" onclick="this.className='loadinglink';this.innerHTML='&nbsp;Please wait...&nbsp;';">My Setup</a></div>
+        <div>Aayat VTeam (Investigator)</div>
+    </div>
+
+
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
+     id="formModal">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            ...
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-5" id="toast-container">
+
+</div>
+
+<template id="toast">
+    <div class="toast bg-success text-white font-weight-bold" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex align-items-center">
+            <div class="toast-body w-100"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</template>
+</body>
+</html>
