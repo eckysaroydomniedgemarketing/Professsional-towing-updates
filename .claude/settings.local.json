@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(rm:*)",
+      "WebFetch(domain:tailwindcss.com)",
+      "Bash(npx:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "mcp__supabase__list_projects",
+      "mcp__supabase__list_tables",
+      "mcp__supabase__list_extensions",
+      "Bash(npm search:*)",
+      "Bash(npm:*)",
+      "Bash(node:*)",
+      "Bash(ls:*)",
+      "Bash(claude mcp:*)",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_tab_list",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_type",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_select_option",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__supabase__list_migrations",
+      "mcp__supabase__execute_sql"
+    ],
+    "deny": []
+  }
+}

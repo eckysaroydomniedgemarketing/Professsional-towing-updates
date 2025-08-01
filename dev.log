@@ -1,0 +1,61 @@
+
+> professsional-towing-updates@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.4.4 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://10.255.255.254:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · webVitalsAttribution
+
+ ✓ Starting...
+ ⚠ Invalid next.config.ts options detected: 
+ ⚠     Unrecognized key(s) in object: 'telemetry'
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ✓ Ready in 23.5s
+ ○ Compiling /_not-found/page ...
+ ✓ Compiled /_not-found/page in 5.8s
+ GET /auth/login 404 in 9326ms
+ GET /auth/login 404 in 748ms
+ GET / 404 in 1908ms
+ GET /login 404 in 1537ms
+   Reload env: .env.local
+[Error: ENOENT: no such file or directory, scandir '/mnt/c/github/professsional-towing-updates/app'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'scandir',
+  path: '/mnt/c/github/professsional-towing-updates/app'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, scandir '/mnt/c/github/professsional-towing-updates/app'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'scandir',
+  path: '/mnt/c/github/professsional-towing-updates/app'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, scandir '/mnt/c/github/professsional-towing-updates/app'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'scandir',
+  path: '/mnt/c/github/professsional-towing-updates/app'
+}
+Error: Cannot apply unknown utility class `border-border`. Are you using CSS modules or similar and missing `@reference`? https://tailwindcss.com/docs/functions-and-directives#reference-directive
+    [2m[at onInvalidCandidate (/mnt/c/github/professsional-towing-updates/node_modules/tailwindcss/dist/lib.js:18:1312)][0m
+    [2m[at ge (/mnt/c/github/professsional-towing-updates/node_modules/tailwindcss/dist/lib.js:13:29803)][0m
+    [2m[at /mnt/c/github/professsional-towing-updates/node_modules/tailwindcss/dist/lib.js:18:373][0m
+    [2m[at I (/mnt/c/github/professsional-towing-updates/node_modules/tailwindcss/dist/lib.js:3:1656)][0m
+    [2m[at je (/mnt/c/github/professsional-towing-updates/node_modules/tailwindcss/dist/lib.js:18:172)][0m
+    [2m[at bi (/mnt/c/github/professsional-towing-updates/node_modules/tailwindcss/dist/lib.js:35:780)][0m
+    [2m[at process.processTicksAndRejections (node:internal/process/task_queues:95:5)][0m
+    [2m[at async yi (/mnt/c/github/professsional-towing-updates/node_modules/tailwindcss/dist/lib.js:35:1123)][0m
+    [2m[at async _r (/mnt/c/github/professsional-towing-updates/node_modules/@tailwindcss/node/dist/index.js:10:3384)][0m
+    [2m[at async p (/mnt/c/github/professsional-towing-updates/node_modules/@tailwindcss/postcss/dist/index.js:10:4019)][0m
+ ✓ Compiled in 18.7s
+ ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+   ▲ Next.js 15.4.4 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://10.255.255.254:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 36.3s
