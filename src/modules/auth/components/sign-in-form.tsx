@@ -24,7 +24,7 @@ export function SignInForm() {
         redirectUrl: "/sso-callback",
         redirectUrlComplete: "/dashboard",
       });
-    } catch (err: any) {
+    } catch (_: unknown) {
       setError("Failed to sign in with Microsoft");
       setIsLoading(false);
     }
@@ -48,8 +48,9 @@ export function SignInForm() {
       } else {
         setError("Please complete the sign-in process");
       }
-    } catch (err: any) {
-      setError(err.errors?.[0]?.message || "Invalid email or password");
+    } catch (err: unknown) {
+      const error = err as { errors?: Array<{ message?: string }> };
+      setError(error.errors?.[0]?.message || "Invalid email or password");
     } finally {
       setIsLoading(false);
     }

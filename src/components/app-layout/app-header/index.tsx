@@ -3,11 +3,7 @@ import { MobileMenu } from "./mobile-menu";
 import { NavigationSection } from "./navigation-section";
 import { UserSection } from "./user-section";
 
-export interface AppHeaderProps {
-  className?: string;
-}
-
-export function AppHeader({ className }: AppHeaderProps) {
+export function AppHeader() {
   return (
     <header
       className="sticky top-0 z-40 w-full border-b bg-sky-600 text-white shadow-sm"

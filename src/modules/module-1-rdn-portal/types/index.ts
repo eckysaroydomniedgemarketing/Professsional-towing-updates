@@ -42,5 +42,5 @@ export interface NavigationResult {
   success: boolean
   nextStep: NavigationStep
   error?: string
-  data?: any
+  data?: unknown
 }

@@ -51,7 +51,7 @@ export default async function DashboardPage() {
             <div className="flex flex-col space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-emerald-700">
-                  Today's Revenue
+                  Today&apos;s Revenue
                 </span>
                 <DollarSign className="h-5 w-5 text-emerald-600" />
               </div>

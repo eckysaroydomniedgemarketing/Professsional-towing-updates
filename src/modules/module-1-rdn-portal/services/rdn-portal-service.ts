@@ -1,4 +1,4 @@
-import { chromium, Browser, Page, BrowserContext } from 'playwright'
+import { chromium, Browser, Page, BrowserContext, Frame } from 'playwright'
 import { 
   RDNCredentials, 
   NavigationState, 
@@ -8,9 +8,7 @@ import {
 } from '../types'
 import { 
   waitForIframe, 
-  getIframeOrThrow, 
-  clickInIframe, 
-  selectInIframe 
+  getIframeOrThrow
 } from '../utils/iframe-helpers'
 
 export class RDNPortalService {
@@ -25,7 +23,7 @@ export class RDNPortalService {
 
   constructor(private credentials: RDNCredentials) {}
 
-  private log(step: string, message: string, data?: any) {
+  private log(step: string, message: string, data?: unknown) {
     if (this.debug) {
       const timestamp = new Date().toISOString()
       console.log(`[${timestamp}] [RDN-${step}]`, message, data ? JSON.stringify(data, null, 2) : '')
@@ -193,15 +191,15 @@ export class RDNPortalService {
     }
   }
 
-  private async applyFilterSelection(frame: any, caseWorker: string): Promise<void> {
+  private async applyFilterSelection(frame: Frame, caseWorker: string): Promise<void> {
     await frame.waitForSelector('select[name="case_worker"]', { timeout: 5000 })
     
-    const currentValue = await frame.$eval('select[name="case_worker"]', (el: any) => el.value)
+    const currentValue = await frame.$eval('select[name="case_worker"]', (el: unknown) => (el as HTMLSelectElement).value)
     this.log('STEP-5', 'Current case worker selection', { value: currentValue })
     
     await frame.selectOption('select[name="case_worker"]', caseWorker)
     
-    const selectedValue = await frame.$eval('select[name="case_worker"]', (el: any) => el.value)
+    const selectedValue = await frame.$eval('select[name="case_worker"]', (el: unknown) => (el as HTMLSelectElement).value)
     if (selectedValue !== caseWorker) {
       throw new Error(`Failed to select case worker: expected "${caseWorker}", got "${selectedValue}"`)
     }
@@ -216,7 +214,7 @@ export class RDNPortalService {
         this.page!.waitForNavigation({ timeout: 15000, waitUntil: 'networkidle' }),
         this.page!.waitForLoadState('networkidle', { timeout: 15000 })
       ])
-    } catch (e) {
+    } catch (_) {
       this.log('STEP-5', 'Wait strategies timed out')
     }
     
@@ -277,7 +275,7 @@ export class RDNPortalService {
     if (!header) throw new Error('Last Update column header not found')
     
     const currentSort = await header.getAttribute('aria-sort')
-    const hasDescClass = await header.evaluate((el: any) => el.classList.contains('sorting_desc'))
+    const hasDescClass = await header.evaluate((el: unknown) => (el as HTMLElement).classList.contains('sorting_desc'))
     
     if (currentSort !== 'descending' && !hasDescClass) {
       await header.click()
@@ -353,7 +351,7 @@ export class RDNPortalService {
           tableSelector = selector
           this.log('STEP-6', 'Table found with selector', { selector })
           break
-        } catch (e) {
+        } catch (_) {
           this.log('STEP-6', 'Selector not found, trying next', { selector })
         }
       }
@@ -487,7 +485,6 @@ export class RDNPortalService {
       
       if (!filterResult.success) {
         this.log('MULTI-CASE', 'Failed to re-apply filters')
-        lastResult = filterResult
         break
       }
       
