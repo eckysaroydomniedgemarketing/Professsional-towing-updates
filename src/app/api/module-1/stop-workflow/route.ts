@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server'
-import { portalService } from '../start-workflow/route'
+import { 
+  getPortalService, 
+  clearWorkflowState 
+} from '@/modules/module-1-rdn-portal/services/workflow-state.service'
 
 export async function POST() {
   try {
+    const portalService = getPortalService()
+    
     if (portalService) {
       await portalService.close()
+      clearWorkflowState()
     }
     
     return NextResponse.json({ 

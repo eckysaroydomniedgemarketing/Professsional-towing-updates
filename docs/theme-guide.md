@@ -11,19 +11,21 @@ The theme is configured in the following files:
 
 ## Color Palette
 
-The theme uses a blue-based color palette with proper contrast ratios for accessibility:
+Using shadcn/ui's blue theme with proper contrast ratios for accessibility.
 
 ### Light Mode
-- Primary: Blue hue (221.2 83.2% 53.3%)
-- Background: White
-- Foreground: Dark blue-gray
-- Accent and secondary colors follow a similar blue-gray palette
+- Primary: `hsl(221.2 83.2% 53.3%)` - Professional blue
+- Background: `hsl(0 0% 100%)` - White
+- Foreground: `hsl(222.2 84% 4.9%)` - Near black
+- Secondary: `hsl(210 40% 96.1%)` - Light blue-gray
+- Border: `hsl(214.3 31.8% 91.4%)` - Blue-tinted gray
 
 ### Dark Mode
-- Primary: Bright blue (217.2 91.2% 59.8%)
-- Background: Deep blue-gray (222.2 84% 4.9%)
-- Foreground: Very light blue-gray
-- Secondary and accent colors in darker blue-gray shades
+- Primary: `hsl(217.2 91.2% 59.8%)` - Bright blue
+- Background: `hsl(222.2 84% 4.9%)` - Deep navy
+- Foreground: `hsl(210 40% 98%)` - Near white
+- Secondary: `hsl(217.2 32.6% 17.5%)` - Dark blue-gray
+- Border: `hsl(217.2 32.6% 17.5%)` - Dark blue border
 
 ## Usage
 

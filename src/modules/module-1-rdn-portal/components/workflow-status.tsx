@@ -10,11 +10,13 @@ interface WorkflowStatusProps {
 }
 
 const WORKFLOW_STEPS = [
-  { key: NavigationStep.LOGIN_PAGE, label: "Navigate to Login", progress: 20 },
-  { key: NavigationStep.AUTHENTICATING, label: "Authenticate", progress: 40 },
-  { key: NavigationStep.DASHBOARD, label: "Dashboard Access", progress: 60 },
-  { key: NavigationStep.CASE_LISTING, label: "Case Listing", progress: 80 },
-  { key: NavigationStep.CASE_DETAIL, label: "Case Detail", progress: 100 }
+  { key: NavigationStep.LOGIN_PAGE, label: "Navigate to Login", progress: 15 },
+  { key: NavigationStep.AUTHENTICATING, label: "Authenticate", progress: 30 },
+  { key: NavigationStep.DASHBOARD, label: "Dashboard Access", progress: 45 },
+  { key: NavigationStep.CASE_LISTING, label: "Case Listing", progress: 60 },
+  { key: NavigationStep.CASE_DETAIL, label: "Case Detail", progress: 75 },
+  { key: NavigationStep.EXTRACTING_DATA, label: "Extracting Data (Order Type, etc.)", progress: 90 },
+  { key: NavigationStep.EXTRACTION_COMPLETE, label: "Data Extraction Complete", progress: 100 }
 ]
 
 export function WorkflowStatus({ currentStep, error }: WorkflowStatusProps) {

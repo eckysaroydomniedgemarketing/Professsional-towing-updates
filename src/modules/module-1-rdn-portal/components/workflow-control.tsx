@@ -6,7 +6,11 @@ import { WorkflowStatus } from './workflow-status'
 import { NavigationStep } from '../types'
 import { Play, Pause, RotateCcw, Eye } from 'lucide-react'
 
-export function WorkflowControl() {
+interface WorkflowControlProps {
+  onWorkflowComplete?: (caseId?: string) => void
+}
+
+export function WorkflowControl({ onWorkflowComplete }: WorkflowControlProps = {}) {
   const [isRunning, setIsRunning] = useState(false)
   const [currentStep, setCurrentStep] = useState<NavigationStep>(NavigationStep.INITIAL)
   const [error, setError] = useState<string>()
@@ -42,6 +46,15 @@ export function WorkflowControl() {
           } else if (status.currentStep === NavigationStep.CASE_DETAIL) {
             clearInterval(pollInterval)
             setIsRunning(false)
+            // Call completion callback when workflow finishes successfully
+            if (onWorkflowComplete) {
+              // Check for case ID in status data first, then fall back to URL extraction
+              const caseId = status.data?.caseId || (() => {
+                const caseIdMatch = status.currentUrl?.match(/case_id=(\d+)/)
+                return caseIdMatch ? caseIdMatch[1] : undefined
+              })()
+              onWorkflowComplete(caseId)
+            }
           }
         }
       }, 1000)

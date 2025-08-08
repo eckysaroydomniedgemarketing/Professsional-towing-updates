@@ -13,6 +13,11 @@ This file guides Claude Code when working with this repository.
 - **Auth**: Clerk.com
 - **Backend/DB**: Supabase
 
+## Supabase Configuration
+- **Project**: RDN (ONLY use this project)
+- **Project ID**: ebttpcsfdbkeotxnivha
+- **IMPORTANT**: Never use any other Supabase project. Always use the RDN project for all database operations.
+
 ## Architecture
 Feature-based modular structure:
 ```
@@ -35,6 +40,14 @@ Each module contains:
 - Minimal shared utilities (auth/DB only)
 - No shared UI components
 - Strong module boundaries
+
+## Module Integration Flow
+When "Start Workflow" is initiated:
+1. **Module 1**: Automated RDN portal login
+2. **Module 2**: Extract and populate case data
+3. **Module 3**: Begin case processing workflow
+
+All modules work sequentially - each module must complete successfully before the next begins.
 
 ## Development Guidelines
 1. **Organization**: Logical grouping, clear structure, separation of concerns

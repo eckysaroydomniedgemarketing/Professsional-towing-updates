@@ -1,0 +1,938 @@
+<html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete"><head>
+    <title>New Updates</title>
+	        <style type="text/css">svg:not(:root).svg-inline--fa{overflow:visible}.svg-inline--fa{display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em}.svg-inline--fa.fa-lg{vertical-align:-.225em}.svg-inline--fa.fa-w-1{width:.0625em}.svg-inline--fa.fa-w-2{width:.125em}.svg-inline--fa.fa-w-3{width:.1875em}.svg-inline--fa.fa-w-4{width:.25em}.svg-inline--fa.fa-w-5{width:.3125em}.svg-inline--fa.fa-w-6{width:.375em}.svg-inline--fa.fa-w-7{width:.4375em}.svg-inline--fa.fa-w-8{width:.5em}.svg-inline--fa.fa-w-9{width:.5625em}.svg-inline--fa.fa-w-10{width:.625em}.svg-inline--fa.fa-w-11{width:.6875em}.svg-inline--fa.fa-w-12{width:.75em}.svg-inline--fa.fa-w-13{width:.8125em}.svg-inline--fa.fa-w-14{width:.875em}.svg-inline--fa.fa-w-15{width:.9375em}.svg-inline--fa.fa-w-16{width:1em}.svg-inline--fa.fa-w-17{width:1.0625em}.svg-inline--fa.fa-w-18{width:1.125em}.svg-inline--fa.fa-w-19{width:1.1875em}.svg-inline--fa.fa-w-20{width:1.25em}.svg-inline--fa.fa-pull-left{margin-right:.3em;width:auto}.svg-inline--fa.fa-pull-right{margin-left:.3em;width:auto}.svg-inline--fa.fa-border{height:1.5em}.svg-inline--fa.fa-li{width:2em}.svg-inline--fa.fa-fw{width:1.25em}.fa-layers svg.svg-inline--fa{bottom:0;left:0;margin:auto;position:absolute;right:0;top:0}.fa-layers{display:inline-block;height:1em;position:relative;text-align:center;vertical-align:-.125em;width:1em}.fa-layers svg.svg-inline--fa{-webkit-transform-origin:center center;transform-origin:center center}.fa-layers-counter,.fa-layers-text{display:inline-block;position:absolute;text-align:center}.fa-layers-text{left:50%;top:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);-webkit-transform-origin:center center;transform-origin:center center}.fa-layers-counter{background-color:#ff253a;border-radius:1em;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;height:1.5em;line-height:1;max-width:5em;min-width:1.5em;overflow:hidden;padding:.25em;right:0;text-overflow:ellipsis;top:0;-webkit-transform:scale(.25);transform:scale(.25);-webkit-transform-origin:top right;transform-origin:top right}.fa-layers-bottom-right{bottom:0;right:0;top:auto;-webkit-transform:scale(.25);transform:scale(.25);-webkit-transform-origin:bottom right;transform-origin:bottom right}.fa-layers-bottom-left{bottom:0;left:0;right:auto;top:auto;-webkit-transform:scale(.25);transform:scale(.25);-webkit-transform-origin:bottom left;transform-origin:bottom left}.fa-layers-top-right{right:0;top:0;-webkit-transform:scale(.25);transform:scale(.25);-webkit-transform-origin:top right;transform-origin:top right}.fa-layers-top-left{left:0;right:auto;top:0;-webkit-transform:scale(.25);transform:scale(.25);-webkit-transform-origin:top left;transform-origin:top left}.fa-lg{font-size:1.3333333333em;line-height:.75em;vertical-align:-.0667em}.fa-xs{font-size:.75em}.fa-sm{font-size:.875em}.fa-1x{font-size:1em}.fa-2x{font-size:2em}.fa-3x{font-size:3em}.fa-4x{font-size:4em}.fa-5x{font-size:5em}.fa-6x{font-size:6em}.fa-7x{font-size:7em}.fa-8x{font-size:8em}.fa-9x{font-size:9em}.fa-10x{font-size:10em}.fa-fw{text-align:center;width:1.25em}.fa-ul{list-style-type:none;margin-left:2.5em;padding-left:0}.fa-ul>li{position:relative}.fa-li{left:-2em;position:absolute;text-align:center;width:2em;line-height:inherit}.fa-border{border:solid .08em #eee;border-radius:.1em;padding:.2em .25em .15em}.fa-pull-left{float:left}.fa-pull-right{float:right}.fa.fa-pull-left,.fab.fa-pull-left,.fal.fa-pull-left,.far.fa-pull-left,.fas.fa-pull-left{margin-right:.3em}.fa.fa-pull-right,.fab.fa-pull-right,.fal.fa-pull-right,.far.fa-pull-right,.fas.fa-pull-right{margin-left:.3em}.fa-spin{-webkit-animation:fa-spin 2s infinite linear;animation:fa-spin 2s infinite linear}.fa-pulse{-webkit-animation:fa-spin 1s infinite steps(8);animation:fa-spin 1s infinite steps(8)}@-webkit-keyframes fa-spin{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes fa-spin{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}.fa-rotate-90{-webkit-transform:rotate(90deg);transform:rotate(90deg)}.fa-rotate-180{-webkit-transform:rotate(180deg);transform:rotate(180deg)}.fa-rotate-270{-webkit-transform:rotate(270deg);transform:rotate(270deg)}.fa-flip-horizontal{-webkit-transform:scale(-1,1);transform:scale(-1,1)}.fa-flip-vertical{-webkit-transform:scale(1,-1);transform:scale(1,-1)}.fa-flip-both,.fa-flip-horizontal.fa-flip-vertical{-webkit-transform:scale(-1,-1);transform:scale(-1,-1)}:root .fa-flip-both,:root .fa-flip-horizontal,:root .fa-flip-vertical,:root .fa-rotate-180,:root .fa-rotate-270,:root .fa-rotate-90{-webkit-filter:none;filter:none}.fa-stack{display:inline-block;height:2em;position:relative;width:2.5em}.fa-stack-1x,.fa-stack-2x{bottom:0;left:0;margin:auto;position:absolute;right:0;top:0}.svg-inline--fa.fa-stack-1x{height:1em;width:1.25em}.svg-inline--fa.fa-stack-2x{height:2em;width:2.5em}.fa-inverse{color:#fff}.sr-only{border:0;clip:rect(0,0,0,0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}.sr-only-focusable:active,.sr-only-focusable:focus{clip:auto;height:auto;margin:0;overflow:visible;position:static;width:auto}.svg-inline--fa .fa-primary{fill:var(--fa-primary-color,currentColor);opacity:1;opacity:var(--fa-primary-opacity,1)}.svg-inline--fa .fa-secondary{fill:var(--fa-secondary-color,currentColor);opacity:.4;opacity:var(--fa-secondary-opacity,.4)}.svg-inline--fa.fa-swap-opacity .fa-primary{opacity:.4;opacity:var(--fa-secondary-opacity,.4)}.svg-inline--fa.fa-swap-opacity .fa-secondary{opacity:1;opacity:var(--fa-primary-opacity,1)}.svg-inline--fa mask .fa-primary,.svg-inline--fa mask .fa-secondary{fill:#000}.fad.fa-inverse{color:#fff}</style><link href="/css/toolkit.css" rel="stylesheet">
+	    <link href="/css/jquery.ui.all.css?v=2.78" rel="stylesheet">
+    <link rel="stylesheet" href="/css/jquery.multiselect.css?v=2.78">
+    <link rel="stylesheet" href="/css/jquery.multiselect.filter.css?v=2.78">
+    <link rel="stylesheet" href="/css/bootstrap5.multiselect.css">
+    <script src="/js/rdn.jquery-loader.js?v=2.78"></script><script src="/js/jquery-3.5.0.min.js" type="text/javascript"></script>
+    <script src="/js/rdn.jquery-ui-loader.js?v=2.78"></script><script src="/js/jquery-ui.min.js?v=1.12.1" type="text/javascript"></script>
+    <script src="/js/jquery.multiselect.min.js?v=2.78"></script>
+    <script src="/js/jquery.multiselect.filter.min.js?v=2.78"></script>
+    <script src="/js/bootstrap5.bundle.min.js"></script>
+    <script src="/js/rdn.toaster.js"></script>
+    <script src="/js/fontawesome/all.min.js" async=""></script>
+    <script>
+        "use strict";
+
+        function toggleSelectAll(el, type) {
+            var text = $(el).html().trim();
+            if (text === "Select All") {
+                $('input.js-' + type + '-update-check').prop('checked', true);
+                $(el).html('Unselect All');
+            } else {
+                $('input.js-' + type + '-update-check').prop('checked', false);
+                $(el).html('Select All');
+            }
+        }
+
+        function removeUpdates(type, updates) {
+            var form = $('#js-remove-update-form');
+            var actionUrl = form.attr('action');
+            var formData = form.serializeArray();
+            for (var i = 0; i < updates.length; i++) {
+                formData.push({ name: "update_id[]", value: updates[i] });
+            }
+            $.post(actionUrl, formData, function() {
+                var numberOfUserOwnedUpdates = 0;
+                for (var i = 0; i < updates.length; i++) {
+                    var updateElement = $('.js-' + type + '-update-' + updates[i]);
+                    if (updateElement.hasClass('js-user-owned')) numberOfUserOwnedUpdates++;
+                    updateElement.remove();
+                }
+                if (window !== window.parent) parent.decrementNewUpdateCounterBadge(numberOfUserOwnedUpdates);
+                RDN.toaster.toast('Updates were removed.');
+            }).fail(function() {
+                RDN.toaster.toast('Unable to remove updates.', true);
+            });
+        }
+
+        function removeSelected(type) {
+            var updates = $('input.js-' + type + '-update-check:checked').map(function() {
+                return $(this).val();
+            }).get();
+            if (!updates.length) {
+                RDN.toaster.toast('No updates are selected.', true);
+                return;
+            }
+            if(confirm('Are you sure you wish to delete these ' + updates.length + ' updates? This cannot be undone.')) {
+                removeUpdates(type, updates);
+            }
+        }
+
+        $(function () {
+            $(".js-select-all-new").click(function () {
+                toggleSelectAll(this, "new")
+            });
+            $(".js-select-all-inv").click(function () {
+                toggleSelectAll(this, "inv")
+            });
+
+            $(".js-remove-selected-new").click(function () {
+                removeSelected("new");
+            });
+            $(".js-remove-selected-inv").click(function () {
+                removeSelected("inv");
+            });
+
+            $(".js-remove-new").click(function() {
+                var updateId = $(this).data("id");
+                removeUpdates("new", [updateId]);
+            });
+            $(".js-remove-inv").click(function() {
+                var updateId = $(this).data("id");
+                removeUpdates("inv", [updateId]);
+            });
+
+            $('.js-multiselect').each(function () {
+                var $this = $(this);
+                $this.data('dirty', false);
+                var targetSubmit = $this.data('target-submit');
+                $(function () {
+                    $this.multiselect({
+                        noneSelectedText: "ALL",
+                        selectedList: 10,
+                        buttonWidth: "100%",
+                        classes: "form-select",
+                        position: {my: 'bottom', at: 'top', collision: 'flip'},
+                        close: function () {
+                            if ($this.data('dirty')) {
+                                $('#' + targetSubmit).submit();
+                            }
+                        }
+                    })
+                    .multiselectfilter().on("multiselectclick multiselectcheckall multiselectuncheckall", function () {
+                        $this.data('dirty', true);
+                    });
+                })
+            });
+
+            RDN.toaster.initialize();
+        });
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+
+<form method="post" action="remove_update.php" id="js-remove-update-form"><!-- csrf done -->
+    <input type="hidden" name="_csrf_token" value="31cae5d242084a6389430fe5284ce40d" id="csrf_token">    <input type="hidden" name="action" value="remove_these">
+</form>
+
+<div id="new_updates">
+    <div class="mx-1 mt-2 d-flex justify-content-between">
+        <h1 class="h2">New Updates</h1>
+                    <a class="align-self-center" href="#investigator_updates"><svg class="svg-inline--fa fa-arrow-down fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"></path></svg><!-- <i class="fas fa-arrow-down"></i> Font Awesome fontawesome.com --> Go to Investigator Updates</a>
+            </div>
+
+    <div class="card card-body">
+        <form id="filter_updates" name="filter_updates">
+            <div class="row">
+                <div class="col-sm-4">
+                    <label class="form-label">Limit Updates To</label>
+                    <select class="form-select" name="case_worker" onchange="submit();">
+                        <option value="ALL">
+                            Show All
+                        </option>
+                        <option value="MINE" selected="">
+                            Show Mine
+                        </option>
+                                                    <option value="Assistant,Virtual,310774061">
+                                Assistant, Virtual [MI7348541736]                            </option>
+                                                    <option value="Briem,Angie,592802">
+                                Briem, Angie [MI7348541736]                            </option>
+                                                    <option value="Cubepros,Briana,310775271">
+                                Cubepros, Briana [MI7348541736]                            </option>
+                                                    <option value="Freeman,Matt,592817">
+                                Freeman, Matt [MI7348541736]                            </option>
+                                                    <option value="Harrell,Bill,310774064">
+                                Harrell, Bill [MI7348541736]                            </option>
+                                                    <option value="Jones,Brandon,310791919">
+                                Jones, Brandon [MI7348541736]                            </option>
+                                                    <option value="Jones,Randy,3107104945">
+                                Jones, Randy [MI7348541736]                            </option>
+                                                    <option value="Motyka,Edward,592832">
+                                Motyka, Edward [MI7348541736]                            </option>
+                                                    <option value="Parker,Coty,310775604">
+                                Parker, Coty [MI7348541736]                            </option>
+                                                    <option value="Ryan,Miller,3107104943">
+                                Ryan, Miller [MI7348541736]                            </option>
+                                                    <option value="Shinsky,Brian,592834">
+                                Shinsky, Brian [MI7348541736]                            </option>
+                                                    <option value="Speaker,Brigett,592833">
+                                Speaker, Brigett [MI7348541736]                            </option>
+                                                    <option value="Vanbrimer,Sheila,3107104941">
+                                Vanbrimer, Sheila [MI7348541736]                            </option>
+                                                    <option value="VTeam,Aayat,310774062">
+                                VTeam, Aayat [MI7348541736]                            </option>
+                                                    <option value="VTeam,Priyanka,310774063">
+                                VTeam, Priyanka [MI7348541736]                            </option>
+                                                    <option value="Whiteman,Alexandra,310775603">
+                                Whiteman, Alexandra [MI7348541736]                            </option>
+                                                    <option value="Wilson,Anthony,592838">
+                                Wilson, Anthony [MI7348541736]                            </option>
+                                                    <option value="Wintersmith,Nick,592822">
+                                Wintersmith, Nick [MI7348541736]                            </option>
+                                                    <option value="Zenk,Tayler,592816">
+                                Zenk, Tayler [MI7348541736]                            </option>
+                                            </select>
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label">Sort By</label>
+                    <select class="form-select" name="order" onchange="submit();">
+                        <option value="priority">
+                            High Priority First
+                        </option>
+                        <option value="date">
+                            Newest First
+                        </option>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label">Limit Type To</label>
+                    <select class="form-select" name="type" onchange="submit();">
+                        <option selected="">
+                            ALL
+                        </option>
+                        <option>
+                            Agent
+                        </option>
+                        <option>
+                            Agent Recovery
+                        </option>
+                        <option>
+                            Client
+                        </option>
+                        <option>
+                            Agent C/R
+                        </option>
+                        <option>
+                            User
+                        </option>
+                        <option>
+                            Discount
+                        </option>
+                        <option>
+                            Check-In
+                        </option>
+                        <option>
+                            System
+                        </option>
+                        <option>
+                            Clearplan Note
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-sm-4">
+                    <label class="form-label" for="clients">Limit Client To</label>
+                    <select name="clients[]" id="clients" class="js-multiselect" data-target-submit="filter_updates" multiple="" style="display: none;">
+                                                                                                                    <option value="2634032">
+                                    MVTrac                                </option>
+                                                                                                                                                <option value="1164048">
+                                    Loss Prevention Services MS, LP (Primary)                                </option>
+                                                                        </select><button class="ui-multiselect ui-widget ui-state-default ui-corner-all form-select" type="button" title="" tabindex="0" id="clients_ms" style="width: 601.391px;"><span class="ui-multiselect-open" title="Open"><span class="ui-icon ui-icon-triangle-1-s"></span></span><span>ALL</span></button>
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="lienholders">Limit Lienholder To</label>
+                    <select name="lienholders[]" id="lienholders" class="js-multiselect" data-target-submit="filter_updates" multiple="" style="display: none;">
+                                                                                                                    <option value="3107980">
+                                    CarMax Auto Finance                                </option>
+                                                                                                                                                <option value="1840632">
+                                    Bridgecrest Credit Company, LLC                                </option>
+                                                                                                                                                <option value="1496215">
+                                    Consumer Portfolio Services                                </option>
+                                                                        </select><button class="ui-multiselect ui-widget ui-state-default ui-corner-all form-select" type="button" title="" tabindex="0" id="lienholders_ms" style="width: 601.391px;"><span class="ui-multiselect-open" title="Open"><span class="ui-icon ui-icon-triangle-1-s"></span></span><span>ALL</span></button>
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="case_ids">Limit Case To</label>
+                    <select name="case_ids[]" id="case_ids" class="js-multiselect" data-target-submit="filter_updates" multiple="" style="display: none;">
+                                                                                                                    <option value="2175484108">
+                                    2175484108                                </option>
+                                                                                                                                                <option value="2175479818">
+                                    2175479818                                </option>
+                                                                                                                                                <option value="2170879904">
+                                    2170879904                                </option>
+                                                                        </select><button class="ui-multiselect ui-widget ui-state-default ui-corner-all form-select" type="button" title="" tabindex="0" id="case_ids_ms" style="width: 601.391px;"><span class="ui-multiselect-open" title="Open"><span class="ui-icon ui-icon-triangle-1-s"></span></span><span>ALL</span></button>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-sm-4">
+                    <label class="form-label" for="days_since_update">Update Date Within</label>
+                    <select name="days_since_update" id="days_since_update" class="form-select" onchange="submit();">
+                        <option value="1">Last 24 Hours</option>
+                        <option value="3">Last 3 Days</option>
+                        <option value="7">Last 7 Days</option>
+                        <option value="30">Last 30 Days</option>
+                        <option value="60">Last 60 Days</option>
+                        <option value="90">Last 90 Days</option>
+                        <option value="all">All Time</option>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label" for="case_status">Limit Case Status To</label>
+                    <select name="case_status[]" id="case_status" class="js-multiselect" data-target-submit="filter_updates" multiple="" style="display: none;">
+                                                    <option value="Open">
+                                Open                            </option>
+                                                    <option value="Closed">
+                                Closed                            </option>
+                                                    <option value="On Hold">
+                                On Hold                            </option>
+                                                    <option value="Pending On Hold">
+                                Pending On Hold                            </option>
+                                                    <option value="Repossessed">
+                                Repossessed                            </option>
+                                                    <option value="Charged Off">
+                                Charged Off                            </option>
+                                                    <option value="Completed">
+                                Completed                            </option>
+                                                    <option value="Completed-Located">
+                                Completed-Located                            </option>
+                                                    <option value="Office Transfer">
+                                Office Transfer                            </option>
+                                                    <option value="Need Info">
+                                Need Info                            </option>
+                                                    <option value="Hold For Billing">
+                                Hold For Billing                            </option>
+                                                    <option value="Auction">
+                                Auction                            </option>
+                                            </select><button class="ui-multiselect ui-widget ui-state-default ui-corner-all form-select" type="button" title="" tabindex="0" id="case_status_ms" style="width: 601.391px;"><span class="ui-multiselect-open" title="Open"><span class="ui-icon ui-icon-triangle-1-s"></span></span><span>ALL</span></button>
+                </div>
+            </div>
+        </form>
+
+        <div class="text-muted mt-2">
+            <span class="fw-bold">View Updates</span> - Opens update page for the associated case.
+        </div>
+        <div class="text-muted mt-1">
+            <span class="fw-bold">Remove From List</span> - Removes update from this list (does <span class="fw-bold">not</span> delete update).
+        </div>
+        <div class="text-muted mt-1">
+            <span class="fw-bold">View Case and Remove From List</span> - Opens case summary page and removes the update from this list.
+        </div>
+    </div>
+
+    <div class="sticky-top mt-4 py-2 alert alert-warning d-flex justify-content-between">
+        <div class="h4 align-self-center">New Updates</div>
+        <div>
+            <button class="btn btn-primary js-select-all-new" type="button">
+                Select All
+            </button>
+            <button class="btn btn-secondary js-remove-selected-new" type="button">
+                Remove Selected
+            </button>
+        </div>
+    </div>
+
+            <div class="update js-new-update-4335824292 js-user-owned">
+                            <h5><span class="badge bg-danger p-2">HIGH PRIORITY UPDATE</span></h5>
+                        <div class="update__status">
+                <div class="status" style="color: blue">
+                    Client                </div>
+            </div>
+            <div class="update__section">
+                <div class="text-list">
+                    <div class="text-list__column text-right fw-bold">
+                        <div>
+                            <input type="checkbox" class="form-check-input js-new-update-check" name="update_id[]" value="4335824292">
+                            Case Number
+                        </div>
+                        <div>Case Status</div>
+                        <div>Added By</div>
+                        <div>Case Worker</div>
+                        <div>Update Date</div>
+                        <div>Debtor Name</div>
+                        <div>Client</div>
+                        <div>Lienholder</div>
+                        <div>Vehicle</div>
+                                            </div>
+                    <div class="text-list__column">
+                                                    <div>
+                                <a href="/alpha_rdn/module/default/case2/?case_ID=2175484108">2175484108 </a>
+                            </div>
+                                                    
+                        <div>
+                            Repossessed                        </div>
+
+                        <div>
+                                                            MVTrac  (MVTrac)                                                    </div>
+
+                        <div>
+                             &nbsp;
+                        </div>
+
+                        <div>2025-08-07 22:19:13</div>
+                        <div>MURRIL, TIFFENY</div>
+                        <div>MVTrac, </div>
+                        <div>CarMax Auto Finance</div>
+                        <div>2017 FORD Explorer</div>
+
+                                            </div>
+                </div>
+            </div>
+            <div class="update__section">
+                <div class="well">
+                    Please provide a key quote, key type, and key ETA - if you are unable to provide a key quote please advise if a 3rd party locksmith is allowed and if you have full access to all personal property.                </div>
+            </div>
+                            <div class="update__section">
+                    <a class="btn btn-warning" target="case2175484108" href="/alpha_rdn/module/default/case2/?tab=6&amp;case_id=2175484108">
+                        View Updates
+                    </a>
+                    <button type="button" class="btn btn-secondary js-remove-new" data-id="4335824292">
+                        Remove From List
+                    </button>
+                    <a class="btn btn-secondary js-remove-new" data-id="4335824292" target="case2175484108" href="/alpha_rdn/module/default/case2/?tab=6&amp;case_id=2175484108">
+                        View Case And Remove From List
+                    </a>
+                </div>
+                    </div>
+            <div class="update js-new-update-4335825270 js-user-owned">
+                        <div class="update__status">
+                <div class="status" style="color: black">
+                    User                </div>
+            </div>
+            <div class="update__section">
+                <div class="text-list">
+                    <div class="text-list__column text-right fw-bold">
+                        <div>
+                            <input type="checkbox" class="form-check-input js-new-update-check" name="update_id[]" value="4335825270">
+                            Case Number
+                        </div>
+                        <div>Case Status</div>
+                        <div>Added By</div>
+                        <div>Case Worker</div>
+                        <div>Update Date</div>
+                        <div>Debtor Name</div>
+                        <div>Client</div>
+                        <div>Lienholder</div>
+                        <div>Vehicle</div>
+                                            </div>
+                    <div class="text-list__column">
+                                                    <div>
+                                <a href="/alpha_rdn/module/default/case2/?case_ID=2170879904">2170879904 </a>
+                            </div>
+                                                    
+                        <div>
+                            Closed                        </div>
+
+                        <div>
+                                                            Matt Freeman (Professional Towing and Recovery, LLC)                                                    </div>
+
+                        <div>
+                             &nbsp;
+                        </div>
+
+                        <div>2025-08-07 22:22:02</div>
+                        <div>CHRISTY, ROBERT</div>
+                        <div>Loss Prevention Services MS, LP (Primary), </div>
+                        <div>Consumer Portfolio Services</div>
+                        <div>2016 BUICK ENCORE</div>
+
+                                            </div>
+                </div>
+            </div>
+            <div class="update__section">
+                <div class="well">
+                    10:22:02 PM (Arizona) - Account Closed. Notes: Unknown                </div>
+            </div>
+                            <div class="update__section">
+                    <a class="btn btn-warning" target="case2170879904" href="/alpha_rdn/module/default/case2/?tab=6&amp;case_id=2170879904">
+                        View Updates
+                    </a>
+                    <button type="button" class="btn btn-secondary js-remove-new" data-id="4335825270">
+                        Remove From List
+                    </button>
+                    <a class="btn btn-secondary js-remove-new" data-id="4335825270" target="case2170879904" href="/alpha_rdn/module/default/case2/?tab=6&amp;case_id=2170879904">
+                        View Case And Remove From List
+                    </a>
+                </div>
+                    </div>
+            <div class="update js-new-update-4335825006 js-user-owned">
+                        <div class="update__status">
+                <div class="status" style="color: black">
+                    User                </div>
+            </div>
+            <div class="update__section">
+                <div class="text-list">
+                    <div class="text-list__column text-right fw-bold">
+                        <div>
+                            <input type="checkbox" class="form-check-input js-new-update-check" name="update_id[]" value="4335825006">
+                            Case Number
+                        </div>
+                        <div>Case Status</div>
+                        <div>Added By</div>
+                        <div>Case Worker</div>
+                        <div>Update Date</div>
+                        <div>Debtor Name</div>
+                        <div>Client</div>
+                        <div>Lienholder</div>
+                        <div>Vehicle</div>
+                                            </div>
+                    <div class="text-list__column">
+                                                    <div>
+                                <a href="/alpha_rdn/module/default/case2/?case_ID=2175479818">2175479818 </a>
+                            </div>
+                                                    
+                        <div>
+                            Need Info                        </div>
+
+                        <div>
+                                                            Matt Freeman (Professional Towing and Recovery, LLC)                                                    </div>
+
+                        <div>
+                             &nbsp;
+                        </div>
+
+                        <div>2025-08-07 22:21:11</div>
+                        <div>Reinhart, Shelby</div>
+                        <div>Loss Prevention Services MS, LP (Primary), </div>
+                        <div>Bridgecrest Credit Company, LLC</div>
+                        <div>2016 Honda HR-V</div>
+
+                                            </div>
+                </div>
+            </div>
+            <div class="update__section">
+                <div class="well">
+                    A new fee request has been submitted on case ID 2175479818<br>
+<br>
+The fee request is for Dolly Fee in the amount of $75.00                </div>
+            </div>
+                            <div class="update__section">
+                    <a class="btn btn-warning" target="case2175479818" href="/alpha_rdn/module/default/case2/?tab=6&amp;case_id=2175479818">
+                        View Updates
+                    </a>
+                    <button type="button" class="btn btn-secondary js-remove-new" data-id="4335825006">
+                        Remove From List
+                    </button>
+                    <a class="btn btn-secondary js-remove-new" data-id="4335825006" target="case2175479818" href="/alpha_rdn/module/default/case2/?tab=6&amp;case_id=2175479818">
+                        View Case And Remove From List
+                    </a>
+                </div>
+                    </div>
+    </div>
+
+    <div id="investigator_updates">
+        <div class="mx-1 mt-5 d-flex justify-content-between">
+            <h1 class="h2">Investigator Updates</h1>
+            <a class="align-self-center" href="#top"><svg class="svg-inline--fa fa-arrow-up fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-up" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"></path></svg><!-- <i class="fas fa-arrow-up"></i> Font Awesome fontawesome.com --> Go to New Updates</a>
+        </div>
+
+        <div class="card card-body">
+            <form id="filter_inv_updates" name="filter_inv_updates">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label class="form-label">Limit Updates To</label>
+                        <select class="form-select" name="investigator" onchange="submit();">
+                            <option value="ALL">
+                                Show All
+                            </option>
+                            <option value="MINE" selected="">
+                                Show Mine
+                            </option>
+                                                                                        <option value="51008">
+                                    Admin, ProTow [MI7348541736]                                </option>
+                                                            <option value="67786">
+                                    Admin 2, ProTow [MI7348541736]                                </option>
+                                                            <option value="73053">
+                                    Assistant, Virtual [MI7348541736]                                </option>
+                                                            <option value="38864">
+                                    Briem, Angie [MI7348541736]                                </option>
+                                                            <option value="47276">
+                                    Campbell, Mike [MI7348541736]                                </option>
+                                                            <option value="103970">
+                                    Chapa, Jon [MI7348541736]                                </option>
+                                                            <option value="67785">
+                                    Crawford, Jordan [MI7348541736]                                </option>
+                                                            <option value="74263">
+                                    Cubepros, Briana [MI7348541736]                                </option>
+                                                            <option value="63595">
+                                    DeBruyne, Caden [MI7348541736]                                </option>
+                                                            <option value="63597">
+                                    Fleming, Clayton [MI7348541736]                                </option>
+                                                            <option value="3629">
+                                    Freeman, Jennifer [MI7348541736]                                </option>
+                                                            <option value="47273">
+                                    Freeman, Kelly [MI7348541736]                                </option>
+                                                            <option value="44601">
+                                    Freeman, Matt [MI7348541736]                                </option>
+                                                            <option value="51007">
+                                    Freeman, Matt [MI7348541736]                                </option>
+                                                            <option value="53418">
+                                    Freeman, Nick [MI7348541736]                                </option>
+                                                            <option value="53058">
+                                    Garcia, Jesse [MI7348541736]                                </option>
+                                                            <option value="73056">
+                                    Harrell, Bill [MI7348541736]                                </option>
+                                                            <option value="53059">
+                                    Hott, Katelynn [MI7348541736]                                </option>
+                                                            <option value="47279">
+                                    Hughes, Rebecca [MI7348541736]                                </option>
+                                                            <option value="47281">
+                                    Hutson, Chris [MI7348541736]                                </option>
+                                                            <option value="47275">
+                                    Johnson, Alex [MI7348541736]                                </option>
+                                                            <option value="90929">
+                                    Jones, Brandon [MI7348541736]                                </option>
+                                                            <option value="103968">
+                                    Jones, Randy [MI7348541736]                                </option>
+                                                            <option value="47277">
+                                    Kimler, Jessica [MI7348541736]                                </option>
+                                                            <option value="38865">
+                                    Kowalinski, Kristine [MI7348541736]                                </option>
+                                                            <option value="74594">
+                                    Kuczma, Erica [MI7348541736]                                </option>
+                                                            <option value="67791">
+                                    Lewis, Nathen [MI7348541736]                                </option>
+                                                            <option value="67792">
+                                    Lindsey, Jaworski [MI7348541736]                                </option>
+                                                            <option value="53060">
+                                    Lowe, Mary [MI7348541736]                                </option>
+                                                            <option value="97822">
+                                    Mann, Stu [MI7348541736]                                </option>
+                                                            <option value="67790">
+                                    Mercer, Brenda [MI7348541736]                                </option>
+                                                            <option value="110913">
+                                    Miller, Dustan [MI7348541736]                                </option>
+                                                            <option value="47280">
+                                    Montri, Jason [MI7348541736]                                </option>
+                                                            <option value="67787">
+                                    Motyka, Edward [MI7348541736]                                </option>
+                                                            <option value="47274">
+                                    Neumann, Noah [MI7348541736]                                </option>
+                                                            <option value="74596">
+                                    Parker, Coty [MI7348541736]                                </option>
+                                                            <option value="14578">
+                                    Peterson, Trista [MI7348541736]                                </option>
+                                                            <option value="63596">
+                                    Phleming, Clayton [MI7348541736]                                </option>
+                                                            <option value="103967">
+                                    Rachui, Brian [MI7348541736]                                </option>
+                                                            <option value="38866">
+                                    Ridgeway, Sue [MI7348541736]                                </option>
+                                                            <option value="103966">
+                                    Ryan, Miller [MI7348541736]                                </option>
+                                                            <option value="103969">
+                                    Schaffer, Greg [MI7348541736]                                </option>
+                                                            <option value="59788">
+                                    Scott, Gavin [MI7348541736]                                </option>
+                                                            <option value="38867">
+                                    Seymour, Heather [MI7348541736]                                </option>
+                                                            <option value="67789">
+                                    Shinsky, Brian [MI7348541736]                                </option>
+                                                            <option value="57785">
+                                    Sims, Chris [MI7348541736]                                </option>
+                                                            <option value="73052">
+                                    Spaziani, Mark [MI7348541736]                                </option>
+                                                            <option value="67788">
+                                    Speaker, Brigett [MI7348541736]                                </option>
+                                                            <option value="47278">
+                                    Stahl, Carl [MI7348541736]                                </option>
+                                                            <option value="74597">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="76834">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="77103">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="80850">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="80851">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="80852">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="80853">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="80854">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="83528">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="85578">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="85579">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="86589">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="86590">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="86591">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="86592">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="90922">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="90928">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="97820">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="97821">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="98077">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="103959">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="103960">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="103961">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="103962">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="103963">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="103965">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="104114">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="104476">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="104477">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="104891">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="105099">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="107211">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="107692">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="110837">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="111554">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="113724">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="113725">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="114143">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="114227">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="114282">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="114728">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="115196">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="115208">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="115249">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="116533">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="116660">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="117111">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="117610">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="117692">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="117693">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="117941">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="118448">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="118591">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="119035">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="119424">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="119425">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="119426">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="119427">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="119701">
+                                    User, New [MI7348541736]                                </option>
+                                                            <option value="103964">
+                                    Vanbrimer, Sheila [MI7348541736]                                </option>
+                                                            <option value="73054">
+                                    VTeam, Aayat [MI7348541736]                                </option>
+                                                            <option value="73055">
+                                    VTeam, Priyanka [MI7348541736]                                </option>
+                                                            <option value="67784">
+                                    Whiles, Kavn [MI7348541736]                                </option>
+                                                            <option value="74595">
+                                    Whiteman, Alexandra [MI7348541736]                                </option>
+                                                            <option value="70639">
+                                    Wilson, Anthony [MI7348541736]                                </option>
+                                                            <option value="53061">
+                                    Wintersmith, Nick [MI7348541736]                                </option>
+                                                            <option value="47282">
+                                    Zenk, Tayler [MI7348541736]                                </option>
+                                                    </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label">Limit Type To</label>
+                        <select class="form-select" name="type" onchange="submit();">
+                            <option selected="">
+                                ALL
+                            </option>
+                            <option>
+                                Agent
+                            </option>
+                            <option>
+                                Agent Recovery
+                            </option>
+                            <option>
+                                Client
+                            </option>
+                            <option>
+                                Agent C/R
+                            </option>
+                            <option>
+                                User
+                            </option>
+                            <option>
+                                Discount
+                            </option>
+                            <option>
+                                Check-In
+                            </option>
+                            <option>
+                                System
+                            </option>
+                            <option>
+                                Clearplan Note
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-4">
+                        <label class="form-label">Limit Client To</label>
+                        <select name="inv_clients[]" id="inv_clients" class="js-multiselect" data-target-submit="filter_inv_updates" multiple="" style="display: none;">
+                                                    </select><button class="ui-multiselect ui-widget ui-state-default ui-corner-all form-select" type="button" title="" tabindex="0" id="inv_clients_ms" style="width: 601.391px;"><span class="ui-multiselect-open" title="Open"><span class="ui-icon ui-icon-triangle-1-s"></span></span><span>ALL</span></button>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label">Limit Lienholder To</label>
+                        <select name="inv_lienholders[]" id="inv_lienholders" class="js-multiselect" data-target-submit="filter_inv_updates" multiple="" style="display: none;">
+                                                    </select><button class="ui-multiselect ui-widget ui-state-default ui-corner-all form-select" type="button" title="" tabindex="0" id="inv_lienholders_ms" style="width: 601.391px;"><span class="ui-multiselect-open" title="Open"><span class="ui-icon ui-icon-triangle-1-s"></span></span><span>ALL</span></button>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label">Limit Case To</label>
+                        <select name="inv_case_ids[]" id="inv_case_ids" class="js-multiselect" data-target-submit="filter_inv_updates" multiple="" style="display: none;">
+                                                    </select><button class="ui-multiselect ui-widget ui-state-default ui-corner-all form-select" type="button" title="" tabindex="0" id="inv_case_ids_ms" style="width: 601.391px;"><span class="ui-multiselect-open" title="Open"><span class="ui-icon ui-icon-triangle-1-s"></span></span><span>ALL</span></button>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-4">
+                        <label class="form-label" for="days_since_update_inv">Update Date Within</label>
+                        <select name="days_since_update" id="days_since_update_inv" class="form-select" onchange="submit();">
+                            <option value="1">Last 24 Hours</option>
+                            <option value="3">Last 3 Days</option>
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                            <option value="60">Last 60 Days</option>
+                            <option value="90">Last 90 Days</option>
+                            <option value="all">All Time</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label" for="inv_case_status">Limit Case Status To</label>
+                        <select name="inv_case_status[]" id="inv_case_status" class="js-multiselect" data-target-submit="filter_inv_updates" multiple="" style="display: none;">
+                                                            <option value="Open">
+                                    Open                                </option>
+                                                            <option value="Closed">
+                                    Closed                                </option>
+                                                            <option value="On Hold">
+                                    On Hold                                </option>
+                                                            <option value="Pending On Hold">
+                                    Pending On Hold                                </option>
+                                                            <option value="Repossessed">
+                                    Repossessed                                </option>
+                                                            <option value="Charged Off">
+                                    Charged Off                                </option>
+                                                            <option value="Completed">
+                                    Completed                                </option>
+                                                            <option value="Completed-Located">
+                                    Completed-Located                                </option>
+                                                            <option value="Office Transfer">
+                                    Office Transfer                                </option>
+                                                            <option value="Need Info">
+                                    Need Info                                </option>
+                                                            <option value="Hold For Billing">
+                                    Hold For Billing                                </option>
+                                                            <option value="Auction">
+                                    Auction                                </option>
+                                                    </select><button class="ui-multiselect ui-widget ui-state-default ui-corner-all form-select" type="button" title="" tabindex="0" id="inv_case_status_ms" style="width: 601.391px;"><span class="ui-multiselect-open" title="Open"><span class="ui-icon ui-icon-triangle-1-s"></span></span><span>ALL</span></button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="text-muted mt-2">
+                <span class="fw-bold">View Updates</span> - Opens update page for the associated case.
+            </div>
+            <div class="text-muted mt-1">
+                <span class="fw-bold">Remove From List</span> - Removes update from this list (does <span class="fw-bold">not</span> delete update).
+            </div>
+            <div class="text-muted mt-1">
+                <span class="fw-bold">View Case and Remove From List</span> - Opens case summary page and removes the update from this list.
+            </div>
+        </div>
+
+        <div class="sticky-top mt-4 py-2 alert alert-warning d-flex justify-content-between">
+            <div class="h4 align-self-center">Investigator Updates</div>
+            <div>
+                <button class="btn btn-primary js-select-all-inv" type="button">
+                    Select All
+                </button>
+                <button class="btn btn-secondary js-remove-selected-inv" type="button">
+                    Remove Selected
+                </button>
+            </div>
+        </div>
+
+            </div>
+</div>
+
+
+<div>
+        <div class="toast-container position-fixed bottom-0 end-0 p-5" id="toast-container">
+        
+        </div>
+        <template id="toast">
+            <div class="toast bg-success text-white font-weight-bold" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex align-items-center">
+                <div class="toast-body"></div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </template>
+        </div><div class="ui-multiselect-menu ui-widget ui-widget-content ui-corner-all form-select"><div class="ui-multiselect-header ui-widget-header ui-corner-all ui-helper-clearfix ui-multiselect-hasfilter"><div class="ui-multiselect-filter"><label class="ui-multiselect-filter-label">Filter:<input placeholder="Enter keywords" type="search"></label></div><ul class="ui-helper-reset"><li><a class="ui-multiselect-all" title="Check all"><span class="ui-icon ui-icon-check"></span><span>Check all</span></a></li><li><a class="ui-multiselect-none" title="Uncheck all"><span class="ui-icon ui-icon-closethick"></span><span>Uncheck all</span></a></li><li class="ui-multiselect-close"><a class="ui-multiselect-close" title="Close"><span class="ui-icon ui-icon-circle-close"></span></a></li></ul></div><ul class="ui-multiselect-checkboxes ui-helper-reset"><li class=""><label for="ui-multiselect-0-clients-option-0" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-0-clients-option-0" value="2634032" name="multiselect_clients"><span>
+                                    MVTrac                                </span></label></li><li class=""><label for="ui-multiselect-0-clients-option-1" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-0-clients-option-1" value="1164048" name="multiselect_clients"><span>
+                                    Loss Prevention Services MS, LP (Primary)                                </span></label></li></ul></div><div class="ui-multiselect-menu ui-widget ui-widget-content ui-corner-all form-select"><div class="ui-multiselect-header ui-widget-header ui-corner-all ui-helper-clearfix ui-multiselect-hasfilter"><div class="ui-multiselect-filter"><label class="ui-multiselect-filter-label">Filter:<input placeholder="Enter keywords" type="search"></label></div><ul class="ui-helper-reset"><li><a class="ui-multiselect-all" title="Check all"><span class="ui-icon ui-icon-check"></span><span>Check all</span></a></li><li><a class="ui-multiselect-none" title="Uncheck all"><span class="ui-icon ui-icon-closethick"></span><span>Uncheck all</span></a></li><li class="ui-multiselect-close"><a class="ui-multiselect-close" title="Close"><span class="ui-icon ui-icon-circle-close"></span></a></li></ul></div><ul class="ui-multiselect-checkboxes ui-helper-reset"><li class=""><label for="ui-multiselect-1-lienholders-option-0" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-1-lienholders-option-0" value="3107980" name="multiselect_lienholders"><span>
+                                    CarMax Auto Finance                                </span></label></li><li class=""><label for="ui-multiselect-1-lienholders-option-1" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-1-lienholders-option-1" value="1840632" name="multiselect_lienholders"><span>
+                                    Bridgecrest Credit Company, LLC                                </span></label></li><li class=""><label for="ui-multiselect-1-lienholders-option-2" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-1-lienholders-option-2" value="1496215" name="multiselect_lienholders"><span>
+                                    Consumer Portfolio Services                                </span></label></li></ul></div><div class="ui-multiselect-menu ui-widget ui-widget-content ui-corner-all form-select"><div class="ui-multiselect-header ui-widget-header ui-corner-all ui-helper-clearfix ui-multiselect-hasfilter"><div class="ui-multiselect-filter"><label class="ui-multiselect-filter-label">Filter:<input placeholder="Enter keywords" type="search"></label></div><ul class="ui-helper-reset"><li><a class="ui-multiselect-all" title="Check all"><span class="ui-icon ui-icon-check"></span><span>Check all</span></a></li><li><a class="ui-multiselect-none" title="Uncheck all"><span class="ui-icon ui-icon-closethick"></span><span>Uncheck all</span></a></li><li class="ui-multiselect-close"><a class="ui-multiselect-close" title="Close"><span class="ui-icon ui-icon-circle-close"></span></a></li></ul></div><ul class="ui-multiselect-checkboxes ui-helper-reset"><li class=""><label for="ui-multiselect-2-case_ids-option-0" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-2-case_ids-option-0" value="2175484108" name="multiselect_case_ids"><span>
+                                    2175484108                                </span></label></li><li class=""><label for="ui-multiselect-2-case_ids-option-1" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-2-case_ids-option-1" value="2175479818" name="multiselect_case_ids"><span>
+                                    2175479818                                </span></label></li><li class=""><label for="ui-multiselect-2-case_ids-option-2" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-2-case_ids-option-2" value="2170879904" name="multiselect_case_ids"><span>
+                                    2170879904                                </span></label></li></ul></div><div class="ui-multiselect-menu ui-widget ui-widget-content ui-corner-all form-select"><div class="ui-multiselect-header ui-widget-header ui-corner-all ui-helper-clearfix ui-multiselect-hasfilter"><div class="ui-multiselect-filter"><label class="ui-multiselect-filter-label">Filter:<input placeholder="Enter keywords" type="search"></label></div><ul class="ui-helper-reset"><li><a class="ui-multiselect-all" title="Check all"><span class="ui-icon ui-icon-check"></span><span>Check all</span></a></li><li><a class="ui-multiselect-none" title="Uncheck all"><span class="ui-icon ui-icon-closethick"></span><span>Uncheck all</span></a></li><li class="ui-multiselect-close"><a class="ui-multiselect-close" title="Close"><span class="ui-icon ui-icon-circle-close"></span></a></li></ul></div><ul class="ui-multiselect-checkboxes ui-helper-reset"><li class=""><label for="ui-multiselect-3-case_status-option-0" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-3-case_status-option-0" value="Open" name="multiselect_case_status"><span>
+                                Open                            </span></label></li><li class=""><label for="ui-multiselect-3-case_status-option-1" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-3-case_status-option-1" value="Closed" name="multiselect_case_status"><span>
+                                Closed                            </span></label></li><li class=""><label for="ui-multiselect-3-case_status-option-2" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-3-case_status-option-2" value="On Hold" name="multiselect_case_status"><span>
+                                On Hold                            </span></label></li><li class=""><label for="ui-multiselect-3-case_status-option-3" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-3-case_status-option-3" value="Pending On Hold" name="multiselect_case_status"><span>
+                                Pending On Hold                            </span></label></li><li class=""><label for="ui-multiselect-3-case_status-option-4" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-3-case_status-option-4" value="Repossessed" name="multiselect_case_status"><span>
+                                Repossessed                            </span></label></li><li class=""><label for="ui-multiselect-3-case_status-option-5" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-3-case_status-option-5" value="Charged Off" name="multiselect_case_status"><span>
+                                Charged Off                            </span></label></li><li class=""><label for="ui-multiselect-3-case_status-option-6" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-3-case_status-option-6" value="Completed" name="multiselect_case_status"><span>
+                                Completed                            </span></label></li><li class=""><label for="ui-multiselect-3-case_status-option-7" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-3-case_status-option-7" value="Completed-Located" name="multiselect_case_status"><span>
+                                Completed-Located                            </span></label></li><li class=""><label for="ui-multiselect-3-case_status-option-8" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-3-case_status-option-8" value="Office Transfer" name="multiselect_case_status"><span>
+                                Office Transfer                            </span></label></li><li class=""><label for="ui-multiselect-3-case_status-option-9" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-3-case_status-option-9" value="Need Info" name="multiselect_case_status"><span>
+                                Need Info                            </span></label></li><li class=""><label for="ui-multiselect-3-case_status-option-10" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-3-case_status-option-10" value="Hold For Billing" name="multiselect_case_status"><span>
+                                Hold For Billing                            </span></label></li><li class=""><label for="ui-multiselect-3-case_status-option-11" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-3-case_status-option-11" value="Auction" name="multiselect_case_status"><span>
+                                Auction                            </span></label></li></ul></div><div class="ui-multiselect-menu ui-widget ui-widget-content ui-corner-all form-select"><div class="ui-multiselect-header ui-widget-header ui-corner-all ui-helper-clearfix ui-multiselect-hasfilter"><div class="ui-multiselect-filter"><label class="ui-multiselect-filter-label">Filter:<input placeholder="Enter keywords" type="search"></label></div><ul class="ui-helper-reset"><li><a class="ui-multiselect-all" title="Check all"><span class="ui-icon ui-icon-check"></span><span>Check all</span></a></li><li><a class="ui-multiselect-none" title="Uncheck all"><span class="ui-icon ui-icon-closethick"></span><span>Uncheck all</span></a></li><li class="ui-multiselect-close"><a class="ui-multiselect-close" title="Close"><span class="ui-icon ui-icon-circle-close"></span></a></li></ul></div><ul class="ui-multiselect-checkboxes ui-helper-reset"></ul></div><div class="ui-multiselect-menu ui-widget ui-widget-content ui-corner-all form-select"><div class="ui-multiselect-header ui-widget-header ui-corner-all ui-helper-clearfix ui-multiselect-hasfilter"><div class="ui-multiselect-filter"><label class="ui-multiselect-filter-label">Filter:<input placeholder="Enter keywords" type="search"></label></div><ul class="ui-helper-reset"><li><a class="ui-multiselect-all" title="Check all"><span class="ui-icon ui-icon-check"></span><span>Check all</span></a></li><li><a class="ui-multiselect-none" title="Uncheck all"><span class="ui-icon ui-icon-closethick"></span><span>Uncheck all</span></a></li><li class="ui-multiselect-close"><a class="ui-multiselect-close" title="Close"><span class="ui-icon ui-icon-circle-close"></span></a></li></ul></div><ul class="ui-multiselect-checkboxes ui-helper-reset"></ul></div><div class="ui-multiselect-menu ui-widget ui-widget-content ui-corner-all form-select"><div class="ui-multiselect-header ui-widget-header ui-corner-all ui-helper-clearfix ui-multiselect-hasfilter"><div class="ui-multiselect-filter"><label class="ui-multiselect-filter-label">Filter:<input placeholder="Enter keywords" type="search"></label></div><ul class="ui-helper-reset"><li><a class="ui-multiselect-all" title="Check all"><span class="ui-icon ui-icon-check"></span><span>Check all</span></a></li><li><a class="ui-multiselect-none" title="Uncheck all"><span class="ui-icon ui-icon-closethick"></span><span>Uncheck all</span></a></li><li class="ui-multiselect-close"><a class="ui-multiselect-close" title="Close"><span class="ui-icon ui-icon-circle-close"></span></a></li></ul></div><ul class="ui-multiselect-checkboxes ui-helper-reset"></ul></div><div class="ui-multiselect-menu ui-widget ui-widget-content ui-corner-all form-select"><div class="ui-multiselect-header ui-widget-header ui-corner-all ui-helper-clearfix ui-multiselect-hasfilter"><div class="ui-multiselect-filter"><label class="ui-multiselect-filter-label">Filter:<input placeholder="Enter keywords" type="search"></label></div><ul class="ui-helper-reset"><li><a class="ui-multiselect-all" title="Check all"><span class="ui-icon ui-icon-check"></span><span>Check all</span></a></li><li><a class="ui-multiselect-none" title="Uncheck all"><span class="ui-icon ui-icon-closethick"></span><span>Uncheck all</span></a></li><li class="ui-multiselect-close"><a class="ui-multiselect-close" title="Close"><span class="ui-icon ui-icon-circle-close"></span></a></li></ul></div><ul class="ui-multiselect-checkboxes ui-helper-reset"><li class=""><label for="ui-multiselect-7-inv_case_status-option-0" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-7-inv_case_status-option-0" value="Open" name="multiselect_inv_case_status"><span>
+                                    Open                                </span></label></li><li class=""><label for="ui-multiselect-7-inv_case_status-option-1" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-7-inv_case_status-option-1" value="Closed" name="multiselect_inv_case_status"><span>
+                                    Closed                                </span></label></li><li class=""><label for="ui-multiselect-7-inv_case_status-option-2" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-7-inv_case_status-option-2" value="On Hold" name="multiselect_inv_case_status"><span>
+                                    On Hold                                </span></label></li><li class=""><label for="ui-multiselect-7-inv_case_status-option-3" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-7-inv_case_status-option-3" value="Pending On Hold" name="multiselect_inv_case_status"><span>
+                                    Pending On Hold                                </span></label></li><li class=""><label for="ui-multiselect-7-inv_case_status-option-4" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-7-inv_case_status-option-4" value="Repossessed" name="multiselect_inv_case_status"><span>
+                                    Repossessed                                </span></label></li><li class=""><label for="ui-multiselect-7-inv_case_status-option-5" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-7-inv_case_status-option-5" value="Charged Off" name="multiselect_inv_case_status"><span>
+                                    Charged Off                                </span></label></li><li class=""><label for="ui-multiselect-7-inv_case_status-option-6" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-7-inv_case_status-option-6" value="Completed" name="multiselect_inv_case_status"><span>
+                                    Completed                                </span></label></li><li class=""><label for="ui-multiselect-7-inv_case_status-option-7" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-7-inv_case_status-option-7" value="Completed-Located" name="multiselect_inv_case_status"><span>
+                                    Completed-Located                                </span></label></li><li class=""><label for="ui-multiselect-7-inv_case_status-option-8" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-7-inv_case_status-option-8" value="Office Transfer" name="multiselect_inv_case_status"><span>
+                                    Office Transfer                                </span></label></li><li class=""><label for="ui-multiselect-7-inv_case_status-option-9" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-7-inv_case_status-option-9" value="Need Info" name="multiselect_inv_case_status"><span>
+                                    Need Info                                </span></label></li><li class=""><label for="ui-multiselect-7-inv_case_status-option-10" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-7-inv_case_status-option-10" value="Hold For Billing" name="multiselect_inv_case_status"><span>
+                                    Hold For Billing                                </span></label></li><li class=""><label for="ui-multiselect-7-inv_case_status-option-11" class=" ui-corner-all"><input type="checkbox" id="ui-multiselect-7-inv_case_status-option-11" value="Auction" name="multiselect_inv_case_status"><span>
+                                    Auction                                </span></label></li></ul></div><div id="guidejar-container" ext-id="nljfdifffnfijpidnjfbibbdeipnnlln" ext-version="2.1.2" style="position: fixed; width: 0px; height: 0px; top: 0px; left: 0px; z-index: 2147483647; overflow: visible;">
+  <link type="text/css" href="chrome-extension://nljfdifffnfijpidnjfbibbdeipnnlln/fonts.css" rel="stylesheet">
+  </div></body></html>

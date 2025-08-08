@@ -102,3 +102,12 @@
 - [ ] Optimize loading performance
 - [ ] Add accessibility improvements
 - [ ] Implement comprehensive error handling
+
+## Module Integration
+
+Module 1 is triggered when "Start Workflow" is clicked in Module 3:
+1. **Module 1**: Performs automated RDN portal login
+2. **On Success**: Triggers Module 2 for data extraction
+3. **On Completion**: Returns control to Module 3
+
+Module 1 maintains the RDN session throughout the workflow for subsequent modules to use.

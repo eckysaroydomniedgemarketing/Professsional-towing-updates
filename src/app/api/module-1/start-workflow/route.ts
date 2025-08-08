@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server'
 import { RDNPortalService } from '@/modules/module-1-rdn-portal/services/rdn-portal-service'
-
-// Store service instance globally (in production, use a proper state management solution)
-let portalService: RDNPortalService | null = null
+import { 
+  setPortalService, 
+  setWorkflowError, 
+  clearWorkflowState,
+  setNavigationData 
+} from '@/modules/module-1-rdn-portal/services/workflow-state.service'
 
 export async function POST() {
   try {
@@ -17,11 +20,35 @@ export async function POST() {
       throw new Error('Missing RDN credentials in environment variables')
     }
     
+    // Clear any previous state
+    clearWorkflowState()
+    
     // Create new service instance
-    portalService = new RDNPortalService(credentials)
+    const portalService = new RDNPortalService(credentials)
+    setPortalService(portalService)
+    
+    // Initialize the browser
+    await portalService.initialize()
     
     // Start the workflow in the background
-    portalService.executeFullWorkflow().catch(console.error)
+    portalService.executeFullWorkflow()
+      .then(result => {
+        if (!result.success) {
+          const error = result.error || 'Workflow failed'
+          setWorkflowError(error)
+          console.error('Workflow error:', error)
+        } else {
+          // Store the navigation data including case ID
+          if (result.data) {
+            setNavigationData(result.data)
+          }
+        }
+      })
+      .catch(error => {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+        setWorkflowError(errorMessage)
+        console.error('Workflow execution error:', error)
+      })
     
     return NextResponse.json({ 
       success: true, 
@@ -34,5 +61,3 @@ export async function POST() {
     }, { status: 500 })
   }
 }
-
-export { portalService }

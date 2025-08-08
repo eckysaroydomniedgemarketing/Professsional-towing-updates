@@ -28,7 +28,16 @@
       "mcp__supabase__list_migrations",
       "mcp__supabase__execute_sql",
       "Bash(git checkout:*)",
-      "Bash(touch:*)"
+      "Bash(touch:*)",
+      "mcp__supabase__apply_migration",
+      "Bash(# Function to count lines and generate file structure\ncd /mnt/c/github/professsional-towing-updates\n\n# Root level files\necho \"\"Counting root files...\"\"\nwc -l README.md claude.md components.json dev.log eslint.config.mjs next-env.d.ts next.config.ts package.json postcss.config.mjs tailwind.config.ts tsconfig.json 2>/dev/null | grep -v total\n\n# Public files\necho -e \"\"\\nCounting public files...\"\"\nwc -l public/*.svg 2>/dev/null | grep -v total\n\n# Source files\necho -e \"\"\\nCounting src files...\"\"\nfind src -type f \\( -name \"\"*.ts\"\" -o -name \"\"*.tsx\"\" -o -name \"\"*.css\"\" -o -name \"\"*.js\"\" -o -name \"\"*.jsx\"\" \\) -exec wc -l {} \\; | sort\n\n# Supabase files\necho -e \"\"\\nCounting supabase files...\"\"\nfind supabase -type f -name \"\"*.sql\"\" -exec wc -l {} \\;)",
+      "Bash(attrib:*)",
+      "Bash(chmod:*)",
+      "Bash(grep:*)",
+      "Bash(chmod:*)",
+      "Bash(mv:*)",
+      "WebFetch(domain:ui.shadcn.com)",
+      "mcp__playwright__browser_close"
     ],
     "deny": []
   }

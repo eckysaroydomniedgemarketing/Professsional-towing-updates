@@ -100,17 +100,16 @@ This document outlines the step-by-step navigation flow for the Professional Tow
     <dt>Order To</dt>
     <dd>Involuntary Repo</dd>
     ```
-    - Must be "Involuntary Repo" or "Investigate Repo" only
   
   - Check "Status" field:
     ```html
     <dt>Status</dt>
     <dd>Open</dd>
     ```
-    - Must be "Open"
+
 - **Data to Extract**:
-  - Order Type (must be "Involuntary Repo" or "Investigate Repo")
-  - Status (must be "Open")
+  - Order Type 
+  - Status 
 
 ### Step 7: Extract ZIP Code
 - **URL**: Same as Step 6
@@ -126,11 +125,11 @@ This document outlines the step-by-step navigation flow for the Professional Tow
 - **Data to Extract**:
   - ZIP code from address
 
-### Step 8: Verify ZIP Code Against Coverage Area
+<!-- ### Step 8: Verify ZIP Code Against Coverage Area
 - **URL**: Same as Step 6
 - **Actions**:
   - Query Supabase `zip_codes` table and validate ZIP code presence
-  - Note: Previously used Google Sheets (`https://docs.google.com/spreadsheets/d/1hd99HmMSCoHwsD25Ie8svsZEQSYkr4xj/edit?gid=1151459725#gid=1151459725`), now using Supabase database
+  - Note: Previously used Google Sheets (`https://docs.google.com/spreadsheets/d/1hd99HmMSCoHwsD25Ie8svsZEQSYkr4xj/edit?gid=1151459725#gid=1151459725`), now using Supabase database -->
 
 ### Step 9: Review Previous Updates
 - **URL**: Same as Step 6

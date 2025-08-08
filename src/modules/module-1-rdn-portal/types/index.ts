@@ -16,17 +16,22 @@ export enum NavigationStep {
   INITIAL = 'INITIAL',
   LOGIN_PAGE = 'LOGIN_PAGE',
   AUTHENTICATING = 'AUTHENTICATING',
+  LOGIN_COMPLETE = 'LOGIN_COMPLETE',
   DASHBOARD = 'DASHBOARD',
   CASE_LISTING = 'CASE_LISTING',
   CASE_DETAIL = 'CASE_DETAIL',
+  EXTRACTING_DATA = 'EXTRACTING_DATA',
+  EXTRACTION_COMPLETE = 'EXTRACTION_COMPLETE',
+  COMPLETE = 'COMPLETE',
   ERROR = 'ERROR'
 }
 
 export interface CaseListingFilters {
   caseWorker: string
   entriesPerPage: number
-  sortBy: 'lastUpdate'
-  sortOrder: 'desc' | 'asc'
+  sortByLastUpdate?: boolean
+  sortBy?: 'lastUpdate'
+  sortOrder?: 'desc' | 'asc'
 }
 
 export interface PortalSession {
@@ -38,9 +43,17 @@ export interface PortalSession {
   isActive: boolean
 }
 
+import { Page } from 'playwright'
+
 export interface NavigationResult {
   success: boolean
   nextStep: NavigationStep
   error?: string
-  data?: unknown
+  data?: {
+    url?: string
+    page?: Page
+    updatesTabClicked?: boolean
+    processedCount?: number
+    message?: string
+  }
 }
