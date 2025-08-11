@@ -22,10 +22,10 @@
 - **Purpose**: All-in-one interface for case processing workflow
 - **Layout**: Split-screen design with dashboard controls and workflow steps
 - **Left Panel - Controls**:
-  - Quick Stats (cases processed today, success rate)
-  - "Get Next Case" button
-  - Manual case ID entry
-  - Start/Stop Automation toggle
+  - "Post Case Update" button (initial state)
+  - "Post Next Update" button (after completion)
+  - Manual case ID entry with "Load Case" button
+  - Automatic Mode toggle
   - Processing status indicator
 - **Right Panel - Workflow**:
   - Dynamic content area showing current step
@@ -405,7 +405,7 @@ interface AutomationConfig {
 ## User Experience Flow
 
 ### Manual Processing Flow
-1. User clicks "Get Next Case" from dashboard
+1. User clicks "Post Case Update" from sidebar
 2. System retrieves next eligible case
 3. Reviews validation results
 4. Manually verifies property via Google Maps
@@ -419,7 +419,7 @@ interface AutomationConfig {
 12. Case marked as complete
 
 ### Semi-Automated Processing Flow
-1. User clicks "Start Automation"
+1. User enables "Automatic Mode" and clicks "Post Case Update"
 2. System processes cases one at a time:
 3. For each case:
    - Validates each case
@@ -469,9 +469,9 @@ interface AutomationConfig {
 - Notification service (email/SMS)
 
 ### Internal Modules
-- Module 1: Authentication and navigation
-- Module 2: Data extraction
-- Module 4: New updates processing
+- Module 1: RDN Portal automation (auto-starts when "Post Case Update" clicked)
+- Module 2: Data extraction (runs automatically after Module 1)
+- Module 3: Case processing workflow (8 steps ending with posting update)
 
 ## Implementation Priority
 

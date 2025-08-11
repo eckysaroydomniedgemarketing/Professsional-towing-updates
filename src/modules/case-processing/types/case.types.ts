@@ -3,6 +3,8 @@
 export interface CaseUpdate {
   id: string
   type: string
+  update_author?: string
+  update_date?: string
   details: string
   created_at: string
   visible: boolean
@@ -16,6 +18,7 @@ export interface CaseAddress {
   street_address?: string
   city?: string
   state?: string
+  is_primary?: boolean
 }
 
 export interface Case {
@@ -26,6 +29,7 @@ export interface Case {
   zip_code: string
   vin: string
   updates: CaseUpdate[]
+  allUpdates?: CaseUpdate[]  // All updates for validation checks
   addresses?: CaseAddress[]
   client_name?: string
   last_update_date?: string
@@ -69,6 +73,13 @@ export interface CaseValidationResult {
     validationMessage: string
     latestExtractionDate?: string
     totalUpdatesInBatch?: number
+  }
+  hasUserUpdate?: boolean
+  userUpdateDetails?: {
+    hasUserUpdate: boolean
+    userUpdateCount: number
+    userUpdateAuthors?: string[]
+    validationMessage: string
   }
   exclusionKeywordResults?: ExclusionKeywordResults
   reasons: string[]

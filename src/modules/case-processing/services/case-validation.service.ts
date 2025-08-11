@@ -58,6 +58,41 @@ export class CaseValidationService {
   }
 
 
+  static checkUserUpdateExists(updates: any[]): {
+    hasUserUpdate: boolean
+    userUpdateCount: number
+    userUpdateAuthors: string[]
+    validationMessage: string
+  } {
+    if (!updates || updates.length === 0) {
+      return {
+        hasUserUpdate: false,
+        userUpdateCount: 0,
+        userUpdateAuthors: [],
+        validationMessage: 'No updates found in case history'
+      }
+    }
+
+    // Filter for updates posted by Users (not Agents)
+    const userUpdates = updates.filter(update => {
+      if (!update.update_author) return false
+      const author = update.update_author.toLowerCase()
+      // Check for role designation (User) not just 'user' anywhere in string
+      return author.includes('(user)') && !author.includes('(agent)')
+    })
+
+    const uniqueUserAuthors = [...new Set(userUpdates.map(u => u.update_author).filter(Boolean))]
+
+    return {
+      hasUserUpdate: userUpdates.length > 0,
+      userUpdateCount: userUpdates.length,
+      userUpdateAuthors: uniqueUserAuthors,
+      validationMessage: userUpdates.length > 0 
+        ? `Found ${userUpdates.length} user update(s) with property details`
+        : 'Update with no property details description present. Manually post an update with property detailed description.'
+    }
+  }
+
   static async validateCase(caseData: Case): Promise<CaseValidationResult> {
     console.log('validateCase called with:', {
       id: caseData.id,
@@ -76,6 +111,10 @@ export class CaseValidationService {
     const agentUpdateCheck = await checkAgentUpdateExists(caseData.id)
     const hasAgentUpdate = agentUpdateCheck.hasAgentUpdate
     
+    // Check for user updates (NEW validation) - use allUpdates if available, otherwise updates
+    const userUpdateCheck = this.checkUserUpdateExists(caseData.allUpdates || caseData.updates || [])
+    const hasUserUpdate = userUpdateCheck.hasUserUpdate
+    
     if (!orderTypeValid) {
       reasons.push(`Invalid order type: ${caseData.order_type}. Must be 'Involuntary Repo' or 'Investigate Repo'`)
     }
@@ -93,13 +132,19 @@ export class CaseValidationService {
       reasons.push(agentUpdateCheck.validationMessage)
     }
     
+    if (!hasUserUpdate) {
+      reasons.push(userUpdateCheck.validationMessage)
+    }
+    
     return {
-      passed: orderTypeValid && statusValid && zipCodeValid && hasAgentUpdate,
+      passed: orderTypeValid && statusValid && zipCodeValid && hasAgentUpdate && hasUserUpdate,
       orderTypeValid,
       statusValid,
       zipCodeValid,
       hasAgentUpdate,
       agentUpdateDetails: agentUpdateCheck,
+      hasUserUpdate,
+      userUpdateDetails: userUpdateCheck,
       reasons
     }
   }

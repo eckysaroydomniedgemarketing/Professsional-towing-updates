@@ -11,6 +11,7 @@ import { WorkflowSidebar } from "./workflow-sidebar"
 import { WorkflowControl } from "@/modules/module-1-rdn-portal/components/workflow-control"
 import { ValidationStep } from "./workflow-steps/validation-step"
 import { PropertyVerificationStep } from "./workflow-steps/property-verification-step"
+import { UpdateAssistant } from "./update-assistant"
 import { TemplateSelectionStep } from "./workflow-steps/template-selection-step"
 import { UpdateGenerationStep } from "./workflow-steps/update-generation-step"
 import { UpdateReviewStep } from "./workflow-steps/update-review-step"
@@ -20,6 +21,11 @@ import { CompletionStep } from "./workflow-steps/completion-step"
 import type { WorkflowStatus, WorkflowStep } from "../types"
 import type { Case } from "../types/case.types"
 import { fetchCaseById } from "../services/supabase-case.service"
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export function CaseProcessingLayout() {
   // Mock state for UI demo - will be replaced with props
@@ -32,6 +38,8 @@ export function CaseProcessingLayout() {
   const [modulesCompleted, setModulesCompleted] = useState(false)
   const [caseData, setCaseData] = useState<Case | null>(null)
   const [validationResults, setValidationResults] = useState<any>(null)
+  const [showUpdateAssistant, setShowUpdateAssistant] = useState(false)
+  const [currentSessionId, setCurrentSessionId] = useState<string>('')
 
   const steps: WorkflowStep[] = [
     'validation',
@@ -45,8 +53,8 @@ export function CaseProcessingLayout() {
   ]
 
   // Called when Module 1 & 2 complete successfully
-  const handleWorkflowComplete = async (extractedCaseId?: string) => {
-    console.log('Workflow complete, received case ID:', extractedCaseId)
+  const handleWorkflowComplete = async (extractedCaseId?: string, sessionId?: string) => {
+    console.log('Workflow complete, received case ID:', extractedCaseId, 'session ID:', sessionId)
     
     // Mark modules as completed and start case processing
     setIsModulesRunning(false)
@@ -61,6 +69,26 @@ export function CaseProcessingLayout() {
     
     const caseId = extractedCaseId
     setCurrentCase(caseId)
+    
+    // Store session ID if provided, otherwise try to get it from database
+    if (sessionId) {
+      setCurrentSessionId(sessionId)
+    } else {
+      // Try to get the latest session for this case
+      const { data: sessionData } = await supabase
+        .from('processing_sessions')
+        .select('id')
+        .eq('case_id', caseId)
+        .eq('status', 'completed')
+        .order('completed_at', { ascending: false })
+        .limit(1)
+        .single()
+      
+      if (sessionData) {
+        setCurrentSessionId(sessionData.id)
+        console.log('Found session ID from database:', sessionData.id)
+      }
+    }
     
     // Fetch case data from Supabase
     console.log('Fetching case data for ID:', caseId)
@@ -110,6 +138,21 @@ export function CaseProcessingLayout() {
     console.log('Loading case:', caseId)
     setWorkflowStatus('running')
     setCurrentCase(caseId)
+    setShowUpdateAssistant(false)
+    
+    // Get the latest session for this case
+    const { data: sessionData } = await supabase
+      .from('processing_sessions')
+      .select('id')
+      .eq('case_id', caseId)
+      .eq('status', 'completed')
+      .order('completed_at', { ascending: false })
+      .limit(1)
+      .single()
+    
+    if (sessionData) {
+      setCurrentSessionId(sessionData.id)
+    }
     
     // Fetch case data from Supabase
     const data = await fetchCaseById(caseId)
@@ -138,11 +181,26 @@ export function CaseProcessingLayout() {
   const handleGetNextCase = async () => {
     // Get next case from queue
     setWorkflowStatus('running')
+    setShowUpdateAssistant(false)
     
     // In production, this will get the next case ID from the queue
     // For MVP, using timestamp-based ID
     const caseId = `CASE-${Date.now()}`
     setCurrentCase(caseId)
+    
+    // Get the latest session for this case if it exists
+    const { data: sessionData } = await supabase
+      .from('processing_sessions')
+      .select('id')
+      .eq('case_id', caseId)
+      .eq('status', 'completed')
+      .order('completed_at', { ascending: false })
+      .limit(1)
+      .single()
+    
+    if (sessionData) {
+      setCurrentSessionId(sessionData.id)
+    }
     
     // Fetch case data from Supabase
     const data = await fetchCaseById(caseId)
@@ -191,6 +249,17 @@ export function CaseProcessingLayout() {
     handleNext()
   }
 
+  const handleSkipUpdate = () => {
+    // Skip current case and load next
+    setShowUpdateAssistant(false)
+    handleGetNextCase()
+  }
+
+  const handlePostUpdate = async (content: string, addressId: string) => {
+    // TODO: Implement post update functionality
+    console.log('Post update not implemented yet', { content, addressId })
+  }
+
   const renderCurrentStep = () => {
     const props = {
       onNext: handleNext,
@@ -200,7 +269,7 @@ export function CaseProcessingLayout() {
 
     switch (currentStep) {
       case 'validation':
-        return <ValidationStep {...props} caseData={caseData} onValidationComplete={setValidationResults} />
+        return <ValidationStep {...props} caseData={caseData} onValidationComplete={setValidationResults} onShowUpdateAssistant={() => setShowUpdateAssistant(true)} />
       case 'property-verification':
         return <PropertyVerificationStep {...props} />
       case 'template-selection':
@@ -237,7 +306,7 @@ export function CaseProcessingLayout() {
           totalSteps={steps.length}
         />
 
-        <SidebarInset className="flex flex-col">
+        <SidebarInset className="flex flex-col flex-1">
           {currentCase ? (
             <div className="flex-1 p-6">
               <div className="max-w-5xl mx-auto h-full">
@@ -249,7 +318,7 @@ export function CaseProcessingLayout() {
             <div className="flex-1 flex items-center justify-center p-6">
               {isModulesRunning ? (
                 <div className="max-w-2xl w-full">
-                  <WorkflowControl onWorkflowComplete={handleWorkflowComplete} />
+                  <WorkflowControl onWorkflowComplete={handleWorkflowComplete} autoStart={true} />
                 </div>
               ) : (
                 <Card className="max-w-md">
@@ -259,8 +328,8 @@ export function CaseProcessingLayout() {
                   <CardContent>
                     <p className="text-muted-foreground">
                       {modulesCompleted 
-                        ? "Workflow modules completed successfully. Click 'Get Next Case' to start processing."
-                        : "Click 'Start Workflow' to begin the RDN portal automation."}
+                        ? "Workflow modules completed successfully. Click 'Post Next Update' to continue processing."
+                        : "Click 'Post Case Update' to begin posting updates to RDN portal."}
                     </p>
                   </CardContent>
                 </Card>
@@ -268,6 +337,20 @@ export function CaseProcessingLayout() {
             </div>
           )}
         </SidebarInset>
+        
+        {/* Third Column - Update Assistant (conditional) */}
+        {showUpdateAssistant && caseData && (
+          <div className="flex-1 border-l">
+            <div className=" p-6">
+              <UpdateAssistant
+                caseData={caseData}
+                sessionId={currentSessionId}
+                onSkip={handleSkipUpdate}
+                onPostUpdate={handlePostUpdate}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </SidebarProvider>
   )

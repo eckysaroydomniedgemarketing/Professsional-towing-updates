@@ -1,6 +1,8 @@
 import { Page } from 'playwright';
 import { ExtractionResult } from './types';
 import {
+  createProcessingSession,
+  updateSessionStatus,
   insertCaseUpdate,
   insertCaseDetails,
   insertVehicle,
@@ -26,9 +28,14 @@ export async function extractCaseData(
   page: Page
 ): Promise<ExtractionResult> {
   let recordsInserted = 0;
+  let sessionId: string | null = null;
   
   try {
     console.log(`Starting data extraction for case ${caseId}`);
+    
+    // Create a new processing session
+    sessionId = await createProcessingSession(caseId, 'module-2');
+    console.log(`Created session ${sessionId} for case ${caseId}`);
     
     // Wait for page to be fully loaded before extraction
     console.log('Waiting for page to fully load...');
@@ -44,19 +51,19 @@ export async function extractCaseData(
     await insertCaseUpdate(caseId, status);
     recordsInserted++;
     
-    // Step 1: Extract case details
+    // Step 1: Extract case details with session ID
     console.log('Extracting case details...');
     const caseDetails = await extractCaseDetails(page, caseId);
-    await insertCaseDetails(caseDetails);
+    await insertCaseDetails(caseDetails, sessionId);
     recordsInserted++;
     
-    // Step 2: Extract vehicle information
+    // Step 2: Extract vehicle information with session ID
     console.log('Extracting vehicle information...');
     const vehicle = await extractVehicle(page, caseId);
-    await insertVehicle(vehicle);
+    await insertVehicle(vehicle, sessionId);
     recordsInserted++;
     
-    // Step 3: Extract addresses
+    // Step 3: Extract addresses with session ID
     console.log('Extracting addresses...');
     const addresses = await extractAddresses(page, caseId);
     
@@ -69,29 +76,43 @@ export async function extractCaseData(
     }
     
     if (addresses.length > 0) {
-      await insertAddresses(addresses);
+      await insertAddresses(addresses, sessionId);
       recordsInserted += addresses.length;
     }
     
-    // Step 4: Extract update history
+    // Step 4: Extract update history with session ID
     console.log('Extracting update history...');
     const updates = await extractUpdates(page, caseId);
     
     if (updates.length > 0) {
-      await insertUpdateHistory(updates);
+      await insertUpdateHistory(updates, sessionId);
       recordsInserted += updates.length;
     }
+    
+    // Mark session as completed
+    await updateSessionStatus(sessionId, 'completed', {
+      recordsInserted,
+      extractionTime: new Date().toISOString()
+    });
     
     console.log(`Data extraction completed. ${recordsInserted} records inserted.`);
     
     return {
       success: true,
       caseId: caseId,
-      recordsInserted: recordsInserted
+      recordsInserted: recordsInserted,
+      sessionId: sessionId
     };
     
   } catch (error) {
     console.error('Error during data extraction:', error);
+    
+    // Mark session as failed if it was created
+    if (sessionId) {
+      await updateSessionStatus(sessionId, 'failed', {
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
     
     return {
       success: false,

@@ -57,6 +57,7 @@ export interface ExtractionResult {
   caseId: string;
   recordsInserted?: number;
   error?: string;
+  sessionId?: string;
 }
 
 export interface ZipCode {

@@ -19,14 +19,16 @@ import { WorkflowStepProps } from "../../types"
 import { Case, CaseValidationResult, ExclusionKeywordResults } from "../../types/case.types"
 import { CaseValidationService } from "../../services/case-validation.service"
 import { checkExclusionKeywordsInDatabase, DatabaseKeywordResult } from "../../services/keyword-check.service"
+import { UpdateHistoryDisplay } from "./update-history-display"
 import { useEffect, useState } from "react"
 
 interface ValidationStepProps extends WorkflowStepProps {
   caseData?: Case
   onValidationComplete?: (result: CaseValidationResult | null) => void
+  onShowUpdateAssistant?: () => void
 }
 
-export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidationComplete }: ValidationStepProps) {
+export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidationComplete, onShowUpdateAssistant }: ValidationStepProps) {
   const [validationResult, setValidationResult] = useState<CaseValidationResult | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [keywordAnalysis, setKeywordAnalysis] = useState<ExclusionKeywordResults | null>(null)
@@ -710,6 +712,88 @@ export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidat
               </Card>
             </div>
 
+            {/* Update History Analysis */}
+            {caseData?.updates && (
+              <UpdateHistoryDisplay 
+                updates={caseData.updates}
+                keywordAnalysis={keywordAnalysis}
+                databaseKeywordResult={databaseKeywordResult}
+              />
+            )}
+
+            {/* User Update Check Section */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Property Update Check</h3>
+                {validationResult?.hasUserUpdate !== undefined && (
+                  <Badge 
+                    variant={validationResult.hasUserUpdate ? "secondary" : "destructive"}
+                    className={validationResult.hasUserUpdate ? 'bg-green-500 text-white hover:bg-green-600' : ''}
+                  >
+                    {validationResult.hasUserUpdate ? 'User Updates Found' : 'No User Updates'}
+                  </Badge>
+                )}
+              </div>
+              <Separator />
+              <Card>
+                <CardContent className="p-6">
+                  {validationResult?.userUpdateDetails ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Status</span>
+                        <div className="flex items-center gap-2">
+                          {validationResult.userUpdateDetails.hasUserUpdate ? (
+                            <>
+                              <CheckCircle2 className="h-4 w-4 text-green-600" />
+                              <span className="text-sm font-medium">
+                                {validationResult.userUpdateDetails.userUpdateCount} User Update(s) Found
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <XCircle className="h-4 w-4 text-destructive" />
+                              <span className="text-sm font-medium text-destructive">
+                                No User Updates Found
+                              </span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {!validationResult.userUpdateDetails.hasUserUpdate && (
+                        <Alert variant="destructive" className="mt-3">
+                          <AlertCircle className="h-4 w-4" />
+                          <AlertTitle>Property Details Required</AlertTitle>
+                          <AlertDescription>
+                            Update with no property details description present. 
+                            Manually post an update with property detailed description.
+                          </AlertDescription>
+                        </Alert>
+                      )}
+                      
+                      {validationResult.userUpdateDetails.userUpdateAuthors && 
+                       validationResult.userUpdateDetails.userUpdateAuthors.length > 0 && (
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-2">User Update Authors:</p>
+                          <div className="flex flex-wrap gap-2">
+                            {validationResult.userUpdateDetails.userUpdateAuthors.map((author, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs">
+                                {author}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Checking for user updates with property details...
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
             {/* Overall Validation Result */}
             {validationResult && (
               <Alert 
@@ -762,21 +846,28 @@ export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidat
         </Button>
         
         <div className="flex gap-2">
-          {((validationResult && !validationResult.passed) || keywordAnalysis?.hasExclusionKeywords || keywordAnalysis?.error) && (
+          {((validationResult && !validationResult.passed) || 
+            keywordAnalysis?.hasExclusionKeywords || keywordAnalysis?.error) && (
             <Button variant="outline" onClick={onSkip}>
               Get Next Case
             </Button>
           )}
           <Button 
-            onClick={onNext} 
-            disabled={
-              isLoading || 
-              !validationResult || 
-              !validationResult.passed || 
-              isAnalyzingKeywords ||
-              keywordAnalysis?.hasExclusionKeywords ||
-              keywordAnalysis?.error !== undefined
-            }
+            onClick={() => {
+              // If user update exists, show Update Assistant; otherwise continue to next step
+              if (validationResult?.hasUserUpdate && onShowUpdateAssistant) {
+                onShowUpdateAssistant()
+              } else {
+                onNext()
+              }
+            }} 
+            disabled={(() => {
+              if (isLoading || !validationResult || isAnalyzingKeywords) return true
+              if (keywordAnalysis?.hasExclusionKeywords || keywordAnalysis?.error !== undefined) return true
+              
+              // Only allow if validation fully passed
+              return !validationResult.passed
+            })()}
             className="gap-2"
           >
             {isAnalyzingKeywords ? (
@@ -786,7 +877,7 @@ export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidat
               </>
             ) : (
               <>
-                Continue to Property Verification
+                Update Draft
                 <ChevronRight className="h-4 w-4" />
               </>
             )}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { WorkflowStatus } from './workflow-status'
 import { NavigationStep } from '../types'
@@ -8,13 +8,22 @@ import { Play, Pause, RotateCcw, Eye } from 'lucide-react'
 
 interface WorkflowControlProps {
   onWorkflowComplete?: (caseId?: string) => void
+  autoStart?: boolean
 }
 
-export function WorkflowControl({ onWorkflowComplete }: WorkflowControlProps = {}) {
+export function WorkflowControl({ onWorkflowComplete, autoStart = false }: WorkflowControlProps = {}) {
   const [isRunning, setIsRunning] = useState(false)
   const [currentStep, setCurrentStep] = useState<NavigationStep>(NavigationStep.INITIAL)
   const [error, setError] = useState<string>()
   const [sessionUrl, setSessionUrl] = useState<string>()
+  const hasStartedRef = useRef(false)
+
+  useEffect(() => {
+    if (autoStart && !hasStartedRef.current) {
+      hasStartedRef.current = true
+      handleStart()
+    }
+  }, [autoStart])
 
   const handleStart = async () => {
     setIsRunning(true)
@@ -91,25 +100,34 @@ export function WorkflowControl({ onWorkflowComplete }: WorkflowControlProps = {
 
   return (
     <div className="bg-white rounded-lg shadow p-6 space-y-6">
+      {autoStart && !isRunning && (
+        <div className="text-center py-4">
+          <div className="text-lg font-medium text-muted-foreground">
+            Initializing workflow...
+          </div>
+        </div>
+      )}
       <WorkflowStatus currentStep={currentStep} error={error} />
       
       <div className="flex items-center gap-3">
-        {!isRunning ? (
+        {!autoStart && !isRunning ? (
           <Button onClick={handleStart} disabled={currentStep === NavigationStep.CASE_DETAIL}>
             <Play className="w-4 h-4 mr-2" />
             Start Workflow
           </Button>
-        ) : (
+        ) : isRunning ? (
           <Button onClick={handleStop} variant="destructive">
             <Pause className="w-4 h-4 mr-2" />
             Stop Workflow
           </Button>
-        )}
+        ) : null}
         
-        <Button onClick={handleReset} variant="outline" disabled={isRunning}>
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reset
-        </Button>
+        {!autoStart && (
+          <Button onClick={handleReset} variant="outline" disabled={isRunning}>
+            <RotateCcw className="w-4 h-4 mr-2" />
+            Reset
+          </Button>
+        )}
         
         {sessionUrl && (
           <Button onClick={handleInspect} variant="outline">

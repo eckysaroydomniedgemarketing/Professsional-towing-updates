@@ -54,7 +54,7 @@ export function WorkflowSidebar({
             onClick={hasCompletedCase && !automationEnabled ? onGetNextCase : onStartWorkflow}
             disabled={workflowStatus === 'running' || showWorkflowControl}
           >
-            {hasCompletedCase && !automationEnabled ? 'Get Next Case' : 'Start Workflow'}
+            {hasCompletedCase && !automationEnabled ? 'Post Next Update' : 'Post Case Update'}
           </Button>
           
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -164,35 +164,6 @@ export function WorkflowSidebar({
             onClick={onStopWorkflow}
           >
             ⏹ Stop
-          </Button>
-          <Separator className="my-2" />
-          <div className="flex items-center space-x-2">
-            <Switch 
-              id="automation"
-              checked={automationEnabled}
-              onCheckedChange={setAutomationEnabled}
-              disabled={workflowStatus === 'running' || showWorkflowControl}
-            />
-            <Label 
-              htmlFor="automation" 
-              className="text-sm font-normal cursor-pointer"
-            >
-              Automatic Mode
-            </Label>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Separator className="mx-4" />
-
-      {/* Help Card */}
-      <Card className="m-4">
-        <CardContent className="pt-6 space-y-2">
-          <Button variant="ghost" size="sm" className="w-full justify-start">
-            View Documentation
-          </Button>
-          <Button variant="ghost" size="sm" className="w-full justify-start">
-            Keyboard Shortcuts
           </Button>
         </CardContent>
       </Card>
