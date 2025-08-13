@@ -10,10 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { WorkflowSidebar } from "./workflow-sidebar"
 import { WorkflowControl } from "@/modules/module-1-rdn-portal/components/workflow-control"
 import { ValidationStep } from "./workflow-steps/validation-step"
-import { PropertyVerificationStep } from "./workflow-steps/property-verification-step"
 import { UpdateAssistant } from "./update-assistant"
-import { TemplateSelectionStep } from "./workflow-steps/template-selection-step"
-import { UpdateGenerationStep } from "./workflow-steps/update-generation-step"
 import { UpdateReviewStep } from "./workflow-steps/update-review-step"
 import { SubmissionStep } from "./workflow-steps/submission-step"
 import { NotificationStep } from "./workflow-steps/notification-step"
@@ -40,39 +37,45 @@ export function CaseProcessingLayout() {
   const [validationResults, setValidationResults] = useState<any>(null)
   const [showUpdateAssistant, setShowUpdateAssistant] = useState(false)
   const [currentSessionId, setCurrentSessionId] = useState<string>('')
+  const [isGetNextCase, setIsGetNextCase] = useState(false)
+  const [workflowKey, setWorkflowKey] = useState(0)
 
   const steps: WorkflowStep[] = [
     'validation',
-    'property-verification',
-    'template-selection',
-    'update-generation',
     'update-review',
     'submission',
     'notification',
     'completion'
   ]
 
-  // Called when Module 1 & 2 complete successfully
-  const handleWorkflowComplete = async (extractedCaseId?: string, sessionId?: string) => {
-    console.log('Workflow complete, received case ID:', extractedCaseId, 'session ID:', sessionId)
+  // Called when Module 1 completes successfully
+  const handleWorkflowComplete = async (extractedCaseId?: string, sessionId?: string, navigationData?: any) => {
+    console.log('Workflow complete, received case ID:', extractedCaseId, 'session ID:', sessionId, 'data:', navigationData)
+    
+    // Use the actual case ID from Module 1
+    if (!extractedCaseId) {
+      console.error('No case ID received from Module 1')
+      return
+    }
+    
+    const caseId = extractedCaseId
+    
+    // Module 1 has already extracted all the data we need
+    // Check if we have a session ID from the navigation data
+    const finalSessionId = sessionId || navigationData?.sessionId
+    console.log('Using data extracted by Module 1 for case:', caseId, 'with session:', finalSessionId)
     
     // Mark modules as completed and start case processing
     setIsModulesRunning(false)
     setModulesCompleted(true)
     setWorkflowStatus('running')
+    setIsGetNextCase(false) // Reset the flag
     
-    // Use the actual case ID from Module 2
-    if (!extractedCaseId) {
-      console.error('No case ID received from Module 2')
-      return
-    }
-    
-    const caseId = extractedCaseId
     setCurrentCase(caseId)
     
     // Store session ID if provided, otherwise try to get it from database
-    if (sessionId) {
-      setCurrentSessionId(sessionId)
+    if (finalSessionId) {
+      setCurrentSessionId(finalSessionId)
     } else {
       // Try to get the latest session for this case
       const { data: sessionData } = await supabase
@@ -98,17 +101,28 @@ export function CaseProcessingLayout() {
       console.log('Case data fetched successfully')
       setCaseData(data)
     } else {
-      console.error('Failed to fetch case data, using empty structure')
-      // Set empty structure if fetch fails
-      setCaseData({
-        id: caseId,
-        order_type: '',
-        status: '',
-        address: '',
-        zip_code: '',
-        vin: '',
-        updates: []
-      })
+      // Module 1 should have extracted the data already
+      console.log('Waiting for case data to be available...')
+      // Try fetching again after a short delay
+      setTimeout(async () => {
+        const retryData = await fetchCaseById(caseId)
+        if (retryData) {
+          console.log('Case data fetched on retry')
+          setCaseData(retryData)
+        } else {
+          console.error('Case data not available after retry')
+          // Set empty structure as fallback
+          setCaseData({
+            id: caseId,
+            order_type: '',
+            status: '',
+            address: '',
+            zip_code: '',
+            vin: '',
+            updates: []
+          })
+        }
+      }, 2000)
     }
     
     setCurrentStep('validation')
@@ -179,49 +193,25 @@ export function CaseProcessingLayout() {
   }
 
   const handleGetNextCase = async () => {
-    // Get next case from queue
+    // Start modules to get next case from RDN portal
+    console.log('Getting next case from RDN portal...')
     setWorkflowStatus('running')
     setShowUpdateAssistant(false)
+    setIsGetNextCase(true)
+    setIsModulesRunning(true)
+    setModulesCompleted(false)
     
-    // In production, this will get the next case ID from the queue
-    // For MVP, using timestamp-based ID
-    const caseId = `CASE-${Date.now()}`
-    setCurrentCase(caseId)
-    
-    // Get the latest session for this case if it exists
-    const { data: sessionData } = await supabase
-      .from('processing_sessions')
-      .select('id')
-      .eq('case_id', caseId)
-      .eq('status', 'completed')
-      .order('completed_at', { ascending: false })
-      .limit(1)
-      .single()
-    
-    if (sessionData) {
-      setCurrentSessionId(sessionData.id)
-    }
-    
-    // Fetch case data from Supabase
-    const data = await fetchCaseById(caseId)
-    if (data) {
-      setCaseData(data)
-    } else {
-      // Set empty structure if fetch fails
-      setCaseData({
-        id: caseId,
-        order_type: '',
-        status: '',
-        address: '',
-        zip_code: '',
-        vin: '',
-        updates: []
-      })
-    }
-    
-    setCurrentStep('validation')
+    // Reset current case state
+    setCurrentCase(null)
+    setCaseData(null)
+    setCurrentStep(null)
     setStepIndex(0)
     setHasCompletedCase(false)
+    
+    // Increment workflow key to force WorkflowControl remount
+    setWorkflowKey(prev => prev + 1)
+    
+    // WorkflowControl will be triggered with isGetNextCase flag
   }
 
   const handleNext = () => {
@@ -269,13 +259,7 @@ export function CaseProcessingLayout() {
 
     switch (currentStep) {
       case 'validation':
-        return <ValidationStep {...props} caseData={caseData} onValidationComplete={setValidationResults} onShowUpdateAssistant={() => setShowUpdateAssistant(true)} />
-      case 'property-verification':
-        return <PropertyVerificationStep {...props} />
-      case 'template-selection':
-        return <TemplateSelectionStep {...props} />
-      case 'update-generation':
-        return <UpdateGenerationStep {...props} />
+        return <ValidationStep {...props} caseData={caseData} onValidationComplete={setValidationResults} onShowUpdateAssistant={() => setShowUpdateAssistant(true)} onGetNextCase={handleGetNextCase} />
       case 'update-review':
         return <UpdateReviewStep {...props} />
       case 'submission':
@@ -318,7 +302,12 @@ export function CaseProcessingLayout() {
             <div className="flex-1 flex items-center justify-center p-6">
               {isModulesRunning ? (
                 <div className="max-w-2xl w-full">
-                  <WorkflowControl onWorkflowComplete={handleWorkflowComplete} autoStart={true} />
+                  <WorkflowControl 
+                    key={workflowKey}
+                    onWorkflowComplete={handleWorkflowComplete} 
+                    autoStart={true} 
+                    isGetNextCase={isGetNextCase}
+                  />
                 </div>
               ) : (
                 <Card className="max-w-md">

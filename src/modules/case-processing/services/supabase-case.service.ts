@@ -46,7 +46,7 @@ export async function fetchCaseById(caseId: string): Promise<Case | null> {
         .single()
 
       if (caseError || !caseDetails) {
-        console.error('Error fetching case details:', caseError)
+        console.log('No case details found for session:', sessionId)
         return null
       }
 
@@ -148,7 +148,7 @@ export async function fetchCaseById(caseId: string): Promise<Case | null> {
         .limit(1)
 
       if (caseError || !caseDetailsArray || caseDetailsArray.length === 0) {
-        console.error('Error fetching case details:', caseError)
+        console.log('No case details found for case:', caseId)
         return null
       }
 
@@ -180,15 +180,9 @@ export async function fetchCaseById(caseId: string): Promise<Case | null> {
       
       console.log('Addresses found from latest extraction:', addressArray?.length || 0)
 
-      // Fetch 10 most recent updates for display based on update_date (actual RDN date)
-      const { data: updates } = await supabase
-        .from('case_update_history')
-        .select('*')
-        .eq('case_id', caseId)
-        .order('update_date', { ascending: false })
-        .limit(10)
-      
-      console.log('Recent 10 updates fetched for display:', updates?.length || 0)
+      // No session means no current extraction - don't show old updates
+      const updates: any[] = []
+      console.log('No session found, skipping update history fetch to avoid showing old data')
       
       // Fetch ALL updates for validation (all updates for this case)
       const { data: allUpdates } = await supabase

@@ -10,9 +10,10 @@ import { getLastUserUpdate, LastUserUpdate } from "../../services/template.servi
 interface LastUpdateProps {
   caseId: string
   sessionId: string
+  currentAddressType?: string
 }
 
-export function LastUpdate({ caseId, sessionId }: LastUpdateProps) {
+export function LastUpdate({ caseId, sessionId, currentAddressType }: LastUpdateProps) {
   const [lastUpdate, setLastUpdate] = useState<LastUserUpdate | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -32,7 +33,14 @@ export function LastUpdate({ caseId, sessionId }: LastUpdateProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Last Update Details</CardTitle>
+        <CardTitle className="text-base flex items-center justify-between">
+          <span>Last Update Details</span>
+          {currentAddressType && (
+            <Badge variant="outline" className="text-xs">
+              {currentAddressType}
+            </Badge>
+          )}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (

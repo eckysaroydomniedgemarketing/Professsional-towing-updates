@@ -31,10 +31,14 @@ export async function fetchActiveTemplates(): Promise<Template[]> {
 
   if (error) {
     console.error('Error fetching templates:', error)
-    return []
+    throw error
   }
 
-  return data || []
+  // Convert bigint ID to string and ensure proper typing
+  return (data || []).map(template => ({
+    ...template,
+    id: String(template.id)
+  }))
 }
 
 export async function getLastUserUpdate(caseId: string, currentSessionId: string): Promise<LastUserUpdate | null> {

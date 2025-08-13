@@ -7,11 +7,12 @@ import { NavigationStep } from '../types'
 import { Play, Pause, RotateCcw, Eye } from 'lucide-react'
 
 interface WorkflowControlProps {
-  onWorkflowComplete?: (caseId?: string) => void
+  onWorkflowComplete?: (caseId?: string, sessionId?: string, navigationData?: any) => void
   autoStart?: boolean
+  isGetNextCase?: boolean
 }
 
-export function WorkflowControl({ onWorkflowComplete, autoStart = false }: WorkflowControlProps = {}) {
+export function WorkflowControl({ onWorkflowComplete, autoStart = false, isGetNextCase = false }: WorkflowControlProps = {}) {
   const [isRunning, setIsRunning] = useState(false)
   const [currentStep, setCurrentStep] = useState<NavigationStep>(NavigationStep.INITIAL)
   const [error, setError] = useState<string>()
@@ -23,7 +24,7 @@ export function WorkflowControl({ onWorkflowComplete, autoStart = false }: Workf
       hasStartedRef.current = true
       handleStart()
     }
-  }, [autoStart])
+  }, [])
 
   const handleStart = async () => {
     setIsRunning(true)
@@ -33,7 +34,8 @@ export function WorkflowControl({ onWorkflowComplete, autoStart = false }: Workf
       // Call API to start workflow
       const response = await fetch('/api/module-1/start-workflow', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isGetNextCase })
       })
       
       if (!response.ok) {
@@ -52,17 +54,39 @@ export function WorkflowControl({ onWorkflowComplete, autoStart = false }: Workf
             setError(status.error)
             clearInterval(pollInterval)
             setIsRunning(false)
+          } else if (status.currentStep === NavigationStep.EXTRACTION_COMPLETE) {
+            // Handle extraction complete state (for Get Next Case)
+            clearInterval(pollInterval)
+            setIsRunning(false)
+            
+            if (onWorkflowComplete) {
+              console.log('[WorkflowControl] Extraction complete, data received:', status.data)
+              const caseId = status.data?.caseId
+              const sessionId = status.data?.sessionId
+              console.log('[WorkflowControl] Case ID:', caseId, 'Session ID:', sessionId)
+              onWorkflowComplete(caseId, sessionId, status.data)
+            }
           } else if (status.currentStep === NavigationStep.CASE_DETAIL) {
+            // For Get Next Case, we need to wait for the data to be available
+            if (isGetNextCase && !status.data?.caseId) {
+              console.log('[WorkflowControl] Waiting for case ID data...')
+              // Continue polling until we get the case ID
+              return
+            }
+            
             clearInterval(pollInterval)
             setIsRunning(false)
             // Call completion callback when workflow finishes successfully
             if (onWorkflowComplete) {
               // Check for case ID in status data first, then fall back to URL extraction
+              console.log('[WorkflowControl] Status data received:', status.data)
               const caseId = status.data?.caseId || (() => {
                 const caseIdMatch = status.currentUrl?.match(/case_id=(\d+)/)
                 return caseIdMatch ? caseIdMatch[1] : undefined
               })()
-              onWorkflowComplete(caseId)
+              const sessionId = status.data?.sessionId
+              console.log('[WorkflowControl] Extracted case ID:', caseId, 'session ID:', sessionId)
+              onWorkflowComplete(caseId, sessionId, status.data)
             }
           }
         }

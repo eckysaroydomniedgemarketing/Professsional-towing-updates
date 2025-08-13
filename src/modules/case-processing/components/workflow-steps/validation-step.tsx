@@ -26,9 +26,10 @@ interface ValidationStepProps extends WorkflowStepProps {
   caseData?: Case
   onValidationComplete?: (result: CaseValidationResult | null) => void
   onShowUpdateAssistant?: () => void
+  onGetNextCase?: () => void
 }
 
-export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidationComplete, onShowUpdateAssistant }: ValidationStepProps) {
+export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidationComplete, onShowUpdateAssistant, onGetNextCase }: ValidationStepProps) {
   const [validationResult, setValidationResult] = useState<CaseValidationResult | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [keywordAnalysis, setKeywordAnalysis] = useState<ExclusionKeywordResults | null>(null)
@@ -713,7 +714,7 @@ export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidat
             </div>
 
             {/* Update History Analysis */}
-            {caseData?.updates && (
+            {caseData?.updates && keywordAnalysis?.analysisComplete && (
               <UpdateHistoryDisplay 
                 updates={caseData.updates}
                 keywordAnalysis={keywordAnalysis}
@@ -848,7 +849,7 @@ export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidat
         <div className="flex gap-2">
           {((validationResult && !validationResult.passed) || 
             keywordAnalysis?.hasExclusionKeywords || keywordAnalysis?.error) && (
-            <Button variant="outline" onClick={onSkip}>
+            <Button variant="outline" onClick={onGetNextCase || onSkip}>
               Get Next Case
             </Button>
           )}

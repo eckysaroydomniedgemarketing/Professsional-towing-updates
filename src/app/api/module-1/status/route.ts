@@ -22,6 +22,8 @@ export async function GET() {
     const currentUrl = await portalService.getCurrentUrl()
     const navigationData = getNavigationData()
     
+    console.log('[STATUS API] Returning navigation data:', navigationData)
+    
     return NextResponse.json({
       ...state,
       currentUrl,

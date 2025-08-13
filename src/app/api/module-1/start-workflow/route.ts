@@ -4,11 +4,18 @@ import {
   setPortalService, 
   setWorkflowError, 
   clearWorkflowState,
-  setNavigationData 
+  setNavigationData,
+  getBrowserInitialized,
+  setBrowserInitialized,
+  getPortalService
 } from '@/modules/module-1-rdn-portal/services/workflow-state.service'
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
+    // Parse request body
+    const body = await request.json()
+    const { isGetNextCase = false } = body
+    
     // Get credentials from environment variables
     const credentials = {
       username: process.env.RDN_USERNAME || '',
@@ -23,12 +30,24 @@ export async function POST() {
     // Clear any previous state
     clearWorkflowState()
     
-    // Create new service instance
-    const portalService = new RDNPortalService(credentials)
-    setPortalService(portalService)
+    let portalService: RDNPortalService
     
-    // Initialize the browser
-    await portalService.initialize()
+    // Check if we need to reuse existing browser for Get Next Case
+    if (isGetNextCase && getBrowserInitialized() && getPortalService()) {
+      // Reuse existing portal service
+      portalService = getPortalService()!
+      portalService.setGetNextCase(true)
+      console.log('[API] Reusing existing browser for Get Next Case')
+    } else {
+      // Create new service instance
+      portalService = new RDNPortalService(credentials, isGetNextCase)
+      setPortalService(portalService)
+      
+      // Initialize the browser only for first time
+      await portalService.initialize()
+      setBrowserInitialized(true)
+      console.log('[API] New browser initialized')
+    }
     
     // Start the workflow in the background
     portalService.executeFullWorkflow()
@@ -40,6 +59,7 @@ export async function POST() {
         } else {
           // Store the navigation data including case ID
           if (result.data) {
+            console.log('[API] Storing navigation data:', result.data)
             setNavigationData(result.data)
           }
         }

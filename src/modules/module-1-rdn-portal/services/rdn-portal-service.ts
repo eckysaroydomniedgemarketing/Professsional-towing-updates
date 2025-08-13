@@ -9,6 +9,7 @@ import { BrowserManager } from './browser-manager.service'
 import { AuthManager } from './auth-manager.service'
 import { NavigationManager } from './navigation-manager.service'
 import { CaseProcessor } from './case-processor.service'
+import extractCaseData from '@/modules/data-extraction'
 
 export class RDNPortalService {
   private browserManager: BrowserManager
@@ -20,12 +21,21 @@ export class RDNPortalService {
     currentStep: NavigationStep.INITIAL,
     isAuthenticated: false
   }
+  
+  private isGetNextCase: boolean = false
+  private lastProcessedCaseId: string | null = null
 
-  constructor(private credentials: RDNCredentials) {
+  constructor(private credentials: RDNCredentials, getNextCase: boolean = false) {
     this.browserManager = new BrowserManager()
     this.authManager = new AuthManager(credentials)
     this.navigationManager = new NavigationManager()
     this.caseProcessor = new CaseProcessor()
+    this.isGetNextCase = getNextCase
+  }
+  
+  // Method to update the getNextCase flag for reused instance
+  setGetNextCase(value: boolean): void {
+    this.isGetNextCase = value
   }
 
   async initialize(): Promise<void> {
@@ -165,9 +175,198 @@ export class RDNPortalService {
     
     if (result.success) {
       this.state.currentStep = result.nextStep
+      // Store the last processed case ID from the first case
+      if (result.data?.caseId) {
+        this.lastProcessedCaseId = result.data.caseId
+        console.log(`[RDN-PORTAL] Stored last processed case ID from first case: ${this.lastProcessedCaseId}`)
+      }
     }
     
     return result
+  }
+  
+  async processNextCase(): Promise<NavigationResult> {
+    const context = this.browserManager.getContext()
+    if (!context) {
+      return {
+        success: false,
+        nextStep: NavigationStep.ERROR,
+        error: 'Browser context not available'
+      }
+    }
+    
+    try {
+      console.log('[RDN-PORTAL] Finding next case in listing')
+      
+      // Get the current page (should be case listing after closing tabs)
+      const pages = context.pages()
+      const page = pages[0]
+      
+      if (!page) {
+        return {
+          success: false,
+          nextStep: NavigationStep.ERROR,
+          error: 'No page available'
+        }
+      }
+      
+      // Ensure page is in focus and loaded
+      await page.bringToFront()
+      await page.waitForLoadState('networkidle')
+      console.log('[RDN-PORTAL] Case listing page brought to front')
+      
+      // Get the mainFrame iframe where the case table is located
+      const frame = page.frame({ name: 'mainFrame' })
+      if (!frame) {
+        console.log('[RDN-PORTAL] mainFrame not found, waiting for it')
+        await page.waitForSelector('iframe[name="mainFrame"]', { timeout: 10000 })
+        const frameRetry = page.frame({ name: 'mainFrame' })
+        if (!frameRetry) {
+          return {
+            success: false,
+            nextStep: NavigationStep.ERROR,
+            error: 'Could not access mainFrame iframe'
+          }
+        }
+      }
+      
+      const activeFrame = frame || page.frame({ name: 'mainFrame' })
+      if (!activeFrame) {
+        return {
+          success: false,
+          nextStep: NavigationStep.ERROR,
+          error: 'mainFrame iframe not accessible'
+        }
+      }
+      
+      // Wait for case listing table inside the iframe
+      await activeFrame.waitForSelector('#casestable tbody tr, table.js-datatable tbody tr', { timeout: 10000 })
+      console.log('[RDN-PORTAL] Case table found in iframe')
+      
+      // Find all case links inside the iframe
+      const caseLinks = await activeFrame.$$('tbody tr td:first-child a[href*="case_id="] b')
+      console.log(`[RDN-PORTAL] Found ${caseLinks.length} cases in listing`)
+      
+      if (caseLinks.length === 0) {
+        return {
+          success: false,
+          nextStep: NavigationStep.ERROR,
+          error: 'No cases available in listing'
+        }
+      }
+      
+      // Find the next case to process
+      let nextCaseLink = null
+      let caseId = null
+      
+      if (this.lastProcessedCaseId) {
+        // Find the index of the last processed case
+        console.log(`[RDN-PORTAL] Looking for last processed case: ${this.lastProcessedCaseId}`)
+        let foundIndex = -1
+        
+        for (let i = 0; i < caseLinks.length; i++) {
+          const linkText = await caseLinks[i].textContent()
+          if (linkText === this.lastProcessedCaseId) {
+            foundIndex = i
+            console.log(`[RDN-PORTAL] Found last processed case at index ${i}`)
+            break
+          }
+        }
+        
+        // Get the next case after the last processed one
+        if (foundIndex >= 0 && foundIndex < caseLinks.length - 1) {
+          nextCaseLink = caseLinks[foundIndex + 1]
+          caseId = await nextCaseLink.textContent()
+          console.log(`[RDN-PORTAL] Clicking on next case after ${this.lastProcessedCaseId}: ${caseId}`)
+        } else if (foundIndex === caseLinks.length - 1) {
+          return {
+            success: false,
+            nextStep: NavigationStep.ERROR,
+            error: 'No more cases to process - reached end of list'
+          }
+        } else {
+          // If we can't find the last processed case, take the first one
+          console.log(`[RDN-PORTAL] Could not find last processed case, selecting first case`)
+          nextCaseLink = caseLinks[0]
+          caseId = await nextCaseLink.textContent()
+        }
+      } else {
+        // No last processed case, take the first one
+        console.log(`[RDN-PORTAL] No last processed case, selecting first case`)
+        nextCaseLink = caseLinks[0]
+        caseId = await nextCaseLink.textContent()
+      }
+      
+      console.log(`[RDN-PORTAL] Clicking on next case: ${caseId}`)
+      
+      // Click opens in new tab
+      const [newPage] = await Promise.all([
+        context.waitForEvent('page'),
+        nextCaseLink.click()
+      ])
+      
+      // Switch to new tab and wait for it to load
+      await newPage.waitForLoadState('networkidle')
+      await newPage.waitForSelector('#tab_6, [onclick*="switchTab(6)"]', { state: 'visible' })
+      
+      // Click Updates tab on the new page
+      const updatesClicked = await this.navigationManager.clickUpdatesTab(newPage)
+      console.log(`[RDN-PORTAL] Updates tab clicked: ${updatesClicked}`)
+      
+      // Update browser manager's page reference to the new tab
+      this.browserManager.setPage(newPage)
+      
+      // Extract data for the new case (same as processCases does)
+      if (caseId) {
+        console.log(`[RDN-PORTAL] Starting data extraction for case ${caseId}`)
+        const extractionResult = await extractCaseData(caseId, newPage)
+        
+        if (!extractionResult.success) {
+          console.error(`[RDN-PORTAL] Data extraction failed for case ${caseId}`)
+          return {
+            success: false,
+            nextStep: NavigationStep.ERROR,
+            error: extractionResult.error || 'Data extraction failed'
+          }
+        }
+        
+        console.log(`[RDN-PORTAL] Data extraction successful for case ${caseId}`)
+        this.state.currentStep = NavigationStep.EXTRACTION_COMPLETE
+        
+        // Store the last processed case ID for next iteration
+        this.lastProcessedCaseId = caseId
+        console.log(`[RDN-PORTAL] Stored last processed case ID: ${this.lastProcessedCaseId}`)
+        
+        return {
+          success: true,
+          nextStep: NavigationStep.EXTRACTION_COMPLETE,
+          data: {
+            caseId: caseId,
+            updatesTabClicked: updatesClicked,
+            sessionId: extractionResult.sessionId,
+            message: 'Case data extracted successfully',
+            recordsInserted: extractionResult.recordsInserted
+          }
+        }
+      }
+      
+      this.state.currentStep = NavigationStep.CASE_DETAIL
+      
+      return {
+        success: true,
+        nextStep: NavigationStep.CASE_DETAIL,
+        data: {
+          caseId: caseId || '',
+          updatesTabClicked: updatesClicked
+        }
+      }
+    } catch (error) {
+      return {
+        success: false,
+        nextStep: NavigationStep.ERROR,
+        error: error instanceof Error ? error.message : 'Failed to process next case'
+      }
+    }
   }
 
   async executeFullWorkflow(): Promise<NavigationResult> {
@@ -181,6 +380,42 @@ export class RDNPortalService {
         }
       }
       
+      // If getting next case, skip login and go straight to case listing
+      if (this.isGetNextCase) {
+        console.log('[RDN-PORTAL] Getting next case from existing session')
+        
+        const context = this.browserManager.getContext()
+        if (!context) {
+          return {
+            success: false,
+            nextStep: NavigationStep.ERROR,
+            error: 'Browser context not available'
+          }
+        }
+        
+        // Get all open pages
+        const pages = context.pages()
+        console.log(`[RDN-PORTAL] Found ${pages.length} open tabs`)
+        
+        // Close all tabs except the first one (case listing)
+        if (pages.length > 1) {
+          for (let i = pages.length - 1; i > 0; i--) {
+            await pages[i].close()
+            console.log(`[RDN-PORTAL] Closed tab ${i}`)
+          }
+        }
+        
+        // Switch to first tab (should be case listing)
+        const listingPage = pages[0]
+        await listingPage.bringToFront()
+        
+        // Process next case
+        const processingResult = await this.processNextCase()
+        console.log('[RDN-PORTAL] processNextCase result:', processingResult)
+        return processingResult
+      }
+      
+      // Normal flow for first case
       // Step 1: Navigate to login
       const loginNavResult = await this.navigateToLogin()
       if (!loginNavResult.success) return loginNavResult

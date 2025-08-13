@@ -4,9 +4,6 @@ export type WorkflowStatus = 'ready' | 'running' | 'paused' | 'stopped'
 
 export type WorkflowStep = 
   | 'validation'
-  | 'property-verification'
-  | 'template-selection'
-  | 'update-generation'
   | 'update-review'
   | 'submission'
   | 'notification'
