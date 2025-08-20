@@ -3,7 +3,8 @@ import type { UpdateElement } from '../types';
 
 export class UpdateDiscoveryService {
   /**
-   * Find all agent updates that are not visible
+   * Find all updates that are not visible (agent check disabled for MVP)
+   * Originally checked for agent updates only, now processes all updates
    */
   async findInvisibleAgentUpdates(casePage: Page): Promise<UpdateElement[]> {
     try {
@@ -24,11 +25,13 @@ export class UpdateDiscoveryService {
         const authorValue = await container.$('dt:has-text("Last Updated By") + dd');
         const authorText = await authorValue?.textContent();
         
-        if (!authorText || !authorText.includes('(Agent)')) {
-          continue; // Not an agent update
-        }
+        // Agent check disabled for MVP - process all updates regardless of author type
+        // Original check: if (!authorText || !authorText.includes('(Agent)'))
+        // if (!authorText || !authorText.includes('(Agent)')) {
+        //   continue; // Not an agent update
+        // }
         
-        console.log(`Found agent update by: ${authorText}`);
+        console.log(`Found update by: ${authorText || 'Agent check disabled'}`);
         
         // Extract and validate company
         let companyName: string | undefined;
@@ -73,14 +76,14 @@ export class UpdateDiscoveryService {
             visibilityButton: visibilityButton,
             company: companyName,
             updateText: updateText,
-            isAgent: true,
+            isAgent: true, // Always true for MVP (agent check disabled)
             isVisible: false
           });
-          console.log(`Found agent update ${updateId} from company "${companyName}" marked as Not Visible`);
+          console.log(`Found update ${updateId} from company "${companyName}" marked as Not Visible`);
         }
       }
       
-      console.log(`Total invisible agent updates found: ${updates.length}`);
+      console.log(`Total invisible updates found: ${updates.length}`);
       return updates;
     } catch (error) {
       console.error('Error finding invisible agent updates:', error);
