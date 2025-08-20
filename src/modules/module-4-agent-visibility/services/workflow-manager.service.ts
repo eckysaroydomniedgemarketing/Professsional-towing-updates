@@ -1,5 +1,5 @@
 import { Page } from 'playwright';
-import { rdnVisibilityService } from './rdn-visibility.service';
+import rdnVisibilityService from './rdn-visibility.service';
 import { visibilityLogService } from './visibility-log.service';
 import type { WorkflowState, WorkflowConfig, ProcessCaseResult } from '../types';
 
@@ -192,6 +192,7 @@ class WorkflowManagerService {
             this.config.mode,
             undefined,
             undefined
+            // undefined // DISCONNECTED - button clicks parameter removed
           );
         } catch (logError) {
           console.warn('Could not log skipped case:', logError);
@@ -218,6 +219,7 @@ class WorkflowManagerService {
           this.config.mode,
           result.company,
           result.updateText
+          // result.buttonClicks // DISCONNECTED - commented out for future use
         );
       } catch (logError) {
         console.error('Error logging visibility update:', logError);

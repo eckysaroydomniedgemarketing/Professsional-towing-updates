@@ -25,6 +25,7 @@ export default function AgentUpdatesVisibilityPage() {
     stopWorkflow,
     processNextCase,
     exportReport,
+    exportReportPDF,
     deleteReport
   } = useWorkflow();
   
@@ -86,6 +87,14 @@ export default function AgentUpdatesVisibilityPage() {
       await exportReport();
     } catch (err) {
       console.error('Failed to export report:', err);
+    }
+  };
+
+  const handleExportPDF = async () => {
+    try {
+      await exportReportPDF();
+    } catch (err) {
+      console.error('Failed to export PDF report:', err);
     }
   };
 
@@ -175,6 +184,7 @@ export default function AgentUpdatesVisibilityPage() {
         <ReportTable
           data={reportData}
           onExport={handleExport}
+          onExportPDF={handleExportPDF}
           onDelete={handleDelete}
         />
       )}

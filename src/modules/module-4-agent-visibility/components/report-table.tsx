@@ -11,7 +11,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Download, Trash2 } from 'lucide-react';
+import { Download, FileText, Trash2 } from 'lucide-react';
 
 interface ReportTableProps {
   data: Array<{
@@ -22,10 +22,11 @@ interface ReportTableProps {
     status: 'Processed' | 'Skipped';
   }>;
   onExport: () => void;
+  onExportPDF?: () => void;
   onDelete?: (logId: string) => void;
 }
 
-export function ReportTable({ data, onExport, onDelete }: ReportTableProps) {
+export function ReportTable({ data, onExport, onExportPDF, onDelete }: ReportTableProps) {
   const getStatusBadge = (status: 'Processed' | 'Skipped') => {
     if (status === 'Processed') {
       return <Badge variant="default">Processed</Badge>;
@@ -43,14 +44,26 @@ export function ReportTable({ data, onExport, onDelete }: ReportTableProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <CardTitle>Processing Report</CardTitle>
-        <Button
-          onClick={onExport}
-          variant="secondary"
-          size="sm"
-        >
-          <Download className="mr-2 h-4 w-4" />
-          Export to CSV
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            onClick={onExport}
+            variant="secondary"
+            size="sm"
+          >
+            <Download className="mr-2 h-4 w-4" />
+            Export to CSV
+          </Button>
+          {onExportPDF && (
+            <Button
+              onClick={onExportPDF}
+              variant="secondary"
+              size="sm"
+            >
+              <FileText className="mr-2 h-4 w-4" />
+              Export PDF
+            </Button>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         {data && data.length > 0 ? (

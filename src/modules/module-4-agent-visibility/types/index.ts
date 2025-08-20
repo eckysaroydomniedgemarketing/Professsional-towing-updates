@@ -6,6 +6,23 @@ export interface VisibilityLogEntry {
   company?: string;
   update_text?: string;
   created_at?: string;
+  transfer_to_client_clicked?: boolean;
+  client_button_clicked?: boolean;
+  collector_button_clicked?: boolean;
+  buttons_available?: ButtonAvailability;
+}
+
+export interface ButtonAvailability {
+  transfer_to_client?: boolean;
+  client?: boolean;
+  collector?: boolean;
+}
+
+export interface ButtonClickResult {
+  transfer_to_client_clicked: boolean;
+  client_button_clicked: boolean;
+  collector_button_clicked: boolean;
+  buttons_available: ButtonAvailability;
 }
 
 export interface VisibilityReport {
@@ -63,6 +80,7 @@ export interface ProcessCaseResult {
   updateText?: string;
   success: boolean;
   error?: string;
+  buttonClicks?: ButtonClickResult;
 }
 
 export interface WorkflowConfig {

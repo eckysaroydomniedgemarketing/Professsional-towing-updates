@@ -2,6 +2,7 @@ import { Case, CaseValidationResult } from '../types/case.types'
 import { createClient } from '@supabase/supabase-js'
 import { checkAgentUpdateExists } from './agent-update-validation.service'
 import { ClientExclusionService } from './client-exclusion.service'
+import { VALID_STATUSES } from '@/modules/data-extraction/utils/status-normalizer'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -11,15 +12,15 @@ export class CaseValidationService {
   // Valid order types for processing
   private static readonly VALID_ORDER_TYPES = ['Involuntary Repo', 'Investigate Repo']
   
-  // Valid status for processing
-  private static readonly VALID_STATUS = 'Open'
+  // Valid statuses for processing - imported from status normalizer
+  private static readonly VALID_STATUSES = VALID_STATUSES
 
   static validateOrderType(orderType: string): boolean {
     return this.VALID_ORDER_TYPES.includes(orderType)
   }
 
   static validateStatus(status: string): boolean {
-    return status === this.VALID_STATUS
+    return this.VALID_STATUSES.includes(status)
   }
 
   static async validateZipCodes(addresses: { zip_code?: string }[]): Promise<boolean> {
@@ -104,6 +105,17 @@ export class CaseValidationService {
     
     const reasons: string[] = []
     
+    // Check if status exists
+    if (!caseData.status) {
+      reasons.push('Status is missing - extraction may have failed')
+      return {
+        passed: false,
+        orderTypeValid: false,
+        statusValid: false,
+        reasons
+      }
+    }
+    
     const orderTypeValid = this.validateOrderType(caseData.order_type)
     const statusValid = this.validateStatus(caseData.status)
     const zipCodeValid = await this.validateZipCodes(caseData.addresses || [])
@@ -127,7 +139,7 @@ export class CaseValidationService {
     }
     
     if (!statusValid) {
-      reasons.push(`Invalid status: ${caseData.status}. Must be 'Open'`)
+      reasons.push(`Invalid status: ${caseData.status}. Must be one of: ${this.VALID_STATUSES.join(', ')}`)
     }
 
     if (!zipCodeValid) {

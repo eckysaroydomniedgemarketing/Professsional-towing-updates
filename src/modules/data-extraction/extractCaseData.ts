@@ -54,13 +54,7 @@ export async function extractCaseData(
       }
     }
     
-    // Step 0: Insert parent record in case_updates table
-    console.log('Creating case update record...');
-    const status = 'Open'; // Default status for new cases
-    await insertCaseUpdate(caseId, status);
-    recordsInserted++;
-    
-    // Step 1: Extract case details with session ID
+    // Step 1: Extract case details first to get status
     // If we're on My Summary tab, extract Additional Info first
     console.log('Extracting case details...');
     let caseDetails: any;
@@ -102,6 +96,18 @@ export async function extractCaseData(
       // Already on Updates tab, just extract case details
       caseDetails = await extractCaseDetails(page, caseId);
     }
+    
+    // Validate that status was extracted
+    if (!caseDetails.status) {
+      const errorMsg = `Failed to extract status for case ${caseId}. Cannot proceed with data extraction.`;
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    }
+    
+    // Step 0: Insert parent record in case_updates table with extracted status
+    console.log(`Creating case update record with status: ${caseDetails.status}`);
+    await insertCaseUpdate(caseId, caseDetails.status);
+    recordsInserted++;
     
     await insertCaseDetails(caseDetails, sessionId);
     recordsInserted++;

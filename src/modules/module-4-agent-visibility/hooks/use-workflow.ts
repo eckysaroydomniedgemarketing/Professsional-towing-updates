@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { apiClient } from '../services/api-client.service';
 import { getErrorMessage } from '../utils/error-handler';
+import { downloadPDF } from '../utils/pdf-export.utils';
 import type { WorkflowState, ProcessingStats, VisibilityReport } from '../types';
 
 interface UseWorkflowReturn {
@@ -13,6 +14,7 @@ interface UseWorkflowReturn {
   stopWorkflow: () => Promise<void>;
   processNextCase: () => Promise<void>;
   exportReport: () => Promise<void>;
+  exportReportPDF: () => Promise<void>;
   refreshReport: () => Promise<void>;
   deleteReport: (logId: string) => Promise<void>;
 }
@@ -206,6 +208,28 @@ export function useWorkflow(): UseWorkflowReturn {
     }
   };
 
+  const exportReportPDF = async () => {
+    setError(null);
+    try {
+      // Get fresh report data from API
+      const response = await apiClient.getReport();
+      const pdfData = response.data.map(item => ({
+        date_ist: item.date_ist || '',
+        case_id: item.case_id,
+        updates_made_visible: item.updates_made_visible,
+        processing_mode: item.processing_mode || 'manual',
+        status: item.status
+      }));
+      
+      // Generate and download PDF
+      downloadPDF(pdfData);
+    } catch (err) {
+      const errorMessage = getErrorMessage(err);
+      setError(errorMessage);
+      throw err;
+    }
+  };
+
   const refreshReport = async () => {
     try {
       const response = await apiClient.getReport();
@@ -249,6 +273,7 @@ export function useWorkflow(): UseWorkflowReturn {
     stopWorkflow,
     processNextCase,
     exportReport,
+    exportReportPDF,
     refreshReport,
     deleteReport
   };

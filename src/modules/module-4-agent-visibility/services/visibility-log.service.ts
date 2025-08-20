@@ -2,13 +2,15 @@ import type {
   VisibilityLogEntry, 
   VisibilityReport, 
   ProcessingStats, 
-  DailySummary 
+  DailySummary,
+  ButtonClickResult 
 } from '../types';
 import { supabaseServerService } from './supabase-server.service';
 
 class VisibilityLogService {
   /**
    * Log case processing with visibility update count
+   * Button clicks parameter DISCONNECTED - kept for future use
    */
   async logCaseVisibilityUpdate(
     caseId: string,
@@ -16,6 +18,7 @@ class VisibilityLogService {
     mode: 'manual' | 'automatic',
     company?: string,
     updateText?: string
+    // buttonClicks?: ButtonClickResult // DISCONNECTED - commented out for future use
   ): Promise<{ data: string | null; error: any }> {
     try {
       const supabase = supabaseServerService.getClient();
@@ -29,6 +32,11 @@ class VisibilityLogService {
           processing_mode: mode,
           company: company,
           update_text: updateText
+          // DISCONNECTED - Button click fields commented out for future use
+          // transfer_to_client_clicked: buttonClicks?.transfer_to_client_clicked || false,
+          // client_button_clicked: buttonClicks?.client_button_clicked || false,
+          // collector_button_clicked: buttonClicks?.collector_button_clicked || false,
+          // buttons_available: buttonClicks?.buttons_available || {}
         })
         .select('id')
         .single();

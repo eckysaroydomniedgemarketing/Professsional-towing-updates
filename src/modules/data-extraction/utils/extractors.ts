@@ -5,6 +5,7 @@ import {
   CaseAddress, 
   CaseUpdateHistory 
 } from '../types';
+import { normalizeStatus } from './status-normalizer';
 
 const EXCLUSION_KEYWORDS = ['DRN', 'LPR', 'GPS', 'Surrender'];
 
@@ -64,11 +65,72 @@ export async function extractCaseDetails(page: Page, caseId: string): Promise<Ca
     }
   }
 
-  // Extract Status
-  const statusElement = await page.$('.badge-open, .badge-repo, .badge-closed');
-  if (statusElement) {
-    details.status = await statusElement.textContent() || null;
-    console.log('Status extracted:', details.status);
+  // Extract Status - Try multiple patterns for dynamic extraction
+  // Method 1: Try dropdown select element first (most reliable)
+  const statusDropdown = await page.$('#status_static');
+  if (statusDropdown) {
+    const dropdownValue = await statusDropdown.evaluate((el: HTMLSelectElement) => {
+      return el.options[el.selectedIndex]?.text || el.value || null;
+    });
+    if (dropdownValue) {
+      details.status = normalizeStatus(dropdownValue);
+      console.log('Status extracted from dropdown:', details.status);
+    }
+  }
+  
+  // Method 2: If dropdown not found or empty, try badge elements
+  if (!details.status) {
+    const statusBadge = await page.$('.badge-open, .badge-repo, .badge-closed, .badge-auction, .badge-transfer, .badge-info, [class*="badge-"]');
+    if (statusBadge) {
+      const badgeText = await statusBadge.textContent();
+      details.status = normalizeStatus(badgeText);
+      console.log('Status extracted from badge:', details.status);
+    }
+  }
+  
+  // Method 3: Try JavaScript variable as fallback
+  if (!details.status) {
+    try {
+      const jsStatus = await page.evaluate(() => {
+        return (window as any).case_status || null;
+      });
+      if (jsStatus) {
+        details.status = normalizeStatus(jsStatus);
+        console.log('Status extracted from JavaScript variable:', details.status);
+      }
+    } catch (error) {
+      console.log('Could not extract status from JavaScript variable');
+    }
+  }
+  
+  // Method 4: Try to find status in text pattern (last resort)
+  if (!details.status) {
+    try {
+      const statusFromText = await page.evaluate(() => {
+        // Look for elements containing "Status" text
+        const elements = document.querySelectorAll('*');
+        for (const el of elements) {
+          if (el.textContent?.includes('Status') && !el.textContent.includes('Sub-Status')) {
+            // Check next sibling or child elements for status value
+            const nextEl = el.nextElementSibling;
+            if (nextEl && ['Open', 'Repossessed', 'repo', 'Office Transfer', 'Need Info', 'Auction'].some(s => nextEl.textContent?.includes(s))) {
+              return nextEl.textContent?.trim();
+            }
+          }
+        }
+        return null;
+      });
+      if (statusFromText) {
+        details.status = normalizeStatus(statusFromText);
+        console.log('Status extracted from text pattern:', details.status);
+      }
+    } catch (error) {
+      console.log('Could not extract status from text pattern');
+    }
+  }
+  
+  if (!details.status) {
+    console.error('WARNING: Could not extract status from any source');
   }
 
   // Extract Client

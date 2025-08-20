@@ -3,22 +3,18 @@ import { updateCaseStatus } from './supabase-case.service'
 import { CaseValidationService } from './case-validation.service'
 
 export class ValidationLogicService {
-  // Validation constants
-  private static readonly VALID_ORDER_TYPES = ['Involuntary Repo', 'Investigate Repo']
-  private static readonly VALID_STATUS = 'Open'
-
   /**
-   * Check if order type is valid
+   * Check if order type is valid - delegates to CaseValidationService
    */
   static isValidOrderType(orderType: string): boolean {
-    return this.VALID_ORDER_TYPES.includes(orderType)
+    return CaseValidationService.validateOrderType(orderType)
   }
 
   /**
-   * Check if status is valid
+   * Check if status is valid - delegates to CaseValidationService
    */
   static isValidStatus(status: string): boolean {
-    return status === this.VALID_STATUS
+    return CaseValidationService.validateStatus(status)
   }
 
   /**
@@ -95,7 +91,7 @@ export class ValidationLogicService {
    */
   static getStatusMessage(status: string): string {
     return this.isValidStatus(status) 
-      ? 'Case is open' 
-      : 'Case must be open'
+      ? 'Valid case status' 
+      : 'Invalid case status'
   }
 }

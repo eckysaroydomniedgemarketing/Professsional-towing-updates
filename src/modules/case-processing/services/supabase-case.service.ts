@@ -28,7 +28,8 @@ async function getLatestSessionId(caseId: string): Promise<string | null> {
 }
 
 /**
- * Update case status with optional rejection reason
+ * Update case validation status with optional rejection reason
+ * Now uses separate validation_status column to preserve original case status
  */
 export async function updateCaseStatus(
   caseId: string, 
@@ -36,10 +37,11 @@ export async function updateCaseStatus(
   rejectionReason?: string
 ): Promise<void> {
   try {
-    console.log('Updating case status:', { caseId, status, rejectionReason })
+    console.log('Updating case validation status:', { caseId, status, rejectionReason })
     
     const updateData: any = {
-      status: status
+      validation_status: status,
+      validation_date: new Date().toISOString()
     }
     
     // Add rejection reason if status is rejected
@@ -126,16 +128,18 @@ export async function fetchCaseById(caseId: string): Promise<Case | null> {
       
       console.log('All updates fetched for validation:', allUpdates?.length || 0)
       
-      // Fetch the latest case status and rejection reason
+      // Fetch the latest case status, validation status and rejection reason
       const { data: caseUpdateArray } = await supabase
         .from('case_updates')
-        .select('status, rejection_reason')
+        .select('status, validation_status, rejection_reason')
         .eq('case_id', caseId)
         .order('created_at', { ascending: false })
         .limit(1)
       
       const latestStatus = caseUpdateArray?.[0]?.status || caseDetails.status || ''
+      const validationStatus = caseUpdateArray?.[0]?.validation_status || null
       const rejectionReason = caseUpdateArray?.[0]?.rejection_reason || null
+      console.log('Latest case status:', latestStatus, 'Validation status:', validationStatus)
       
       // Get primary address info
       const primaryAddress = addressArray?.find(addr => addr.is_primary) || addressArray?.[0]
@@ -235,14 +239,15 @@ export async function fetchCaseById(caseId: string): Promise<Case | null> {
       // Fetch the latest case status from case_updates table
       const { data: caseUpdateArray } = await supabase
         .from('case_updates')
-        .select('status')
+        .select('status, validation_status, rejection_reason')
         .eq('case_id', caseId)
         .order('created_at', { ascending: false })
         .limit(1)
       
       const latestStatus = caseUpdateArray?.[0]?.status || caseDetails.status || ''
+      const validationStatus = caseUpdateArray?.[0]?.validation_status || null
       const rejectionReason = caseUpdateArray?.[0]?.rejection_reason || null
-      console.log('Latest case status:', latestStatus)
+      console.log('Latest case status:', latestStatus, 'Validation status:', validationStatus)
 
       // Get primary address info for backwards compatibility
       const primaryAddress = addressArray?.find(addr => addr.is_primary) || addressArray?.[0]
