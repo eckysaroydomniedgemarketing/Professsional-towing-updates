@@ -1,7 +1,7 @@
 # Project Plan 
 
 ## Project Overview
-A concise web application that provides core functionality. Designed to streamline workflows and improve efficiency.
+A concise web application that provides core functionality. Designed to streamline workflows and improve efficiency. Features automatic processing mode for enhanced productivity and manual case input via RDN portal navigation for specific case handling.
 
 ## Project Status
 **MVP/POC Level Project**
@@ -46,3 +46,10 @@ Each module contains:
 - Minimal shared utilities (auth and database only)
 - No shared UI components
 - Strong module boundaries for independent development
+
+## Key Features
+- **Automatic Processing Mode**: Toggle-enabled automatic case processing with intelligent skip logic for rejected cases
+- **Manual Case Input**: Direct navigation to specific cases via RDN portal integration
+- **Modular Workflow**: Sequential module execution (Module 1 → Module 2 → Module 3)
+- **Company Validation**: Flexible pattern matching for company-specific processing
+- **Real-time Status Tracking**: Live updates and progress monitoring throughout workflows

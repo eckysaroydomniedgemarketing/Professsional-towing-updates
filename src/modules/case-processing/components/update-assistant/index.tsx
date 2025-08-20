@@ -15,6 +15,7 @@ import {
   getLastUserUpdate,
   Template 
 } from "../../services/template.service"
+import { findAndValidateAddress } from "../../services/update-poster.service"
 
 interface UpdateAssistantProps {
   caseData: Case
@@ -232,10 +233,10 @@ export function UpdateAssistant({
         }`
       })
       
-      // Find matching address value
-      const addressPart = selectedAddress.full_address?.split(',')[0] || ''
-      const matchingOption = addressOptions?.find((opt: any) => 
-        opt.text && opt.text.includes(addressPart)
+      // Use improved address matching from service
+      const matchingOption = findAndValidateAddress(
+        addressOptions || [],
+        selectedAddress.full_address || ''
       )
       
       if (matchingOption) {
@@ -244,6 +245,9 @@ export function UpdateAssistant({
           ref: '#is_address_update_select',
           values: [matchingOption.value]
         })
+        console.log(`Selected address: "${matchingOption.text}"`)
+      } else {
+        throw new Error(`Could not find matching address in dropdown for: ${selectedAddress.full_address}`)
       }
       
       // Fill Details textarea with draft content

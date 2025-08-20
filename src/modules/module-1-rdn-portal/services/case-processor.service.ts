@@ -298,52 +298,47 @@ export class CaseProcessor {
       // Get the case detail page
       const casePage = caseResult.data?.page || page
       
-      // Click Updates tab
-      const updatesClicked = await navigationManager.clickUpdatesTab(casePage)
-      if (updatesClicked) {
-        this.log('MULTI', 'Updates tab clicked, processing')
+      // Extract case ID from URL first
+      const currentUrl = casePage.url()
+      const caseIdMatch = currentUrl.match(/case_id=(\d+)/)
+      const caseId = caseIdMatch ? caseIdMatch[1] : null
+      currentCaseId = caseId // Track the current case ID
+      
+      if (caseId) {
+        this.log('MULTI', 'Starting data extraction from My Summary tab', { caseId })
         
-        // Extract case ID from URL
-        const currentUrl = casePage.url()
-        const caseIdMatch = currentUrl.match(/case_id=(\d+)/)
-        const caseId = caseIdMatch ? caseIdMatch[1] : null
-        currentCaseId = caseId // Track the current case ID
+        // Update status to EXTRACTING_DATA (this would normally be sent to frontend)
+        this.log('STATUS', 'Setting status to EXTRACTING_DATA')
         
-        if (caseId) {
-          this.log('MULTI', 'Starting data extraction', { caseId })
-          
-          // Update status to EXTRACTING_DATA (this would normally be sent to frontend)
-          this.log('STATUS', 'Setting status to EXTRACTING_DATA')
-          
-          // Call Module 2 to extract data
-          try {
-            const extractionResult = await extractCaseData(caseId, casePage)
+        // Call Module 2 to extract data starting from My Summary tab
+        // The extraction function will handle navigating to Updates tab
+        try {
+          const extractionResult = await extractCaseData(caseId, casePage, true)
             
-            if (extractionResult.success) {
-              this.log('MULTI', 'Data extraction successful', { 
-                caseId: extractionResult.caseId,
-                recordsInserted: extractionResult.recordsInserted 
-              })
-              
-              // Update status to EXTRACTION_COMPLETE
-              this.log('STATUS', 'Setting status to EXTRACTION_COMPLETE')
-            } else {
-              this.log('MULTI', 'Data extraction failed', { 
-                caseId: extractionResult.caseId,
-                error: extractionResult.error 
-              })
-            }
-          } catch (error) {
-            this.log('MULTI', 'Error during extraction', { 
-              error: error instanceof Error ? error.message : 'Unknown error' 
+          if (extractionResult.success) {
+            this.log('MULTI', 'Data extraction successful', { 
+              caseId: extractionResult.caseId,
+              recordsInserted: extractionResult.recordsInserted 
+            })
+            
+            // Update status to EXTRACTION_COMPLETE
+            this.log('STATUS', 'Setting status to EXTRACTION_COMPLETE')
+          } else {
+            this.log('MULTI', 'Data extraction failed', { 
+              caseId: extractionResult.caseId,
+              error: extractionResult.error 
             })
           }
-        } else {
-          this.log('MULTI', 'Could not extract case ID from URL', { url: currentUrl })
+        } catch (error) {
+          this.log('MULTI', 'Error during extraction', { 
+            error: error instanceof Error ? error.message : 'Unknown error' 
+          })
         }
         
         // Wait a bit before moving to next case
         await casePage.waitForTimeout(2000)
+      } else {
+        this.log('MULTI', 'Could not extract case ID from URL', { url: currentUrl })
       }
       
       processedCount++

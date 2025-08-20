@@ -19,7 +19,8 @@ export async function extractCaseDetails(page: Page, caseId: string): Promise<Ca
     client: null,
     collector: null,
     lien_holder: null,
-    client_account_number: null
+    client_account_number: null,
+    my_summary_additional_info: null
   };
 
   // Extract Order Date
@@ -92,6 +93,23 @@ export async function extractCaseDetails(page: Page, caseId: string): Promise<Ca
   const clientAcctElement = await page.$('dt:has-text("Client Acct No") + dd');
   if (clientAcctElement) {
     details.client_account_number = await clientAcctElement.textContent() || null;
+  }
+
+  // Extract Additional Information from My Summary tab
+  // This should be called when on the My Summary tab
+  try {
+    const additionalInfoElement = await page.$('#additional_info');
+    if (additionalInfoElement) {
+      const additionalInfoText = await additionalInfoElement.textContent();
+      details.my_summary_additional_info = cleanText(additionalInfoText);
+      console.log('Additional Information extracted in case details:', details.my_summary_additional_info);
+    } else {
+      console.log('Additional Information element not found, setting to null');
+      details.my_summary_additional_info = null;
+    }
+  } catch (error) {
+    console.log('Warning: Error extracting Additional Information, setting to null:', error);
+    details.my_summary_additional_info = null;
   }
 
   return details;
@@ -387,6 +405,28 @@ export async function extractUpdates(page: Page, caseId: string): Promise<CaseUp
 
   console.log(`Extracted ${updates.length} updates`);
   return updates;
+}
+
+// Extract Additional Information from My Summary tab
+export async function extractAdditionalInfo(page: Page, caseId: string): Promise<string | null> {
+  try {
+    // Wait for the Additional Information section to be present
+    const additionalInfoElement = await page.$('#additional_info');
+    
+    if (additionalInfoElement) {
+      const additionalInfoText = await additionalInfoElement.textContent();
+      console.log(`Additional Information extracted for case ${caseId}:`, additionalInfoText);
+      
+      // Clean and return the text
+      return cleanText(additionalInfoText);
+    } else {
+      console.log(`No Additional Information found for case ${caseId}`);
+      return null;
+    }
+  } catch (error) {
+    console.error(`Error extracting Additional Information for case ${caseId}:`, error);
+    return null;
+  }
 }
 
 // Helper function to clean text

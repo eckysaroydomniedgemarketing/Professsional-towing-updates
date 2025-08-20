@@ -10,13 +10,15 @@ interface WorkflowControlProps {
   onWorkflowComplete?: (caseId?: string, sessionId?: string, navigationData?: any) => void
   autoStart?: boolean
   isGetNextCase?: boolean
+  targetCaseId?: string | null
 }
 
-export function WorkflowControl({ onWorkflowComplete, autoStart = false, isGetNextCase = false }: WorkflowControlProps = {}) {
+export function WorkflowControl({ onWorkflowComplete, autoStart = false, isGetNextCase = false, targetCaseId = null }: WorkflowControlProps = {}) {
   const [isRunning, setIsRunning] = useState(false)
   const [currentStep, setCurrentStep] = useState<NavigationStep>(NavigationStep.INITIAL)
   const [error, setError] = useState<string>()
   const [sessionUrl, setSessionUrl] = useState<string>()
+  const [currentCaseId, setCurrentCaseId] = useState<string>()
   const hasStartedRef = useRef(false)
 
   useEffect(() => {
@@ -31,24 +33,59 @@ export function WorkflowControl({ onWorkflowComplete, autoStart = false, isGetNe
     setError(undefined)
     
     try {
+      // Start simulated progress for UI feedback
+      let simulatedStepIndex = 0
+      const simulatedSteps = isGetNextCase ? [
+        NavigationStep.CASE_LISTING,  // For Get Next Case, start at case listing
+      ] : [
+        NavigationStep.LOGIN_PAGE,
+        NavigationStep.AUTHENTICATING,
+        NavigationStep.DASHBOARD,
+        NavigationStep.CASE_LISTING,
+      ]
+      
+      // Show initial step immediately
+      setCurrentStep(simulatedSteps[0])
+      
+      // Advance through simulated steps every 3 seconds (except for Get Next Case)
+      const simulationInterval = !isGetNextCase ? setInterval(() => {
+        simulatedStepIndex++
+        if (simulatedStepIndex < simulatedSteps.length) {
+          setCurrentStep(simulatedSteps[simulatedStepIndex])
+        }
+        // Stop at Case Listing
+        if (simulatedStepIndex >= simulatedSteps.length - 1) {
+          clearInterval(simulationInterval)
+        }
+      }, 3000) : null
+      
       // Call API to start workflow
       const response = await fetch('/api/module-1/start-workflow', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isGetNextCase })
+        body: JSON.stringify({ 
+          isGetNextCase,
+          targetCaseId 
+        })
       })
+      
+      // Clear simulation interval if still running
+      if (simulationInterval) {
+        clearInterval(simulationInterval)
+      }
       
       if (!response.ok) {
         throw new Error('Failed to start workflow')
       }
       
-      // Poll for status updates
+      // Now start real polling for status updates
       const pollInterval = setInterval(async () => {
         const statusResponse = await fetch('/api/module-1/status')
         if (statusResponse.ok) {
           const status = await statusResponse.json()
           setCurrentStep(status.currentStep)
           setSessionUrl(status.currentUrl)
+          setCurrentCaseId(status.currentCaseId)
           
           if (status.error) {
             setError(status.error)
@@ -131,7 +168,12 @@ export function WorkflowControl({ onWorkflowComplete, autoStart = false, isGetNe
           </div>
         </div>
       )}
-      <WorkflowStatus currentStep={currentStep} error={error} />
+      <WorkflowStatus 
+        currentStep={currentStep} 
+        error={error} 
+        currentCaseId={currentCaseId}
+        isGetNextCase={isGetNextCase}
+      />
       
       <div className="flex items-center gap-3">
         {!autoStart && !isRunning ? (

@@ -138,6 +138,55 @@ class RDNVisibilityService {
         
         console.log(`Found agent update by: ${authorText}`);
         
+        // Extract and validate company
+        let companyName: string | undefined;
+        const companyLabel = await container.$('dt:has-text("Company")');
+        if (companyLabel) {
+          const companyValue = await container.$('dt:has-text("Company") + dd');
+          companyName = (await companyValue?.textContent()) || undefined;
+          
+          // Flexible company matching - check for "professional towing" (case-insensitive)
+          const isValidCompany = /professional\s+towing/i.test(companyName || '');
+          
+          if (!isValidCompany) {
+            console.log(`Skipping update - company "${companyName}" doesn't match "Professional Towing"`);
+            continue;
+          }
+          
+          console.log(`Valid company found: ${companyName}`);
+        } else {
+          // No company field found, skip this update
+          console.log('No company field found in update, skipping...');
+          continue;
+        }
+        
+        // Extract update text content
+        let updateText: string | undefined;
+        
+        // Try multiple selectors for update text
+        const textSelectors = [
+          'dd[id$="_view_comments"]',  // Primary: dd with ID ending in _view_comments
+          'dt:has-text("Details") + dd', // Secondary: dd following Details label
+          'dd[class*="update-text-"]'    // Tertiary: dd with update-text class
+        ];
+        
+        for (const selector of textSelectors) {
+          const updateContentElement = await container.$(selector);
+          if (updateContentElement) {
+            updateText = (await updateContentElement.textContent()) || undefined;
+            if (updateText) {
+              // Clean up the text - remove extra whitespace and HTML entities
+              updateText = updateText.trim().replace(/\s+/g, ' ');
+              console.log(`Extracted update text using selector "${selector}" (first 100 chars): ${updateText.substring(0, 100)}...`);
+              break; // Stop once we find text
+            }
+          }
+        }
+        
+        if (!updateText) {
+          console.log('Warning: Could not extract update text with any selector');
+        }
+        
         // Find visibility button with "Not Visible" text
         const visibilityButton = await container.$('button.js-visible:has(span:has-text("Not Visible"))');
         
@@ -180,10 +229,12 @@ class RDNVisibilityService {
             updateId: updateId,
             authorElement: authorValue!,
             visibilityButton: visibilityButton,
+            company: companyName,
+            updateText: updateText,
             isAgent: true,
             isVisible: false
           });
-          console.log(`Found agent update ${updateId} marked as Not Visible`);
+          console.log(`Found agent update ${updateId} from company "${companyName}" marked as Not Visible`);
         }
       }
       
@@ -443,28 +494,50 @@ class RDNVisibilityService {
         };
       }
       
-      console.log(`Found ${invisibleUpdates.length} invisible agent updates for case ${caseId}`);
+      console.log(`Found ${invisibleUpdates.length} invisible agent updates from Professional Towing for case ${caseId}`);
       
       // Toggle visibility for each update
       let processedCount = 0;
+      let companyName: string | undefined;
+      let combinedUpdateText = '';
       
       for (const update of invisibleUpdates) {
         const toggled = await this.toggleUpdateVisibility(casePage, update.updateId);
         
         if (toggled) {
           processedCount++;
-          console.log(`Toggled visibility for update ${update.updateId}`);
+          console.log(`Toggled visibility for update ${update.updateId} from company: ${update.company}`);
+          
+          // Store company name from first processed update
+          if (!companyName && update.company) {
+            companyName = update.company;
+          }
+          
+          // Combine update texts (with separator if multiple)
+          if (update.updateText) {
+            if (combinedUpdateText) {
+              combinedUpdateText += ' | '; // Separator between multiple updates
+            }
+            combinedUpdateText += update.updateText;
+          }
         } else {
-          console.error(`Failed to toggle visibility for update ${update.updateId}`);
+          console.error(`Failed to toggle visibility for update ${update.updateId} from company: ${update.company}`);
         }
         
         // Small delay between updates to avoid overwhelming the server
         await casePage.waitForTimeout(1000);
       }
       
+      // Truncate combined update text if too long (database field limit)
+      if (combinedUpdateText.length > 5000) {
+        combinedUpdateText = combinedUpdateText.substring(0, 4997) + '...';
+      }
+      
       return {
         caseId,
         updatesProcessed: processedCount,
+        company: companyName,
+        updateText: combinedUpdateText || undefined,
         success: processedCount === invisibleUpdates.length
       };
     } catch (error) {

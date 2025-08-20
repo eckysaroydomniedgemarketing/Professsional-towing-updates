@@ -1,5 +1,7 @@
 // Case data types for case processing module
 
+export type ProcessingMode = 'manual' | 'automatic';
+
 export interface CaseUpdate {
   id: string
   type: string
@@ -25,6 +27,7 @@ export interface Case {
   id: string
   order_type: string
   status: string
+  rejection_reason?: string  // Reason why case was rejected by validation
   address: string
   zip_code: string
   vin: string
@@ -65,6 +68,8 @@ export interface CaseValidationResult {
   orderTypeValid: boolean
   statusValid: boolean
   zipCodeValid?: boolean
+  clientExclusionPassed?: boolean
+  skipClientExclusionValidation?: boolean
   hasAgentUpdate?: boolean
   agentUpdateDetails?: {
     hasAgentUpdate: boolean

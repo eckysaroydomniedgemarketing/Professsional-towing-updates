@@ -14,18 +14,21 @@ import {
   extractCaseDetails,
   extractVehicle,
   extractAddresses,
-  extractUpdates
+  extractUpdates,
+  extractAdditionalInfo
 } from './utils/extractors';
 
 /**
- * Main function to extract all case data from Updates tab and store in database
+ * Main function to extract all case data from My Summary and Updates tabs and store in database
  * @param caseId - The case ID to extract data for
- * @param page - Playwright page object positioned on Updates tab
+ * @param page - Playwright page object (starts on My Summary tab)
+ * @param isOnMySummary - Whether the page is currently on My Summary tab (default: true)
  * @returns ExtractionResult with success status
  */
 export async function extractCaseData(
   caseId: string, 
-  page: Page
+  page: Page,
+  isOnMySummary: boolean = true
 ): Promise<ExtractionResult> {
   let recordsInserted = 0;
   let sessionId: string | null = null;
@@ -37,13 +40,19 @@ export async function extractCaseData(
     sessionId = await createProcessingSession(caseId, 'module-2');
     console.log(`Created session ${sessionId} for case ${caseId}`);
     
-    // Wait for page to be fully loaded before extraction
-    console.log('Waiting for page to fully load...');
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
-    await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
+    // Simple wait strategy for MVP - avoid complex state checking that can timeout
+    console.log('Waiting for page to stabilize...');
+    await page.waitForTimeout(3000);
     
-    // Additional wait to ensure dynamic content is loaded
-    await page.waitForTimeout(2000);
+    // Check if key elements are present but don't fail if not found
+    if (isOnMySummary) {
+      try {
+        await page.waitForSelector('.section__main', { timeout: 2000 });
+        console.log('My Summary page structure detected');
+      } catch {
+        console.log('Warning: My Summary page structure not fully loaded, continuing anyway');
+      }
+    }
     
     // Step 0: Insert parent record in case_updates table
     console.log('Creating case update record...');
@@ -52,8 +61,48 @@ export async function extractCaseData(
     recordsInserted++;
     
     // Step 1: Extract case details with session ID
+    // If we're on My Summary tab, extract Additional Info first
     console.log('Extracting case details...');
-    const caseDetails = await extractCaseDetails(page, caseId);
+    let caseDetails: any;
+    
+    if (isOnMySummary) {
+      console.log('On My Summary tab - extracting Additional Information...');
+      
+      // Check if Additional Info element exists before extraction
+      const hasAdditionalInfo = await page.$('#additional_info');
+      if (hasAdditionalInfo) {
+        console.log('Additional Information element found');
+      } else {
+        console.log('Warning: Additional Information element not found, will extract other data');
+      }
+      
+      // Extract case details including Additional Info from My Summary
+      caseDetails = await extractCaseDetails(page, caseId);
+      
+      // Now navigate to Updates tab for remaining extraction
+      console.log('Clicking Updates tab...');
+      const updatesTab = await page.$('#tab_6 a, [onclick*="switchTab(6)"]');
+      if (updatesTab) {
+        await updatesTab.click();
+        
+        // Simple wait for tab switch - no complex state checking
+        await page.waitForTimeout(3000);
+        
+        // Try to wait for Updates tab content but don't fail
+        try {
+          await page.waitForSelector('#ContentLoader', { timeout: 2000 });
+          console.log('Updates tab content area detected');
+        } catch {
+          console.log('Warning: Updates tab content not fully loaded, continuing anyway');
+        }
+      } else {
+        console.log('Warning: Could not find Updates tab button');
+      }
+    } else {
+      // Already on Updates tab, just extract case details
+      caseDetails = await extractCaseDetails(page, caseId);
+    }
+    
     await insertCaseDetails(caseDetails, sessionId);
     recordsInserted++;
     

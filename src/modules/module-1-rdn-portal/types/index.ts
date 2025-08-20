@@ -10,6 +10,7 @@ export interface NavigationState {
   error?: string
   sessionStartTime?: Date
   lastActivityTime?: Date
+  currentCaseId?: string
 }
 
 export enum NavigationStep {
@@ -20,7 +21,9 @@ export enum NavigationStep {
   DASHBOARD = 'DASHBOARD',
   CASE_LISTING = 'CASE_LISTING',
   CASE_DETAIL = 'CASE_DETAIL',
+  PROCESSING_CASE = 'PROCESSING_CASE',
   EXTRACTING_DATA = 'EXTRACTING_DATA',
+  RETURNING_TO_LISTING = 'RETURNING_TO_LISTING',
   EXTRACTION_COMPLETE = 'EXTRACTION_COMPLETE',
   COMPLETE = 'COMPLETE',
   ERROR = 'ERROR'

@@ -4,6 +4,11 @@ This document outlines the step-by-step navigation flow for the Professional Tow
 
 ## MODULE 1: SYSTEM ACCESS AND NAVIGATION
 
+### Navigation Flow Options
+1. **Automatic Flow**: System navigates to case listing and processes cases sequentially
+2. **Manual Case Input**: System navigates directly to a specific case when targetCaseId is provided
+3. **Get Next Case**: System reuses existing session to process the next case in the listing
+
 ### Step 1: Navigate to RDN Portal Login Page
 - **URL**: `https://secureauth.recoverydatabase.net/public/login?rd=/`
 - **Actions**:
@@ -89,6 +94,20 @@ This document outlines the step-by-step navigation flow for the Professional Tow
     <a href="view_case.php?case_id=CASE_NUMBER">View Updates</a>
     ```
   - Click on the link to open the case details
+
+### Step 5a: Direct Case Navigation (Manual Case Input)
+- **URL**: Direct navigation when targetCaseId is provided
+- **Actions**:
+  - When a specific case ID is entered manually, navigate directly to:
+    ```
+    https://app.recoverydatabase.net/alpha_rdn/module/default/case2/?tab=6&case_id={caseId}
+    ```
+  - This bypasses the case listing and goes straight to the case detail page
+  - The system will:
+    1. Login to RDN portal (if not already logged in)
+    2. Navigate directly to the specified case URL
+    3. Extract case data from the loaded page
+    4. Continue with normal processing workflow
 
 ## MODULE 2: CASE VALIDATION AND QUALIFICATION
 

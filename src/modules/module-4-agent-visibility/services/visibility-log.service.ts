@@ -13,7 +13,9 @@ class VisibilityLogService {
   async logCaseVisibilityUpdate(
     caseId: string,
     updatesCount: number,
-    mode: 'manual' | 'automatic'
+    mode: 'manual' | 'automatic',
+    company?: string,
+    updateText?: string
   ): Promise<{ data: string | null; error: any }> {
     try {
       const supabase = supabaseServerService.getClient();
@@ -24,7 +26,9 @@ class VisibilityLogService {
         .insert({
           case_id: caseId,
           updates_made_visible: updatesCount,
-          processing_mode: mode
+          processing_mode: mode,
+          company: company,
+          update_text: updateText
         })
         .select('id')
         .single();

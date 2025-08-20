@@ -33,13 +33,8 @@ export function LastUpdate({ caseId, sessionId, currentAddressType }: LastUpdate
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base flex items-center justify-between">
-          <span>Last Update Details</span>
-          {currentAddressType && (
-            <Badge variant="outline" className="text-xs">
-              {currentAddressType}
-            </Badge>
-          )}
+        <CardTitle className="text-base">
+          Last Update Details
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -66,6 +61,15 @@ export function LastUpdate({ caseId, sessionId, currentAddressType }: LastUpdate
                 {lastUpdate.address_associated || 'No address specified'}
               </span>
             </div>
+
+            {currentAddressType && (
+              <div className="flex items-center gap-2 text-sm">
+                <span className="font-medium">Address Type:</span>
+                <Badge variant="outline" className="text-xs">
+                  {currentAddressType}
+                </Badge>
+              </div>
+            )}
 
             <Separator />
 

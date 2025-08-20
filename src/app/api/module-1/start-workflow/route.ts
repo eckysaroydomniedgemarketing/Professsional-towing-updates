@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   try {
     // Parse request body
     const body = await request.json()
-    const { isGetNextCase = false } = body
+    const { isGetNextCase = false, targetCaseId = null } = body
     
     // Get credentials from environment variables
     const credentials = {
@@ -39,8 +39,8 @@ export async function POST(request: Request) {
       portalService.setGetNextCase(true)
       console.log('[API] Reusing existing browser for Get Next Case')
     } else {
-      // Create new service instance
-      portalService = new RDNPortalService(credentials, isGetNextCase)
+      // Create new service instance with optional targetCaseId
+      portalService = new RDNPortalService(credentials, isGetNextCase, targetCaseId)
       setPortalService(portalService)
       
       // Initialize the browser only for first time
@@ -49,31 +49,37 @@ export async function POST(request: Request) {
       console.log('[API] New browser initialized')
     }
     
-    // Start the workflow in the background
-    portalService.executeFullWorkflow()
-      .then(result => {
-        if (!result.success) {
-          const error = result.error || 'Workflow failed'
-          setWorkflowError(error)
-          console.error('Workflow error:', error)
-        } else {
-          // Store the navigation data including case ID
-          if (result.data) {
-            console.log('[API] Storing navigation data:', result.data)
-            setNavigationData(result.data)
-          }
+    // Execute the workflow synchronously to avoid race condition
+    try {
+      const result = await portalService.executeFullWorkflow()
+      
+      if (!result.success) {
+        const error = result.error || 'Workflow failed'
+        setWorkflowError(error)
+        console.error('Workflow error:', error)
+      } else {
+        // Store the navigation data including case ID
+        if (result.data) {
+          console.log('[API] Storing navigation data:', result.data)
+          setNavigationData(result.data)
         }
+      }
+      
+      return NextResponse.json({ 
+        success: true, 
+        message: 'Workflow completed',
+        data: result.data 
       })
-      .catch(error => {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-        setWorkflowError(errorMessage)
-        console.error('Workflow execution error:', error)
-      })
-    
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Workflow started' 
-    })
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      setWorkflowError(errorMessage)
+      console.error('Workflow execution error:', error)
+      
+      return NextResponse.json({ 
+        success: false, 
+        error: errorMessage 
+      }, { status: 500 })
+    }
   } catch (error) {
     return NextResponse.json({ 
       success: false, 

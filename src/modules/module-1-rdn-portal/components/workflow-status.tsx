@@ -7,6 +7,8 @@ import { CheckCircle2, Circle, AlertCircle, Loader2 } from "lucide-react"
 interface WorkflowStatusProps {
   currentStep: NavigationStep
   error?: string
+  currentCaseId?: string
+  isGetNextCase?: boolean
 }
 
 const WORKFLOW_STEPS = [
@@ -15,15 +17,26 @@ const WORKFLOW_STEPS = [
   { key: NavigationStep.DASHBOARD, label: "Dashboard Access", progress: 45 },
   { key: NavigationStep.CASE_LISTING, label: "Case Listing", progress: 60 },
   { key: NavigationStep.CASE_DETAIL, label: "Case Detail", progress: 75 },
-  { key: NavigationStep.EXTRACTING_DATA, label: "Extracting Data (Order Type, etc.)", progress: 90 },
+  { key: NavigationStep.PROCESSING_CASE, label: "Processing Case", progress: 80 },
+  { key: NavigationStep.EXTRACTING_DATA, label: "Extracting Data", progress: 90 },
+  { key: NavigationStep.RETURNING_TO_LISTING, label: "Returning to Case Listing", progress: 95 },
   { key: NavigationStep.EXTRACTION_COMPLETE, label: "Data Extraction Complete", progress: 100 }
 ]
 
-export function WorkflowStatus({ currentStep, error }: WorkflowStatusProps) {
-  const currentStepIndex = WORKFLOW_STEPS.findIndex(s => s.key === currentStep)
-  const currentProgress = currentStepIndex >= 0 ? WORKFLOW_STEPS[currentStepIndex].progress : 0
+const GET_NEXT_CASE_STEPS = [
+  { key: NavigationStep.CASE_LISTING, label: "Case Listing", progress: 20 },
+  { key: NavigationStep.PROCESSING_CASE, label: "Processing Case", progress: 40 },
+  { key: NavigationStep.EXTRACTING_DATA, label: "Extracting Data", progress: 70 },
+  { key: NavigationStep.RETURNING_TO_LISTING, label: "Returning to Case Listing", progress: 90 },
+  { key: NavigationStep.EXTRACTION_COMPLETE, label: "Data Extraction Complete", progress: 100 }
+]
 
-  const getStepIcon = (step: typeof WORKFLOW_STEPS[0], index: number) => {
+export function WorkflowStatus({ currentStep, error, currentCaseId, isGetNextCase }: WorkflowStatusProps) {
+  const steps = isGetNextCase ? GET_NEXT_CASE_STEPS : WORKFLOW_STEPS
+  const currentStepIndex = steps.findIndex(s => s.key === currentStep)
+  const currentProgress = currentStepIndex >= 0 ? steps[currentStepIndex].progress : 0
+
+  const getStepIcon = (step: typeof steps[0], index: number) => {
     if (currentStep === NavigationStep.ERROR && index === currentStepIndex) {
       return <AlertCircle className="w-5 h-5 text-red-500" />
     }
@@ -46,17 +59,24 @@ export function WorkflowStatus({ currentStep, error }: WorkflowStatusProps) {
       <Progress value={currentProgress} className="h-2" />
       
       <div className="space-y-3">
-        {WORKFLOW_STEPS.map((step, index) => (
-          <div 
-            key={step.key} 
-            className={`flex items-center gap-3 ${
-              index <= currentStepIndex ? 'text-gray-900' : 'text-gray-400'
-            }`}
-          >
-            {getStepIcon(step, index)}
-            <span className="text-sm">{step.label}</span>
-          </div>
-        ))}
+        {steps.map((step, index) => {
+          let label = step.label
+          if (step.key === NavigationStep.PROCESSING_CASE && currentCaseId) {
+            label = `Processing Case #${currentCaseId}`
+          }
+          
+          return (
+            <div 
+              key={step.key} 
+              className={`flex items-center gap-3 ${
+                index <= currentStepIndex ? 'text-gray-900' : 'text-gray-400'
+              }`}
+            >
+              {getStepIcon(step, index)}
+              <span className="text-sm">{label}</span>
+            </div>
+          )
+        })}
       </div>
       
       {error && (

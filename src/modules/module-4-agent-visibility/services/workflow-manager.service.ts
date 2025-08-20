@@ -189,7 +189,9 @@ class WorkflowManagerService {
           await visibilityLogService.logCaseVisibilityUpdate(
             caseId,
             0,
-            this.config.mode
+            this.config.mode,
+            undefined,
+            undefined
           );
         } catch (logError) {
           console.warn('Could not log skipped case:', logError);
@@ -213,7 +215,9 @@ class WorkflowManagerService {
         await visibilityLogService.logCaseVisibilityUpdate(
           result.caseId,
           result.updatesProcessed,
-          this.config.mode
+          this.config.mode,
+          result.company,
+          result.updateText
         );
       } catch (logError) {
         console.error('Error logging visibility update:', logError);

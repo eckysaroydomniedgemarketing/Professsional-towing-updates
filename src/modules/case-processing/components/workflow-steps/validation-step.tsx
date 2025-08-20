@@ -6,20 +6,16 @@ import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Separator } from "@/components/ui/separator"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { CheckCircle2, XCircle, AlertCircle, Loader2, ChevronRight, RefreshCw } from "lucide-react"
+import { CheckCircle2, XCircle, AlertCircle, Loader2, ChevronRight } from "lucide-react"
 import { WorkflowStepProps } from "../../types"
 import { Case, CaseValidationResult, ExclusionKeywordResults } from "../../types/case.types"
-import { CaseValidationService } from "../../services/case-validation.service"
 import { checkExclusionKeywordsInDatabase, DatabaseKeywordResult } from "../../services/keyword-check.service"
 import { UpdateHistoryDisplay } from "./update-history-display"
+import { ValidationLogicService } from "../../services/validation-logic.service"
+import { ValidationOrderStatus } from "../validation/validation-order-status"
+import { ValidationZipCode } from "../validation/validation-zipcode"
+import { ValidationKeywordAnalysis } from "../validation/validation-keyword-analysis"
+import { ClientExclusionService } from "../../services/client-exclusion.service"
 import { useEffect, useState } from "react"
 
 interface ValidationStepProps extends WorkflowStepProps {
@@ -27,14 +23,26 @@ interface ValidationStepProps extends WorkflowStepProps {
   onValidationComplete?: (result: CaseValidationResult | null) => void
   onShowUpdateAssistant?: () => void
   onGetNextCase?: () => void
+  automaticMode?: boolean
 }
 
-export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidationComplete, onShowUpdateAssistant, onGetNextCase }: ValidationStepProps) {
+export function ValidationStep({ 
+  onNext, 
+  onPrevious, 
+  onSkip, 
+  caseData, 
+  onValidationComplete, 
+  onShowUpdateAssistant, 
+  onGetNextCase,
+  automaticMode = false
+}: ValidationStepProps) {
   const [validationResult, setValidationResult] = useState<CaseValidationResult | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [keywordAnalysis, setKeywordAnalysis] = useState<ExclusionKeywordResults | null>(null)
   const [isAnalyzingKeywords, setIsAnalyzingKeywords] = useState(false)
   const [databaseKeywordResult, setDatabaseKeywordResult] = useState<DatabaseKeywordResult | null>(null)
+  const [autoSkipCountdown, setAutoSkipCountdown] = useState<number | null>(null)
+  const [showClientExclusion, setShowClientExclusion] = useState(false)
   
   useEffect(() => {
     const validateCase = async () => {
@@ -42,9 +50,14 @@ export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidat
       if (caseData) {
         setIsLoading(true)
         try {
-          const result = await CaseValidationService.validateCase(caseData)
-          console.log('Validation result:', result)
+          // Check if client exclusion table has data
+          const clientExclusionService = ClientExclusionService.getInstance()
+          const hasExclusions = await clientExclusionService.hasExclusions()
+          setShowClientExclusion(hasExclusions)
+          
+          const result = await ValidationLogicService.validateCaseAndUpdateStatus(caseData)
           setValidationResult(result)
+          
           if (onValidationComplete) {
             onValidationComplete(result)
           }
@@ -63,16 +76,6 @@ export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidat
     
     validateCase()
   }, [caseData, onValidationComplete])
-
-  // Helper function to check if order type is valid
-  const isValidOrderType = (orderType: string) => {
-    return orderType === 'Involuntary Repo' || orderType === 'Investigate Repo'
-  }
-
-  // Helper function to check if status is valid  
-  const isValidStatus = (status: string) => {
-    return status === 'Open'
-  }
 
   // Analyze exclusion keywords
   const analyzeExclusionKeywords = async () => {
@@ -249,10 +252,196 @@ export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidat
     }
   }, [validationResult?.hasAgentUpdate])
 
+  // Auto-skip logic for automatic mode
+  useEffect(() => {
+    // Check if we should auto-skip
+    if (automaticMode && validationResult && !validationResult.passed && onGetNextCase) {
+      // Start countdown
+      setAutoSkipCountdown(2)
+      
+      const countdownInterval = setInterval(() => {
+        setAutoSkipCountdown(prev => {
+          if (prev === null || prev <= 1) {
+            clearInterval(countdownInterval)
+            return null
+          }
+          return prev - 1
+        })
+      }, 1000)
+      
+      // Skip to next case after 2 seconds
+      const skipTimer = setTimeout(() => {
+        console.log('[ValidationStep] Auto-skipping to next case due to validation failure')
+        onGetNextCase()
+        setAutoSkipCountdown(null)
+      }, 2000)
+      
+      // Cleanup on unmount or if conditions change
+      return () => {
+        clearTimeout(skipTimer)
+        clearInterval(countdownInterval)
+        setAutoSkipCountdown(null)
+      }
+    }
+  }, [automaticMode, validationResult, onGetNextCase])
+
+  // Agent and User update sections rendering
+  const renderAgentUpdateSection = () => (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold">Agent Update Check</h3>
+        {validationResult?.hasAgentUpdate !== undefined && (
+          <Badge 
+            variant={validationResult.hasAgentUpdate ? "secondary" : "destructive"}
+            className={validationResult.hasAgentUpdate ? 'bg-green-500 text-white hover:bg-green-600' : ''}
+          >
+            {validationResult.hasAgentUpdate ? 'Agent Updates Found' : 'No Agent Updates'}
+          </Badge>
+        )}
+      </div>
+      <Separator />
+      <Card>
+        <CardContent className="p-6">
+          {validationResult?.agentUpdateDetails ? (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Status</span>
+                <div className="flex items-center gap-2">
+                  {validationResult.agentUpdateDetails.hasAgentUpdate ? (
+                    <>
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      <span className="text-sm font-medium">
+                        {validationResult.agentUpdateDetails.agentUpdateCount} Agent Update(s) Found
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="h-4 w-4 text-destructive" />
+                      <span className="text-sm font-medium text-destructive">
+                        No Agent Updates Found
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+              
+              {validationResult.agentUpdateDetails.agentUpdateAuthors && 
+               validationResult.agentUpdateDetails.agentUpdateAuthors.length > 0 && (
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Update Authors:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {validationResult.agentUpdateDetails.agentUpdateAuthors.map((author, idx) => (
+                      <Badge key={idx} variant="outline" className="text-xs">
+                        {author}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {validationResult.agentUpdateDetails.totalUpdatesInBatch !== undefined && (
+                <div className="text-xs text-muted-foreground">
+                  Latest batch: {validationResult.agentUpdateDetails.agentUpdateCount} of{' '}
+                  {validationResult.agentUpdateDetails.totalUpdatesInBatch} total updates
+                </div>
+              )}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Checking for agent updates in case history...
+            </p>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+
+  const renderUserUpdateSection = () => (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold">Property Update Check</h3>
+        {validationResult?.hasUserUpdate !== undefined && (
+          <Badge 
+            variant={validationResult.hasUserUpdate ? "secondary" : "destructive"}
+            className={validationResult.hasUserUpdate ? 'bg-green-500 text-white hover:bg-green-600' : ''}
+          >
+            {validationResult.hasUserUpdate ? 'User Updates Found' : 'No User Updates'}
+          </Badge>
+        )}
+      </div>
+      <Separator />
+      <Card>
+        <CardContent className="p-6">
+          {validationResult?.userUpdateDetails ? (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Status</span>
+                <div className="flex items-center gap-2">
+                  {validationResult.userUpdateDetails.hasUserUpdate ? (
+                    <>
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      <span className="text-sm font-medium">
+                        {validationResult.userUpdateDetails.userUpdateCount} User Update(s) Found
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="h-4 w-4 text-destructive" />
+                      <span className="text-sm font-medium text-destructive">
+                        No User Updates Found
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+              
+              {!validationResult.userUpdateDetails.hasUserUpdate && (
+                <Alert variant="destructive" className="mt-3">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Property Details Required</AlertTitle>
+                  <AlertDescription>
+                    Update with no property details description present. 
+                    Manually post an update with property detailed description.
+                  </AlertDescription>
+                </Alert>
+              )}
+              
+              {validationResult.userUpdateDetails.userUpdateAuthors && 
+               validationResult.userUpdateDetails.userUpdateAuthors.length > 0 && (
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">User Update Authors:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {validationResult.userUpdateDetails.userUpdateAuthors.map((author, idx) => (
+                      <Badge key={idx} variant="outline" className="text-xs">
+                        {author}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Checking for user updates with property details...
+            </p>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+
   return (
     <Card className="max-w-full">
       <CardHeader>
         <CardTitle className="text-2xl">Case Validation Review</CardTitle>
+        {automaticMode && autoSkipCountdown !== null && (
+          <Alert className="mt-2 border-yellow-200 bg-yellow-50">
+            <AlertDescription className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Case rejected. Loading next case in {autoSkipCountdown} seconds...
+            </AlertDescription>
+          </Alert>
+        )}
         <CardDescription>
           Reviewing case #{caseData?.id || 'N/A'} eligibility for update posting
         </CardDescription>
@@ -280,438 +469,65 @@ export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidat
         ) : (
           <>
             {/* Order Type & Status Section */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Basic Information</h3>
-              <Separator />
-              
-              <div className="grid grid-cols-2 gap-4">
-                {/* Order Type Card */}
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm font-medium text-muted-foreground">Order Type</span>
-                      {validationResult?.orderTypeValid !== undefined && (
-                        validationResult.orderTypeValid ? 
-                          <CheckCircle2 className="h-5 w-5 text-green-600" /> : 
-                          <XCircle className="h-5 w-5 text-destructive" />
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge 
-                        variant={isValidOrderType(caseData.order_type) ? "secondary" : "destructive"}
-                        className={`text-sm py-1 ${isValidOrderType(caseData.order_type) ? 'bg-green-500 text-white hover:bg-green-600' : ''}`}
-                      >
-                        {caseData.order_type || 'No data'}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      {isValidOrderType(caseData.order_type) ? 'Eligible order type' : 'Not eligible for processing'}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                {/* Status Card */}
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm font-medium text-muted-foreground">Case Status</span>
-                      {validationResult?.statusValid !== undefined && (
-                        validationResult.statusValid ? 
-                          <CheckCircle2 className="h-5 w-5 text-green-600" /> : 
-                          <XCircle className="h-5 w-5 text-destructive" />
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge 
-                        variant={isValidStatus(caseData.status) ? "secondary" : "destructive"}
-                        className={`text-sm py-1 ${isValidStatus(caseData.status) ? 'bg-green-500 text-white hover:bg-green-600' : ''}`}
-                      >
-                        {caseData.status || 'No data'}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      {isValidStatus(caseData.status) ? 'Case is open' : 'Case must be open'}
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
+            <ValidationOrderStatus caseData={caseData} validationResult={validationResult} />
 
             {/* ZIP Code Coverage Section */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">ZIP Code Coverage</h3>
-                {validationResult?.zipCodeValid !== undefined && (
-                  <Badge 
-                    variant={validationResult.zipCodeValid ? "secondary" : "destructive"}
-                    className={validationResult.zipCodeValid ? 'bg-green-500 text-white hover:bg-green-600' : ''}
-                  >
-                    {validationResult.zipCodeValid ? 'In Coverage' : 'Not in Coverage'}
-                  </Badge>
-                )}
-              </div>
-              <Separator />
-              
-              {caseData.addresses && caseData.addresses.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[100px]">Address #</TableHead>
-                      <TableHead>Full Address</TableHead>
-                      <TableHead>ZIP Code</TableHead>
-                      <TableHead className="text-right">Coverage Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {caseData.addresses.map((address: any, index: number) => (
-                      <TableRow key={index}>
-                        <TableCell className="font-medium">{index + 1}</TableCell>
-                        <TableCell>{address.full_address || 'No address'}</TableCell>
-                        <TableCell>
-                          <Badge variant="secondary" className="font-mono">
-                            {address.zip_code || 'N/A'}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {validationResult?.zipCodeValid !== undefined && (
-                            <Badge 
-                              variant={validationResult.zipCodeValid ? "secondary" : "destructive"}
-                              className={`gap-1 ${validationResult.zipCodeValid ? 'bg-green-500 text-white hover:bg-green-600' : ''}`}
-                            >
-                              {validationResult.zipCodeValid ? (
-                                <>
-                                  <CheckCircle2 className="h-3 w-3" />
-                                  Covered
-                                </>
-                              ) : (
-                                <>
-                                  <XCircle className="h-3 w-3" />
-                                  Not Covered
-                                </>
-                              )}
-                            </Badge>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>No addresses found for this case</AlertDescription>
-                </Alert>
-              )}
-            </div>
+            <ValidationZipCode caseData={caseData} validationResult={validationResult} />
 
-            {/* Agent Update Check Section */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Agent Update Check</h3>
-                {validationResult?.hasAgentUpdate !== undefined && (
-                  <Badge 
-                    variant={validationResult.hasAgentUpdate ? "secondary" : "destructive"}
-                    className={validationResult.hasAgentUpdate ? 'bg-green-500 text-white hover:bg-green-600' : ''}
-                  >
-                    {validationResult.hasAgentUpdate ? 'Agent Updates Found' : 'No Agent Updates'}
-                  </Badge>
-                )}
-              </div>
-              <Separator />
-              <Card>
-                <CardContent className="p-6">
-                  {validationResult?.agentUpdateDetails ? (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-muted-foreground">Status</span>
-                        <div className="flex items-center gap-2">
-                          {validationResult.agentUpdateDetails.hasAgentUpdate ? (
-                            <>
-                              <CheckCircle2 className="h-4 w-4 text-green-600" />
-                              <span className="text-sm font-medium">
-                                {validationResult.agentUpdateDetails.agentUpdateCount} Agent Update(s) Found
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <XCircle className="h-4 w-4 text-destructive" />
-                              <span className="text-sm font-medium text-destructive">
-                                No Agent Updates Found
-                              </span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                      
-                      {validationResult.agentUpdateDetails.agentUpdateAuthors && 
-                       validationResult.agentUpdateDetails.agentUpdateAuthors.length > 0 && (
-                        <div>
-                          <p className="text-sm text-muted-foreground mb-2">Update Authors:</p>
-                          <div className="flex flex-wrap gap-2">
-                            {validationResult.agentUpdateDetails.agentUpdateAuthors.map((author, idx) => (
-                              <Badge key={idx} variant="outline" className="text-xs">
-                                {author}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {validationResult.agentUpdateDetails.totalUpdatesInBatch !== undefined && (
-                        <div className="text-xs text-muted-foreground">
-                          Latest batch: {validationResult.agentUpdateDetails.agentUpdateCount} of{' '}
-                          {validationResult.agentUpdateDetails.totalUpdatesInBatch} total updates
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">
-                      Checking for agent updates in case history...
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Exclusion Keywords Check Section */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Exclusion Keywords Check</h3>
-                <div className="flex items-center gap-2">
-                  {keywordAnalysis?.detectedBy && (
-                    <Badge variant="outline" className="text-xs">
-                      {keywordAnalysis.detectedBy === 'database' ? 'DB Check' : 'AI Analysis'}
-                    </Badge>
-                  )}
-                  {keywordAnalysis?.analysisComplete && (
+            {/* Client Exclusion Check Section - Only show if table has data */}
+            {showClientExclusion && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold">Client Exclusion Check</h3>
+                  {validationResult?.clientExclusionPassed !== undefined && (
                     <Badge 
-                      variant={keywordAnalysis.hasExclusionKeywords ? "destructive" : "secondary"}
-                      className={!keywordAnalysis.hasExclusionKeywords ? 'bg-green-500 text-white hover:bg-green-600' : ''}
+                      variant={validationResult.clientExclusionPassed ? "secondary" : "destructive"}
+                      className={validationResult.clientExclusionPassed ? 'bg-green-500 text-white hover:bg-green-600' : ''}
                     >
-                      {keywordAnalysis.hasExclusionKeywords ? 'Keywords Found' : 'All Clear'}
-                    </Badge>
-                  )}
-                  {isAnalyzingKeywords && (
-                    <Badge variant="secondary" className="gap-1">
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                      {databaseKeywordResult === null ? 'Checking Database...' : 'AI Analysis...'}
+                      {validationResult.clientExclusionPassed ? 'Client Allowed' : 'Client Excluded'}
                     </Badge>
                   )}
                 </div>
-              </div>
-              <Separator />
-              <Card>
-                <CardContent className="p-6">
-                  {!validationResult?.hasAgentUpdate ? (
-                    <div className="text-sm text-muted-foreground">
-                      Agent update validation must pass before keyword analysis
+                <Separator />
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Client Name</span>
+                      <span className="text-sm font-medium">{caseData?.client_name || 'Not Available'}</span>
                     </div>
-                  ) : isAnalyzingKeywords ? (
-                    <div className="space-y-4">
+                    <div className="flex items-center justify-between mt-3">
+                      <span className="text-sm text-muted-foreground">Status</span>
                       <div className="flex items-center gap-2">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        <span className="text-sm text-muted-foreground">
-                          {databaseKeywordResult === null 
-                            ? 'Checking database for exclusion keywords...'
-                            : `Analyzing ${caseData?.updates?.length || 0} updates with AI...`}
-                        </span>
-                      </div>
-                      <div className="space-y-2">
-                        {['DRN', 'LPR', 'GPS', 'SURRENDER', 'UNIT SPOTTED'].map(keyword => (
-                          <Skeleton key={keyword} className="h-14 w-full" />
-                        ))}
+                        {validationResult?.clientExclusionPassed ? (
+                          <>
+                            <CheckCircle2 className="h-4 w-4 text-green-600" />
+                            <span className="text-sm font-medium">Not on exclusion list</span>
+                          </>
+                        ) : (
+                          <>
+                            <XCircle className="h-4 w-4 text-destructive" />
+                            <span className="text-sm font-medium text-destructive">Client is excluded</span>
+                          </>
+                        )}
                       </div>
                     </div>
-                  ) : keywordAnalysis?.error ? (
-                    <Alert variant="destructive">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertTitle>Verification Failed</AlertTitle>
-                      <AlertDescription>
-                        <div>{keywordAnalysis.error}</div>
-                        <div className="mt-3 flex items-center gap-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={analyzeExclusionKeywords}
-                          >
-                            <RefreshCw className="h-3 w-3 mr-1" />
-                            Retry
-                          </Button>
-                          {(keywordAnalysis.errorCode === 401 || keywordAnalysis.error.includes('authentication')) && (
-                            <span className="text-xs text-muted-foreground">Contact system administrator for assistance</span>
-                          )}
-                        </div>
-                      </AlertDescription>
-                    </Alert>
-                  ) : keywordAnalysis?.keywords ? (
-                    <div className="space-y-3">
-                      {/* DRN Check */}
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
-                        <div className="flex items-center gap-3">
-                          {keywordAnalysis.keywords.DRN.found ? (
-                            <XCircle className="h-5 w-5 text-destructive" />
-                          ) : (
-                            <CheckCircle2 className="h-5 w-5 text-green-600" />
-                          )}
-                          <div>
-                            <span className="font-medium">DRN Check</span>
-                            <p className="text-xs text-muted-foreground">
-                              Digital Recognition Network hits
-                            </p>
-                          </div>
-                        </div>
-                        <Badge 
-                          variant={keywordAnalysis.keywords.DRN.found ? "destructive" : "outline"}
-                          className={!keywordAnalysis.keywords.DRN.found ? 'text-green-600 border-green-600' : ''}
-                        >
-                          {keywordAnalysis.keywords.DRN.found 
-                            ? `Found${keywordAnalysis.keywords.DRN.location ? ` in ${keywordAnalysis.keywords.DRN.location}` : ''}` 
-                            : 'Not Found'}
-                        </Badge>
-                      </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
 
-                      {/* LPR Check */}
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
-                        <div className="flex items-center gap-3">
-                          {keywordAnalysis.keywords.LPR.found ? (
-                            <XCircle className="h-5 w-5 text-destructive" />
-                          ) : (
-                            <CheckCircle2 className="h-5 w-5 text-green-600" />
-                          )}
-                          <div>
-                            <span className="font-medium">LPR Check</span>
-                            <p className="text-xs text-muted-foreground">
-                              License Plate Reader scans
-                            </p>
-                          </div>
-                        </div>
-                        <Badge 
-                          variant={keywordAnalysis.keywords.LPR.found ? "destructive" : "outline"}
-                          className={!keywordAnalysis.keywords.LPR.found ? 'text-green-600 border-green-600' : ''}
-                        >
-                          {keywordAnalysis.keywords.LPR.found 
-                            ? `Found${keywordAnalysis.keywords.LPR.location ? ` in ${keywordAnalysis.keywords.LPR.location}` : ''}` 
-                            : 'Not Found'}
-                        </Badge>
-                      </div>
+            {/* Agent Update Check Section */}
+            {renderAgentUpdateSection()}
 
-                      {/* GPS Check */}
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
-                        <div className="flex items-center gap-3">
-                          {keywordAnalysis.keywords.GPS.found ? (
-                            <XCircle className="h-5 w-5 text-destructive" />
-                          ) : (
-                            <CheckCircle2 className="h-5 w-5 text-green-600" />
-                          )}
-                          <div>
-                            <span className="font-medium">GPS Check</span>
-                            <p className="text-xs text-muted-foreground">
-                              GPS tracking or coordinates
-                            </p>
-                          </div>
-                        </div>
-                        <Badge 
-                          variant={keywordAnalysis.keywords.GPS.found ? "destructive" : "outline"}
-                          className={!keywordAnalysis.keywords.GPS.found ? 'text-green-600 border-green-600' : ''}
-                        >
-                          {keywordAnalysis.keywords.GPS.found 
-                            ? `Found${keywordAnalysis.keywords.GPS.location ? ` in ${keywordAnalysis.keywords.GPS.location}` : ''}` 
-                            : 'Not Found'}
-                        </Badge>
-                      </div>
-
-                      {/* SURRENDER Check */}
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
-                        <div className="flex items-center gap-3">
-                          {keywordAnalysis.keywords.SURRENDER.found ? (
-                            <XCircle className="h-5 w-5 text-destructive" />
-                          ) : (
-                            <CheckCircle2 className="h-5 w-5 text-green-600" />
-                          )}
-                          <div>
-                            <span className="font-medium">SURRENDER Check</span>
-                            <p className="text-xs text-muted-foreground">
-                              Voluntary surrender by customer
-                            </p>
-                          </div>
-                        </div>
-                        <Badge 
-                          variant={keywordAnalysis.keywords.SURRENDER.found ? "destructive" : "outline"}
-                          className={!keywordAnalysis.keywords.SURRENDER.found ? 'text-green-600 border-green-600' : ''}
-                        >
-                          {keywordAnalysis.keywords.SURRENDER.found 
-                            ? `Found${keywordAnalysis.keywords.SURRENDER.location ? ` in ${keywordAnalysis.keywords.SURRENDER.location}` : ''}` 
-                            : 'Not Found'}
-                        </Badge>
-                      </div>
-
-                      {/* UNIT SPOTTED Check */}
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
-                        <div className="flex items-center gap-3">
-                          {keywordAnalysis.keywords.UNIT_SPOTTED.found ? (
-                            <XCircle className="h-5 w-5 text-destructive" />
-                          ) : (
-                            <CheckCircle2 className="h-5 w-5 text-green-600" />
-                          )}
-                          <div>
-                            <span className="font-medium">UNIT SPOTTED Check</span>
-                            <p className="text-xs text-muted-foreground">
-                              Unit spotted or found at location
-                            </p>
-                          </div>
-                        </div>
-                        <Badge 
-                          variant={keywordAnalysis.keywords.UNIT_SPOTTED.found ? "destructive" : "outline"}
-                          className={!keywordAnalysis.keywords.UNIT_SPOTTED.found ? 'text-green-600 border-green-600' : ''}
-                        >
-                          {keywordAnalysis.keywords.UNIT_SPOTTED.found 
-                            ? `Found${keywordAnalysis.keywords.UNIT_SPOTTED.location ? ` in ${keywordAnalysis.keywords.UNIT_SPOTTED.location}` : ''}` 
-                            : 'Not Found'}
-                        </Badge>
-                      </div>
-
-                      {/* Show matched text if keyword found */}
-                      {keywordAnalysis.hasExclusionKeywords && (
-                        <Alert variant="destructive" className="mt-3">
-                          <AlertCircle className="h-4 w-4" />
-                          <AlertTitle>
-                            Exclusion Keywords Detected 
-                            {keywordAnalysis.detectedBy && (
-                              <span className="text-xs ml-2 font-normal">
-                                ({keywordAnalysis.detectedBy === 'database' ? 'Database Check' : 'AI Analysis'})
-                              </span>
-                            )}
-                          </AlertTitle>
-                          <AlertDescription>
-                            <div className="space-y-1">
-                              {Object.values(keywordAnalysis.keywords)
-                                .filter(k => k.found && k.exactMatch)
-                                .map((k, idx) => (
-                                  <div key={idx}>
-                                    <span className="font-medium">{k.exactMatch}</span>
-                                    {k.location && <span className="text-xs ml-2">- {k.location}</span>}
-                                  </div>
-                                ))}
-                              {databaseKeywordResult?.updateContent && keywordAnalysis.detectedBy === 'database' && (
-                                <div className="mt-2 p-2 bg-muted rounded text-xs">
-                                  <span className="font-medium">Update content: </span>
-                                  {databaseKeywordResult.updateContent.substring(0, 200)}
-                                  {databaseKeywordResult.updateContent.length > 200 && '...'}
-                                </div>
-                              )}
-                            </div>
-                          </AlertDescription>
-                        </Alert>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="text-sm text-muted-foreground">
-                      Waiting to analyze exclusion keywords...
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
+            {/* Exclusion Keywords Check Section */}
+            <ValidationKeywordAnalysis
+              hasAgentUpdate={validationResult?.hasAgentUpdate || false}
+              isAnalyzingKeywords={isAnalyzingKeywords}
+              keywordAnalysis={keywordAnalysis}
+              databaseKeywordResult={databaseKeywordResult}
+              caseUpdateCount={caseData?.updates?.length}
+              onRetryAnalysis={analyzeExclusionKeywords}
+            />
 
             {/* Update History Analysis */}
             {caseData?.updates && keywordAnalysis?.analysisComplete && (
@@ -723,77 +539,7 @@ export function ValidationStep({ onNext, onPrevious, onSkip, caseData, onValidat
             )}
 
             {/* User Update Check Section */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Property Update Check</h3>
-                {validationResult?.hasUserUpdate !== undefined && (
-                  <Badge 
-                    variant={validationResult.hasUserUpdate ? "secondary" : "destructive"}
-                    className={validationResult.hasUserUpdate ? 'bg-green-500 text-white hover:bg-green-600' : ''}
-                  >
-                    {validationResult.hasUserUpdate ? 'User Updates Found' : 'No User Updates'}
-                  </Badge>
-                )}
-              </div>
-              <Separator />
-              <Card>
-                <CardContent className="p-6">
-                  {validationResult?.userUpdateDetails ? (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-muted-foreground">Status</span>
-                        <div className="flex items-center gap-2">
-                          {validationResult.userUpdateDetails.hasUserUpdate ? (
-                            <>
-                              <CheckCircle2 className="h-4 w-4 text-green-600" />
-                              <span className="text-sm font-medium">
-                                {validationResult.userUpdateDetails.userUpdateCount} User Update(s) Found
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <XCircle className="h-4 w-4 text-destructive" />
-                              <span className="text-sm font-medium text-destructive">
-                                No User Updates Found
-                              </span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                      
-                      {!validationResult.userUpdateDetails.hasUserUpdate && (
-                        <Alert variant="destructive" className="mt-3">
-                          <AlertCircle className="h-4 w-4" />
-                          <AlertTitle>Property Details Required</AlertTitle>
-                          <AlertDescription>
-                            Update with no property details description present. 
-                            Manually post an update with property detailed description.
-                          </AlertDescription>
-                        </Alert>
-                      )}
-                      
-                      {validationResult.userUpdateDetails.userUpdateAuthors && 
-                       validationResult.userUpdateDetails.userUpdateAuthors.length > 0 && (
-                        <div>
-                          <p className="text-sm text-muted-foreground mb-2">User Update Authors:</p>
-                          <div className="flex flex-wrap gap-2">
-                            {validationResult.userUpdateDetails.userUpdateAuthors.map((author, idx) => (
-                              <Badge key={idx} variant="outline" className="text-xs">
-                                {author}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">
-                      Checking for user updates with property details...
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
+            {renderUserUpdateSection()}
 
             {/* Overall Validation Result */}
             {validationResult && (

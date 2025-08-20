@@ -3,6 +3,8 @@ export interface VisibilityLogEntry {
   case_id: string;
   updates_made_visible: number;
   processing_mode: 'manual' | 'automatic';
+  company?: string;
+  update_text?: string;
   created_at?: string;
 }
 
@@ -21,6 +23,7 @@ export interface ProcessingStats {
   manualCases: number;
   automaticCases: number;
   skippedCases: number;
+  companyFilteredCount?: number;
 }
 
 export interface DailySummary {
@@ -45,6 +48,7 @@ export interface WorkflowState {
 export interface CaseUpdate {
   updateId: string;
   author: string;
+  company?: string;
   isAgent: boolean;
   visibility: 'visible' | 'not_visible';
   content: string;
@@ -54,6 +58,9 @@ export interface CaseUpdate {
 export interface ProcessCaseResult {
   caseId: string;
   updatesProcessed: number;
+  companyFilteredCount?: number;
+  company?: string;
+  updateText?: string;
   success: boolean;
   error?: string;
 }
@@ -68,6 +75,8 @@ export interface UpdateElement {
   updateId: string;
   authorElement: Element;
   visibilityButton: Element;
+  company?: string;
+  updateText?: string;
   isAgent: boolean;
   isVisible: boolean;
 }

@@ -43,11 +43,16 @@ Each module contains:
 
 ## Module Integration Flow
 When "Start Workflow" is initiated:
-1. **Module 1**: Automated RDN portal login
+1. **Module 1**: Automated RDN portal login (or direct navigation if case ID provided)
 2. **Module 2**: Extract and populate case data
-3. **Module 3**: Begin case processing workflow
+3. **Module 3**: Begin case processing workflow (with automatic mode support)
 
 All modules work sequentially - each module must complete successfully before the next begins.
+
+### Key Features
+- **Automatic Mode**: Toggle to enable automatic skipping of rejected cases (2-second delay)
+- **Manual Case Input**: Enter specific case ID to navigate directly via RDN portal
+- **Get Next Case**: Continue processing from existing RDN session without re-login
 
 ## Development Guidelines
 1. **Organization**: Logical grouping, clear structure, separation of concerns

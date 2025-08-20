@@ -6,13 +6,14 @@
 **Description**: This module handles all business logic for case processing including validation, template selection, update generation, and notification workflows
 
 ## Module Flow Summary
-1. Retrieve case data from database (populated by Module 2)
+1. Retrieve case data from database (populated by Module 2) or via manual case input
 2. Validate case eligibility (Order Type, Status, ZIP code coverage)
 3. Check exclusion criteria (DRN, LPR, GPS, Surrender keywords)
-4. Analyze property and select appropriate template
-5. Generate and submit update
-6. Notify stakeholders
-7. Track progress
+4. In Automatic Mode: Auto-skip rejected cases after 2-second countdown
+5. Analyze property and select appropriate template
+6. Generate and submit update
+7. Notify stakeholders
+8. Track progress
 
 ## Architecture Overview
 
@@ -24,8 +25,8 @@
 - **Left Panel - Controls**:
   - "Post Case Update" button (initial state)
   - "Post Next Update" button (after completion)
-  - Manual case ID entry with "Load Case" button
-  - Automatic Mode toggle
+  - Manual case ID entry with "Load Case" button (triggers Module 1 to navigate to RDN portal)
+  - Automatic Mode toggle (enables auto-skip for rejected cases)
   - Processing status indicator
 - **Right Panel - Workflow**:
   - Dynamic content area showing current step
@@ -307,6 +308,9 @@ interface ProgressTracking {
 ### Workflow Automation
 ```typescript
 interface AutomationConfig {
+  automaticMode: boolean // Toggle for automatic processing
+  autoSkipRejected: boolean // Auto-skip rejected cases after delay
+  autoSkipDelay: number // Delay before auto-skip (default: 2000ms)
   delayBetweenCases: number // Milliseconds between cases
   maxRetries: number
   pauseOnError: boolean
@@ -319,11 +323,13 @@ interface AutomationConfig {
 ```
 
 **UI Controls**:
+- Automatic Mode toggle switch (enables automatic case processing)
 - Start/Stop/Pause buttons
 - Speed control (delay between cases)
 - Error handling preferences
 - Real-time progress indicator
 - Current case display
+- Auto-skip countdown display (shows 2-second countdown when case is rejected in automatic mode)
 
 ## Database Schema Updates
 
@@ -418,20 +424,35 @@ interface AutomationConfig {
 11. User confirms completion
 12. Case marked as complete
 
+### Manual Case Input Flow
+1. User enters specific case ID in the input field
+2. User clicks "Load Case" button
+3. **System triggers Module 1 to navigate directly to RDN portal for that case**
+4. Module 1 logs into RDN portal (if not already logged in)
+5. Module 1 navigates to specific case URL: `https://app.recoverydatabase.net/alpha_rdn/module/default/case2/?tab=6&case_id={caseId}`
+6. Module 2 extracts case data from the loaded case
+7. Module 3 proceeds with normal validation and processing workflow
+8. Case processing continues as per standard flow
+
 ### Semi-Automated Processing Flow
 1. User enables "Automatic Mode" and clicks "Post Case Update"
 2. System processes cases one at a time:
 3. For each case:
    - Validates each case
-   - Pauses for manual property verification
-   - Auto-selects templates based on rotation
-   - Generates update content
-   - **Pauses for user review and approval**
-   - Submits approved updates only
-   - Pauses for manual notifications
-   - Logs progress after confirmation
-4. User actively participates at pause points
-5. System continues after each user action
+   - **If case is rejected and Automatic Mode is ON:**
+     - Shows 2-second countdown timer
+     - Auto-skips to next case after countdown
+     - No user intervention required for rejected cases
+   - If case passes validation:
+     - Pauses for manual property verification
+     - Auto-selects templates based on rotation
+     - Generates update content
+     - **Pauses for user review and approval**
+     - Submits approved updates only
+     - Pauses for manual notifications
+     - Logs progress after confirmation
+4. User actively participates at pause points (except for rejected cases)
+5. System continues after each user action or auto-skip
 
 ## Security & Permissions
 

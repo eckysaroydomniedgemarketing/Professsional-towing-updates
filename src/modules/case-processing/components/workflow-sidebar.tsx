@@ -23,6 +23,8 @@ interface WorkflowSidebarProps {
   showWorkflowControl?: boolean
   currentStep?: number
   totalSteps?: number
+  automaticMode?: boolean
+  onAutomaticModeChange?: (mode: boolean) => void
 }
 
 export function WorkflowSidebar({
@@ -36,7 +38,9 @@ export function WorkflowSidebar({
   onGetNextCase,
   showWorkflowControl = false,
   currentStep = 0,
-  totalSteps = 8
+  totalSteps = 8,
+  automaticMode = false,
+  onAutomaticModeChange
 }: WorkflowSidebarProps) {
   const [caseIdInput, setCaseIdInput] = useState("")
   const [automationEnabled, setAutomationEnabled] = useState(false)
@@ -87,19 +91,30 @@ export function WorkflowSidebar({
           
           <Separator />
           
-          <div className="flex items-center space-x-2">
-            <Switch 
-              id="automation"
-              checked={automationEnabled}
-              onCheckedChange={setAutomationEnabled}
-              disabled={workflowStatus === 'running' || showWorkflowControl}
-            />
-            <Label 
-              htmlFor="automation" 
-              className="text-sm font-normal cursor-pointer"
-            >
-              Automatic Mode
-            </Label>
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2">
+              <Switch 
+                id="automation"
+                checked={automaticMode}
+                onCheckedChange={(checked) => {
+                  if (onAutomaticModeChange) {
+                    onAutomaticModeChange(checked)
+                  }
+                }}
+                disabled={workflowStatus === 'running' || showWorkflowControl}
+              />
+              <Label 
+                htmlFor="automation" 
+                className="text-sm font-normal cursor-pointer"
+              >
+                Automatic Mode {automaticMode ? '(ON)' : '(OFF)'}
+              </Label>
+            </div>
+            {automaticMode && (
+              <p className="text-xs text-muted-foreground">
+                Rejected cases will automatically skip to the next case
+              </p>
+            )}
           </div>
         </CardContent>
       </Card>

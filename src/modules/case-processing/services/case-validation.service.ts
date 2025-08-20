@@ -1,6 +1,7 @@
 import { Case, CaseValidationResult } from '../types/case.types'
 import { createClient } from '@supabase/supabase-js'
 import { checkAgentUpdateExists } from './agent-update-validation.service'
+import { ClientExclusionService } from './client-exclusion.service'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -107,7 +108,13 @@ export class CaseValidationService {
     const statusValid = this.validateStatus(caseData.status)
     const zipCodeValid = await this.validateZipCodes(caseData.addresses || [])
     
-    // Check for agent updates after ZIP code validation
+    // Check for client exclusion after ZIP code validation
+    const clientExclusionService = ClientExclusionService.getInstance()
+    const clientExclusionResult = await clientExclusionService.checkClientExclusion(caseData.client_name)
+    const isClientExcluded = clientExclusionResult.isExcluded
+    const skipClientExclusionValidation = clientExclusionResult.skipValidation || false
+    
+    // Check for agent updates
     const agentUpdateCheck = await checkAgentUpdateExists(caseData.id)
     const hasAgentUpdate = agentUpdateCheck.hasAgentUpdate
     
@@ -128,6 +135,11 @@ export class CaseValidationService {
       reasons.push(`None of the ${zipCount} address(es) are in coverage area`)
     }
     
+    // Only check client exclusion if validation is not skipped
+    if (!skipClientExclusionValidation && isClientExcluded) {
+      reasons.push(clientExclusionResult.reason || 'Client is on exclusion list')
+    }
+    
     if (!hasAgentUpdate) {
       reasons.push(agentUpdateCheck.validationMessage)
     }
@@ -136,11 +148,16 @@ export class CaseValidationService {
       reasons.push(userUpdateCheck.validationMessage)
     }
     
+    // Include client exclusion in passed check only if validation is not skipped
+    const clientExclusionPassed = skipClientExclusionValidation || !isClientExcluded
+    
     return {
-      passed: orderTypeValid && statusValid && zipCodeValid && hasAgentUpdate && hasUserUpdate,
+      passed: orderTypeValid && statusValid && zipCodeValid && clientExclusionPassed && hasAgentUpdate && hasUserUpdate,
       orderTypeValid,
       statusValid,
       zipCodeValid,
+      clientExclusionPassed,
+      skipClientExclusionValidation,
       hasAgentUpdate,
       agentUpdateDetails: agentUpdateCheck,
       hasUserUpdate,

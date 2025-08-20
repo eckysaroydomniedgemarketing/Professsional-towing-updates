@@ -10,6 +10,7 @@ export interface CaseDetails {
   collector: string | null;
   lien_holder: string | null;
   client_account_number: string | null;
+  my_summary_additional_info?: string | null;
   created_at?: string;
 }
 

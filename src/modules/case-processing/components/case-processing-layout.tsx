@@ -39,6 +39,8 @@ export function CaseProcessingLayout() {
   const [currentSessionId, setCurrentSessionId] = useState<string>('')
   const [isGetNextCase, setIsGetNextCase] = useState(false)
   const [workflowKey, setWorkflowKey] = useState(0)
+  const [automaticMode, setAutomaticMode] = useState(false)
+  const [targetCaseId, setTargetCaseId] = useState<string | null>(null)
 
   const steps: WorkflowStep[] = [
     'validation',
@@ -70,6 +72,7 @@ export function CaseProcessingLayout() {
     setModulesCompleted(true)
     setWorkflowStatus('running')
     setIsGetNextCase(false) // Reset the flag
+    setTargetCaseId(null) // Reset target case ID
     
     setCurrentCase(caseId)
     
@@ -150,46 +153,26 @@ export function CaseProcessingLayout() {
 
   const handleLoadCase = async (caseId: string) => {
     console.log('Loading case:', caseId)
+    
+    // Set target case ID and trigger Module 1 to navigate to RDN portal
+    setTargetCaseId(caseId)
     setWorkflowStatus('running')
-    setCurrentCase(caseId)
     setShowUpdateAssistant(false)
+    setIsModulesRunning(true)
+    setModulesCompleted(false)
     
-    // Get the latest session for this case
-    const { data: sessionData } = await supabase
-      .from('processing_sessions')
-      .select('id')
-      .eq('case_id', caseId)
-      .eq('status', 'completed')
-      .order('completed_at', { ascending: false })
-      .limit(1)
-      .single()
-    
-    if (sessionData) {
-      setCurrentSessionId(sessionData.id)
-    }
-    
-    // Fetch case data from Supabase
-    const data = await fetchCaseById(caseId)
-    if (data) {
-      console.log('Case loaded successfully')
-      setCaseData(data)
-    } else {
-      console.error('Failed to load case data')
-      // Set empty structure if fetch fails
-      setCaseData({
-        id: caseId,
-        order_type: '',
-        status: '',
-        address: '',
-        zip_code: '',
-        vin: '',
-        updates: []
-      })
-    }
-    
-    setCurrentStep('validation')
+    // Reset current case state
+    setCurrentCase(null)
+    setCaseData(null)
+    setCurrentStep(null)
     setStepIndex(0)
     setHasCompletedCase(false)
+    
+    // Increment workflow key to force WorkflowControl remount with target case ID
+    setWorkflowKey(prev => prev + 1)
+    
+    // WorkflowControl will be triggered with targetCaseId
+    console.log('Starting Module 1 to navigate to case:', caseId)
   }
 
   const handleGetNextCase = async () => {
@@ -259,7 +242,7 @@ export function CaseProcessingLayout() {
 
     switch (currentStep) {
       case 'validation':
-        return <ValidationStep {...props} caseData={caseData} onValidationComplete={setValidationResults} onShowUpdateAssistant={() => setShowUpdateAssistant(true)} onGetNextCase={handleGetNextCase} />
+        return <ValidationStep {...props} caseData={caseData} automaticMode={automaticMode} onValidationComplete={setValidationResults} onShowUpdateAssistant={() => setShowUpdateAssistant(true)} onGetNextCase={handleGetNextCase} />
       case 'update-review':
         return <UpdateReviewStep {...props} />
       case 'submission':
@@ -288,6 +271,8 @@ export function CaseProcessingLayout() {
           showWorkflowControl={isModulesRunning}
           currentStep={stepIndex}
           totalSteps={steps.length}
+          automaticMode={automaticMode}
+          onAutomaticModeChange={setAutomaticMode}
         />
 
         <SidebarInset className="flex flex-col flex-1">
@@ -307,6 +292,7 @@ export function CaseProcessingLayout() {
                     onWorkflowComplete={handleWorkflowComplete} 
                     autoStart={true} 
                     isGetNextCase={isGetNextCase}
+                    targetCaseId={targetCaseId}
                   />
                 </div>
               ) : (

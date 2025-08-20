@@ -137,4 +137,33 @@ export class BrowserManager {
     }
     return initialized
   }
+
+  /**
+   * Get the current active page for update posting
+   * This allows other modules to access the browser page
+   */
+  getCurrentPage(): Page | null {
+    if (!this.page) {
+      this.log('BROWSER', 'getCurrentPage called but no page available')
+      return null
+    }
+    
+    // Return the current active page
+    // In case of multiple tabs, this should return the active tab
+    if (this.context) {
+      const pages = this.context.pages()
+      if (pages.length > 0) {
+        // Return the last page (most recently opened/active)
+        const activePage = pages[pages.length - 1]
+        this.log('BROWSER', 'Returning active page', { 
+          totalPages: pages.length,
+          url: activePage.url()
+        })
+        return activePage
+      }
+    }
+    
+    this.log('BROWSER', 'Returning stored page reference')
+    return this.page
+  }
 }

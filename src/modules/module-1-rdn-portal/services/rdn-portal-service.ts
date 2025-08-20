@@ -24,13 +24,15 @@ export class RDNPortalService {
   
   private isGetNextCase: boolean = false
   private lastProcessedCaseId: string | null = null
+  private targetCaseId: string | null = null
 
-  constructor(private credentials: RDNCredentials, getNextCase: boolean = false) {
+  constructor(private credentials: RDNCredentials, getNextCase: boolean = false, targetCaseId: string | null = null) {
     this.browserManager = new BrowserManager()
     this.authManager = new AuthManager(credentials)
     this.navigationManager = new NavigationManager()
     this.caseProcessor = new CaseProcessor()
     this.isGetNextCase = getNextCase
+    this.targetCaseId = targetCaseId
   }
   
   // Method to update the getNextCase flag for reused instance
@@ -144,20 +146,51 @@ export class RDNPortalService {
       this.state.currentStep = result.nextStep
       this.state.lastActivityTime = new Date()
       
-      // Click Updates tab
-      const updatesClicked = await this.navigationManager.clickUpdatesTab(
-        result.data?.page || page
-      )
+      // Updates tab navigation is now handled inside extractCaseData
+      return result
+    }
+    
+    return result
+  }
+
+  async navigateToSpecificCase(caseId: string): Promise<NavigationResult> {
+    const page = this.browserManager.getPage()
+    if (!page) throw new Error('Browser not initialized')
+    
+    const result = await this.navigationManager.navigateToSpecificCase(page, caseId)
+    if (result.success) {
+      this.state.currentStep = NavigationStep.CASE_DETAIL
+      this.state.currentCaseId = caseId
+      
+      // Extract case data after navigating to the case
+      console.log(`[RDN-PORTAL] Starting data extraction for case ${caseId}`)
+      this.state.currentStep = NavigationStep.EXTRACTING_DATA
+      
+      const extractionResult = await extractCaseData(caseId, page, true)
+      
+      if (!extractionResult.success) {
+        console.error(`[RDN-PORTAL] Data extraction failed for case ${caseId}`)
+        return {
+          success: false,
+          nextStep: NavigationStep.ERROR,
+          error: extractionResult.error || 'Data extraction failed'
+        }
+      }
+      
+      console.log(`[RDN-PORTAL] Data extraction successful for case ${caseId}`)
+      this.state.currentStep = NavigationStep.EXTRACTION_COMPLETE
       
       return {
-        ...result,
+        success: true,
+        nextStep: NavigationStep.EXTRACTION_COMPLETE,
         data: {
-          ...result.data,
-          updatesTabClicked: updatesClicked
+          caseId: caseId,
+          sessionId: extractionResult.sessionId,
+          message: 'Case data extracted successfully',
+          recordsInserted: extractionResult.recordsInserted
         }
       }
     }
-    
     return result
   }
 
@@ -299,6 +332,10 @@ export class RDNPortalService {
       
       console.log(`[RDN-PORTAL] Clicking on next case: ${caseId}`)
       
+      // Update state to show we're processing this case
+      this.state.currentStep = NavigationStep.PROCESSING_CASE
+      this.state.currentCaseId = caseId || undefined
+      
       // Click opens in new tab
       const [newPage] = await Promise.all([
         context.waitForEvent('page'),
@@ -307,19 +344,20 @@ export class RDNPortalService {
       
       // Switch to new tab and wait for it to load
       await newPage.waitForLoadState('networkidle')
-      await newPage.waitForSelector('#tab_6, [onclick*="switchTab(6)"]', { state: 'visible' })
-      
-      // Click Updates tab on the new page
-      const updatesClicked = await this.navigationManager.clickUpdatesTab(newPage)
-      console.log(`[RDN-PORTAL] Updates tab clicked: ${updatesClicked}`)
       
       // Update browser manager's page reference to the new tab
       this.browserManager.setPage(newPage)
       
-      // Extract data for the new case (same as processCases does)
+      // Extract data for the new case
       if (caseId) {
         console.log(`[RDN-PORTAL] Starting data extraction for case ${caseId}`)
-        const extractionResult = await extractCaseData(caseId, newPage)
+        
+        // Update state to show we're extracting data
+        this.state.currentStep = NavigationStep.EXTRACTING_DATA
+        
+        // Extract data starting from My Summary tab (we just opened the case)
+        // The extraction function will handle navigating to Updates tab
+        const extractionResult = await extractCaseData(caseId, newPage, true)
         
         if (!extractionResult.success) {
           console.error(`[RDN-PORTAL] Data extraction failed for case ${caseId}`)
@@ -342,7 +380,6 @@ export class RDNPortalService {
           nextStep: NavigationStep.EXTRACTION_COMPLETE,
           data: {
             caseId: caseId,
-            updatesTabClicked: updatesClicked,
             sessionId: extractionResult.sessionId,
             message: 'Case data extracted successfully',
             recordsInserted: extractionResult.recordsInserted
@@ -356,8 +393,7 @@ export class RDNPortalService {
         success: true,
         nextStep: NavigationStep.CASE_DETAIL,
         data: {
-          caseId: caseId || '',
-          updatesTabClicked: updatesClicked
+          caseId: caseId || ''
         }
       }
     } catch (error) {
@@ -393,6 +429,9 @@ export class RDNPortalService {
           }
         }
         
+        // Update state to show we're returning to listing
+        this.state.currentStep = NavigationStep.RETURNING_TO_LISTING
+        
         // Get all open pages
         const pages = context.pages()
         console.log(`[RDN-PORTAL] Found ${pages.length} open tabs`)
@@ -409,10 +448,30 @@ export class RDNPortalService {
         const listingPage = pages[0]
         await listingPage.bringToFront()
         
+        // Update state to show we're back at case listing
+        this.state.currentStep = NavigationStep.CASE_LISTING
+        
         // Process next case
         const processingResult = await this.processNextCase()
         console.log('[RDN-PORTAL] processNextCase result:', processingResult)
         return processingResult
+      }
+      
+      // Check if we have a specific target case ID
+      if (this.targetCaseId) {
+        console.log(`[RDN-PORTAL] Loading specific case: ${this.targetCaseId}`)
+        
+        // Step 1: Navigate to login
+        const loginNavResult = await this.navigateToLogin()
+        if (!loginNavResult.success) return loginNavResult
+        
+        // Step 2: Authenticate
+        const authResult = await this.authenticate()
+        if (!authResult.success) return authResult
+        
+        // Step 3: Navigate directly to the specific case (includes data extraction)
+        const caseNavResult = await this.navigateToSpecificCase(this.targetCaseId)
+        return caseNavResult
       }
       
       // Normal flow for first case

@@ -198,4 +198,36 @@ export class NavigationManager {
   getCaseListingUrl(): string | null {
     return this.caseListingUrl
   }
+
+  async navigateToSpecificCase(page: Page, caseId: string): Promise<NavigationResult> {
+    try {
+      const caseUrl = `https://app.recoverydatabase.net/alpha_rdn/module/default/case2/?tab=6&case_id=${caseId}`
+      
+      this.log('NAV', `Navigating to specific case: ${caseId}`)
+      await page.goto(caseUrl, { 
+        waitUntil: 'networkidle',
+        timeout: 30000 
+      })
+      
+      // Wait for case page content to load - the page loads directly with tab 6 (My Summary)
+      // Just wait for the main content section that's present on the My Summary tab
+      await page.waitForSelector('.section__main', { state: 'visible', timeout: 10000 })
+      this.log('NAV', 'Case page loaded with My Summary tab')
+      
+      this.log('NAV', `Successfully navigated to case ${caseId}`)
+      
+      return {
+        success: true,
+        nextStep: NavigationStep.CASE_DETAIL,
+        url: caseUrl,
+        data: { caseId }
+      }
+    } catch (error) {
+      this.log('NAV', `Failed to navigate to case ${caseId}`, { error: error.message })
+      return {
+        success: false,
+        error: `Failed to navigate to case ${caseId}: ${error.message}`
+      }
+    }
+  }
 }

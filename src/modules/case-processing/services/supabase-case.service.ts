@@ -27,6 +27,43 @@ async function getLatestSessionId(caseId: string): Promise<string | null> {
   return data.id
 }
 
+/**
+ * Update case status with optional rejection reason
+ */
+export async function updateCaseStatus(
+  caseId: string, 
+  status: 'accepted' | 'rejected',
+  rejectionReason?: string
+): Promise<void> {
+  try {
+    console.log('Updating case status:', { caseId, status, rejectionReason })
+    
+    const updateData: any = {
+      status: status
+    }
+    
+    // Add rejection reason if status is rejected
+    if (status === 'rejected' && rejectionReason) {
+      updateData.rejection_reason = rejectionReason
+    }
+    
+    const { error } = await supabase
+      .from('case_updates')
+      .update(updateData)
+      .eq('case_id', caseId)
+    
+    if (error) {
+      console.error('Error updating case status:', error)
+      throw error
+    }
+    
+    console.log('Case status updated successfully')
+  } catch (error) {
+    console.error('Failed to update case status:', error)
+    throw error
+  }
+}
+
 export async function fetchCaseById(caseId: string): Promise<Case | null> {
   try {
     console.log('Fetching case data for:', caseId)
@@ -89,15 +126,16 @@ export async function fetchCaseById(caseId: string): Promise<Case | null> {
       
       console.log('All updates fetched for validation:', allUpdates?.length || 0)
       
-      // Fetch the latest case status
+      // Fetch the latest case status and rejection reason
       const { data: caseUpdateArray } = await supabase
         .from('case_updates')
-        .select('status')
+        .select('status, rejection_reason')
         .eq('case_id', caseId)
         .order('created_at', { ascending: false })
         .limit(1)
       
       const latestStatus = caseUpdateArray?.[0]?.status || caseDetails.status || ''
+      const rejectionReason = caseUpdateArray?.[0]?.rejection_reason || null
       
       // Get primary address info
       const primaryAddress = addressArray?.find(addr => addr.is_primary) || addressArray?.[0]
@@ -107,6 +145,7 @@ export async function fetchCaseById(caseId: string): Promise<Case | null> {
         id: caseId,
         order_type: caseDetails.order_type || '',
         status: latestStatus,
+        rejection_reason: rejectionReason,
         address: primaryAddress?.full_address || '',
         zip_code: primaryAddress?.zip_code || '',
         vin: vehicle?.vin || '',
@@ -202,6 +241,7 @@ export async function fetchCaseById(caseId: string): Promise<Case | null> {
         .limit(1)
       
       const latestStatus = caseUpdateArray?.[0]?.status || caseDetails.status || ''
+      const rejectionReason = caseUpdateArray?.[0]?.rejection_reason || null
       console.log('Latest case status:', latestStatus)
 
       // Get primary address info for backwards compatibility
@@ -212,6 +252,7 @@ export async function fetchCaseById(caseId: string): Promise<Case | null> {
         id: caseId,
         order_type: caseDetails.order_type || '',
         status: latestStatus,
+        rejection_reason: rejectionReason,
         address: primaryAddress?.full_address || '',
         zip_code: primaryAddress?.zip_code || '',
         vin: vehicle?.vin || '',
