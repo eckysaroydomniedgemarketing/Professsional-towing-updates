@@ -207,6 +207,46 @@ class RDNVisibilityService {
   async closeCaseTab(casePage: Page): Promise<void> {
     return this.caseNavigation.closeCaseTab(casePage);
   }
+
+  /**
+   * Close browser and clean up all resources
+   * Called when session is lost or workflow needs to be reset
+   */
+  async closeBrowser(): Promise<void> {
+    try {
+      console.log('Closing browser and cleaning up resources...');
+      
+      // Close the browser context if page exists
+      if (this.page) {
+        const context = this.page.context();
+        const browser = context.browser();
+        
+        // Close all pages in the context
+        const pages = context.pages();
+        for (const page of pages) {
+          try {
+            await page.close();
+          } catch (error) {
+            console.warn('Error closing page:', error);
+          }
+        }
+        
+        // Close the browser
+        if (browser) {
+          await browser.close();
+          console.log('Browser closed successfully');
+        }
+      }
+      
+      // Clear the page reference
+      this.page = null;
+      
+    } catch (error) {
+      console.error('Error closing browser:', error);
+      // Still set page to null even if close fails
+      this.page = null;
+    }
+  }
 }
 
 export default new RDNVisibilityService();

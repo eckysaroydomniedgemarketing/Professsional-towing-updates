@@ -58,8 +58,9 @@ export interface WorkflowState {
   mode: 'manual' | 'automatic';
   processedCount: number;
   totalProcessed: number;
-  currentStatus: 'idle' | 'authenticating' | 'navigating' | 'processing' | 'completed' | 'error';
+  currentStatus: 'idle' | 'authenticating' | 'navigating' | 'processing' | 'completed' | 'error' | 'session_lost';
   error?: string;
+  sessionLostAtCase?: string; // Track which case ID the session was lost at
 }
 
 export interface CaseUpdate {

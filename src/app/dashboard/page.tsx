@@ -1,7 +1,9 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { AppLayout } from "@/components/app-layout";
-import { Briefcase, Truck, DollarSign, Star } from "lucide-react";
-import { WorkflowControl } from "@/modules/module-1-rdn-portal/components/workflow-control";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, FileText, Eye, CheckCircle2, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 export default async function DashboardPage() {
   const user = await currentUser();
@@ -16,91 +18,110 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-lg border-2 border-amber-200 bg-amber-50 p-6 hover:border-amber-300 transition-colors">
-            <div className="flex flex-col space-y-1">
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Case Processing Workflow Card */}
+          <Card className="border-2 hover:border-primary/50 transition-colors">
+            <CardHeader>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-amber-700">
-                  Active Jobs
-                </span>
-                <Briefcase className="h-5 w-5 text-amber-600" />
+                <CardTitle className="text-xl">Case Processing Workflow</CardTitle>
+                <FileText className="h-6 w-6 text-primary" />
               </div>
-              <span className="text-2xl font-bold text-amber-900">12</span>
-              <span className="text-xs text-amber-600">
-                +2 from yesterday
-              </span>
-            </div>
-          </div>
+              <CardDescription>
+                Automated RDN Portal Navigation & Case Processing
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <span className="text-sm">Automated portal login and navigation</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <span className="text-sm">Extract case details and vehicle information</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <span className="text-sm">Validate cases against business rules</span>
+                </div>
+              </div>
+              
+              <div className="pt-2 space-y-1">
+                <p className="text-sm text-muted-foreground">
+                  Complete end-to-end case processing automation
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Navigate through cases automatically
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Verify ZIP code coverage areas
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Check order types and case status
+                </p>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Link href="/case-processing" className="w-full">
+                <Button className="w-full" size="lg">
+                  Go to Case Processing
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
 
-          <div className="rounded-lg border-2 border-sky-200 bg-sky-50 p-6 hover:border-sky-300 transition-colors">
-            <div className="flex flex-col space-y-1">
+          {/* Agent Updates Visibility Card */}
+          <Card className="border-2 hover:border-primary/50 transition-colors">
+            <CardHeader>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-sky-700">
-                  Fleet Status
-                </span>
-                <Truck className="h-5 w-5 text-sky-600" />
+                <CardTitle className="text-xl">Agent Updates Visibility</CardTitle>
+                <Eye className="h-6 w-6 text-primary" />
               </div>
-              <span className="text-2xl font-bold text-sky-900">8/10</span>
-              <span className="text-xs text-sky-600">
-                Available vehicles
-              </span>
-            </div>
-          </div>
-
-          <div className="rounded-lg border-2 border-emerald-200 bg-emerald-50 p-6 hover:border-emerald-300 transition-colors">
-            <div className="flex flex-col space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-emerald-700">
-                  Today&apos;s Revenue
-                </span>
-                <DollarSign className="h-5 w-5 text-emerald-600" />
+              <CardDescription>
+                Control Update Visibility in RDN Portal
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm">Toggle agent update visibility</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm">Filter updates by specific criteria</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm">Process multiple cases in batches</span>
+                </div>
               </div>
-              <span className="text-2xl font-bold text-emerald-900">$2,450</span>
-              <span className="text-xs text-emerald-600">
-                +15% from average
-              </span>
-            </div>
-          </div>
-
-          <div className="rounded-lg border-2 border-purple-200 bg-purple-50 p-6 hover:border-purple-300 transition-colors">
-            <div className="flex flex-col space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-purple-700">
-                  Customer Rating
-                </span>
-                <Star className="h-5 w-5 text-purple-600" />
+              
+              <div className="pt-2 space-y-1">
+                <p className="text-sm text-muted-foreground">
+                  Manage which updates are visible in the portal
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Show or hide specific updates
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Choose automatic or manual mode
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Track changes in real-time
+                </p>
               </div>
-              <span className="text-2xl font-bold text-purple-900">4.8</span>
-              <span className="text-xs text-purple-600">
-                Based on 127 reviews
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold mb-4">RDN Portal Automation</h2>
-          <WorkflowControl />
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="rounded-lg border-2 border-slate-200 bg-white p-6 hover:border-slate-300 transition-colors">
-            <h3 className="font-semibold mb-4 text-slate-900">Recent Jobs</h3>
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">
-                No recent jobs to display.
-              </p>
-            </div>
-          </div>
-
-          <div className="rounded-lg border-2 border-slate-200 bg-white p-6 hover:border-slate-300 transition-colors">
-            <h3 className="font-semibold mb-4 text-slate-900">Fleet Alerts</h3>
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">
-                All vehicles are operating normally.
-              </p>
-            </div>
-          </div>
+            </CardContent>
+            <CardFooter>
+              <Link href="/agent-updates-visibility" className="w-full">
+                <Button className="w-full" size="lg" variant="secondary">
+                  Go to Agent Updates
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
         </div>
       </div>
     </AppLayout>

@@ -60,18 +60,20 @@ export class CaseValidationService {
   }
 
 
-  static checkUserUpdateExists(updates: any[]): {
+  static async checkUserUpdateExists(updates: any[]): Promise<{
     hasUserUpdate: boolean
     userUpdateCount: number
     userUpdateAuthors: string[]
     validationMessage: string
-  } {
+    isAuthorizedUser: boolean
+  }> {
     if (!updates || updates.length === 0) {
       return {
         hasUserUpdate: false,
         userUpdateCount: 0,
         userUpdateAuthors: [],
-        validationMessage: 'No updates found in case history'
+        validationMessage: 'No updates found in case history',
+        isAuthorizedUser: false
       }
     }
 
@@ -84,14 +86,80 @@ export class CaseValidationService {
     })
 
     const uniqueUserAuthors = [...new Set(userUpdates.map(u => u.update_author).filter(Boolean))]
+    
+    // Check if authorized_users table has any records
+    const { data: tableCheck, error: tableError } = await supabase
+      .from('authorized_users')
+      .select('user_name')
+      .limit(1)
+    
+    // If table is empty or has error, use original validation (backward compatible)
+    if (tableError || !tableCheck || tableCheck.length === 0) {
+      console.log('Authorized users table is empty or not accessible - using default validation')
+      return {
+        hasUserUpdate: userUpdates.length > 0,
+        userUpdateCount: userUpdates.length,
+        userUpdateAuthors: uniqueUserAuthors,
+        validationMessage: userUpdates.length > 0 
+          ? `Found ${userUpdates.length} user update(s) with property details`
+          : 'Update with no property details description present. Manually post an update with property detailed description.',
+        isAuthorizedUser: userUpdates.length > 0 // Consider authorized if table is empty
+      }
+    }
+    
+    // Table has records, check if user is authorized
+    let isAuthorizedUser = false
+    if (uniqueUserAuthors.length > 0) {
+      // Extract just the user names without the (User) designation for database lookup
+      const userNames = uniqueUserAuthors.map(author => {
+        // Remove the (User) designation to get just the name
+        return author.replace(/\s*\(user\)/i, '').trim()
+      })
+      
+      // Get all active authorized users
+      const { data: authorizedUsers, error } = await supabase
+        .from('authorized_users')
+        .select('user_name')
+        .eq('is_active', true)
+        
+      if (!error && authorizedUsers && authorizedUsers.length > 0) {
+        // Check if any authorized user name is found within the update author names
+        for (const updateAuthor of userNames) {
+          const updateAuthorLower = updateAuthor.toLowerCase()
+          
+          // Check if any authorized user's name appears in this update author
+          const matchFound = authorizedUsers.some(authUser => {
+            const authUserLower = authUser.user_name.toLowerCase()
+            // Check if the authorized name appears anywhere in the update author
+            return updateAuthorLower.includes(authUserLower)
+          })
+          
+          if (matchFound) {
+            isAuthorizedUser = true
+            console.log(`Authorized user found in: ${updateAuthor}`)
+            break
+          }
+        }
+      }
+    }
+
+    // Different validation messages based on whether user is authorized
+    let validationMessage = ''
+    if (userUpdates.length === 0) {
+      validationMessage = 'Update with no property details description present. Manually post an update with property detailed description.'
+    } else if (!isAuthorizedUser) {
+      // User found but not in authorized list - needs first update
+      validationMessage = 'Update with no property details description present. Manually post an update with property detailed description.'
+    } else {
+      validationMessage = `Found ${userUpdates.length} user update(s) with property details from authorized user`
+    }
 
     return {
-      hasUserUpdate: userUpdates.length > 0,
+      hasUserUpdate: userUpdates.length > 0 && isAuthorizedUser,
       userUpdateCount: userUpdates.length,
       userUpdateAuthors: uniqueUserAuthors,
-      validationMessage: userUpdates.length > 0 
-        ? `Found ${userUpdates.length} user update(s) with property details`
-        : 'Update with no property details description present. Manually post an update with property detailed description.'
+      validationMessage,
+      isAuthorizedUser
     }
   }
 
@@ -131,7 +199,7 @@ export class CaseValidationService {
     const hasAgentUpdate = agentUpdateCheck.hasAgentUpdate
     
     // Check for user updates (NEW validation) - use allUpdates if available, otherwise updates
-    const userUpdateCheck = this.checkUserUpdateExists(caseData.allUpdates || caseData.updates || [])
+    const userUpdateCheck = await this.checkUserUpdateExists(caseData.allUpdates || caseData.updates || [])
     const hasUserUpdate = userUpdateCheck.hasUserUpdate
     
     if (!orderTypeValid) {

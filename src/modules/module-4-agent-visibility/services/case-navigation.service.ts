@@ -48,6 +48,7 @@ export class CaseNavigationService {
 
   /**
    * Open case in new tab and switch to it
+   * Validates session is still active by checking the opened page URL
    */
   async openCaseInNewTab(page: Page, caseId: string): Promise<Page | null> {
     try {
@@ -63,8 +64,30 @@ export class CaseNavigationService {
       // Wait for new page to load
       await newPage.waitForLoadState('networkidle');
       
+      // Validate session by checking if we're on the expected case page
+      const currentUrl = newPage.url();
+      const expectedUrlPattern = `/alpha_rdn/module/default/case2/?tab=6&case_id=${caseId}`;
+      
+      // Check if URL contains the expected pattern
+      if (!currentUrl.includes(`case_id=${caseId}`) || !currentUrl.includes('/case2/')) {
+        // Check if it's a login page (session lost)
+        if (currentUrl.includes('/login') || currentUrl.includes('sign') || currentUrl.includes('auth')) {
+          console.error(`Session lost! Redirected to login page instead of case ${caseId}`);
+          throw new Error(`SESSION_LOST: Session expired while opening case ${caseId}. Please re-login.`);
+        }
+        
+        console.error(`Unexpected page opened. Expected case ${caseId}, got: ${currentUrl}`);
+        throw new Error(`SESSION_ERROR: Failed to open case ${caseId}. Unexpected page loaded.`);
+      }
+      
+      console.log(`Successfully opened case ${caseId}`);
       return newPage;
     } catch (error) {
+      // Re-throw session errors to be handled by workflow manager
+      if (error instanceof Error && error.message.startsWith('SESSION_')) {
+        throw error;
+      }
+      
       console.error('Error opening case in new tab:', error);
       return null;
     }

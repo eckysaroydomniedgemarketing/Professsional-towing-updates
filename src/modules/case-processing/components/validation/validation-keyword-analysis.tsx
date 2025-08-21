@@ -56,17 +56,22 @@ export function ValidationKeywordAnalysis({
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Exclusion Keywords Check</h3>
         <div className="flex items-center gap-2">
-          {keywordAnalysis?.detectedBy && (
+          {databaseKeywordResult?.drnOverriddenByAgent && (
+            <Badge variant="outline" className="text-xs bg-yellow-50 border-yellow-500 text-yellow-800">
+              DRN Overridden by Agent
+            </Badge>
+          )}
+          {keywordAnalysis?.detectedBy && !databaseKeywordResult?.drnOverriddenByAgent && (
             <Badge variant="outline" className="text-xs">
               {keywordAnalysis.detectedBy === 'database' ? 'DB Check' : 'AI Analysis'}
             </Badge>
           )}
           {keywordAnalysis?.analysisComplete && (
             <Badge 
-              variant={keywordAnalysis.hasExclusionKeywords ? "destructive" : "secondary"}
-              className={!keywordAnalysis.hasExclusionKeywords ? 'bg-green-500 text-white hover:bg-green-600' : ''}
+              variant={keywordAnalysis.hasExclusionKeywords && !databaseKeywordResult?.drnOverriddenByAgent ? "destructive" : "secondary"}
+              className={!keywordAnalysis.hasExclusionKeywords || databaseKeywordResult?.drnOverriddenByAgent ? 'bg-green-500 text-white hover:bg-green-600' : ''}
             >
-              {keywordAnalysis.hasExclusionKeywords ? 'Keywords Found' : 'All Clear'}
+              {keywordAnalysis.hasExclusionKeywords && !databaseKeywordResult?.drnOverriddenByAgent ? 'Keywords Found' : 'All Clear'}
             </Badge>
           )}
           {isAnalyzingKeywords && (
@@ -129,8 +134,31 @@ export function ValidationKeywordAnalysis({
               {renderKeywordCheck('SURRENDER', 'Voluntary surrender by customer', keywordAnalysis.keywords.SURRENDER)}
               {renderKeywordCheck('UNIT SPOTTED', 'Unit spotted or found at location', keywordAnalysis.keywords.UNIT_SPOTTED)}
 
-              {/* Show matched text if keyword found */}
-              {keywordAnalysis.hasExclusionKeywords && (
+              {/* Show DRN override message */}
+              {databaseKeywordResult?.drnOverriddenByAgent && (
+                <Alert className="mt-3 border-yellow-500 bg-yellow-50">
+                  <AlertCircle className="h-4 w-4 text-yellow-600" />
+                  <AlertTitle className="text-yellow-800">
+                    DRN Detected but Overridden
+                  </AlertTitle>
+                  <AlertDescription className="text-yellow-700">
+                    <div className="space-y-1">
+                      <p>DRN keyword was found in the update history, but an Agent has posted an update after it.</p>
+                      <p className="font-medium">Case is eligible for processing despite DRN presence.</p>
+                      {databaseKeywordResult?.updateContent && (
+                        <div className="mt-2 p-2 bg-white rounded text-xs">
+                          <span className="font-medium">DRN found in: </span>
+                          {databaseKeywordResult.updateContent.substring(0, 200)}
+                          {databaseKeywordResult.updateContent.length > 200 && '...'}
+                        </div>
+                      )}
+                    </div>
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {/* Show matched text if keyword found (and not overridden) */}
+              {keywordAnalysis.hasExclusionKeywords && !databaseKeywordResult?.drnOverriddenByAgent && (
                 <Alert variant="destructive" className="mt-3">
                   <AlertCircle className="h-4 w-4" />
                   <AlertTitle>

@@ -40,25 +40,25 @@ export function MobileMenu() {
                   Dashboard
                 </Link>
                 <Link 
-                  href="/jobs" 
+                  href="/case-processing" 
                   className="block px-4 py-2 rounded-md hover:bg-accent hover:text-accent-foreground"
                   onClick={() => setIsOpen(false)}
                 >
-                  Jobs
+                  Case Processing
                 </Link>
                 <Link 
-                  href="/fleet" 
+                  href="/agent-updates-visibility" 
                   className="block px-4 py-2 rounded-md hover:bg-accent hover:text-accent-foreground"
                   onClick={() => setIsOpen(false)}
                 >
-                  Fleet
+                  Agent Updates
                 </Link>
                 <Link 
-                  href="/customers" 
+                  href="/settings" 
                   className="block px-4 py-2 rounded-md hover:bg-accent hover:text-accent-foreground"
                   onClick={() => setIsOpen(false)}
                 >
-                  Customers
+                  Settings
                 </Link>
               </div>
             </div>

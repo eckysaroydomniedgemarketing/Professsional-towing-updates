@@ -130,16 +130,17 @@ export async function getActiveZipCodes(): Promise<string[]> {
   return data.map(z => z.zip_code);
 }
 
-// Insert case update (parent record)
+// Insert or update case update (parent record)
 export async function insertCaseUpdate(caseId: string, status: string = 'Open') {
   const { error } = await rdnSupabase
     .from('case_updates')
-    .insert({ 
+    .upsert({ 
       case_id: caseId,
       status: status 
+    }, {
+      onConflict: 'case_id'
     });
   
-  // If record already exists, that's OK for MVP
-  if (error && error.code !== '23505') throw error;
+  if (error) throw error;
   return true;
 }

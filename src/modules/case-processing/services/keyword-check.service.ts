@@ -11,6 +11,7 @@ export interface DatabaseKeywordResult {
   updateDate?: string
   updateContent?: string
   matchedPattern?: string
+  drnOverriddenByAgent?: boolean  // True if DRN found but Agent update exists after it
 }
 
 export async function checkExclusionKeywordsInDatabase(caseId: string): Promise<DatabaseKeywordResult> {
@@ -62,6 +63,9 @@ export async function checkExclusionKeywordsInDatabase(caseId: string): Promise<
     ]
     
     // Step 4: Check each update for exclusion keywords
+    let drnFoundAt: Date | null = null
+    let drnResult: DatabaseKeywordResult | null = null
+    
     for (const update of updates) {
       if (!update.update_content) continue
       
@@ -72,17 +76,66 @@ export async function checkExclusionKeywordsInDatabase(caseId: string): Promise<
           if (contentUpper.includes(keyword.toUpperCase())) {
             console.log(`[KeywordCheck] Found keyword "${keyword}" in update from ${update.update_author}`)
             
-            return {
-              hasExclusionKeyword: true,
-              keywordFound: keyword,
-              updateAuthor: update.update_author,
-              updateDate: update.update_date,
-              updateContent: update.update_content,
-              matchedPattern: pattern
+            // Special handling for DRN - save it but continue checking
+            if (pattern === 'DRN') {
+              drnFoundAt = new Date(update.update_date)
+              drnResult = {
+                hasExclusionKeyword: true,
+                keywordFound: keyword,
+                updateAuthor: update.update_author,
+                updateDate: update.update_date,
+                updateContent: update.update_content,
+                matchedPattern: pattern,
+                drnOverriddenByAgent: false
+              }
+              // Continue checking for other keywords and Agent updates
+              break
+            } else {
+              // For non-DRN keywords, return immediately (no exceptions)
+              return {
+                hasExclusionKeyword: true,
+                keywordFound: keyword,
+                updateAuthor: update.update_author,
+                updateDate: update.update_date,
+                updateContent: update.update_content,
+                matchedPattern: pattern
+              }
             }
           }
         }
       }
+    }
+    
+    // Step 5: If DRN was found, check for Agent updates after it
+    if (drnFoundAt && drnResult) {
+      console.log(`[KeywordCheck] DRN found at ${drnFoundAt}, checking for Agent updates after it`)
+      
+      for (const update of updates) {
+        if (!update.update_date) continue
+        
+        const updateDate = new Date(update.update_date)
+        
+        // Check if this update is after DRN and by an Agent
+        if (updateDate > drnFoundAt && update.update_author) {
+          const authorLower = update.update_author.toLowerCase()
+          if (authorLower.includes('(agent)') || authorLower.includes('agent')) {
+            console.log(`[KeywordCheck] Found Agent update after DRN: ${update.update_author} at ${update.update_date}`)
+            // DRN is overridden by Agent update
+            return {
+              hasExclusionKeyword: false,  // Case is eligible
+              keywordFound: 'DRN',
+              updateAuthor: drnResult.updateAuthor,
+              updateDate: drnResult.updateDate,
+              updateContent: drnResult.updateContent,
+              matchedPattern: 'DRN',
+              drnOverriddenByAgent: true
+            }
+          }
+        }
+      }
+      
+      // DRN found but no Agent update after it
+      return drnResult
     }
     
     console.log('[KeywordCheck] No exclusion keywords found in database')

@@ -10,7 +10,8 @@ import { Play, Square } from 'lucide-react';
 interface WorkflowControlProps {
   isRunning: boolean;
   mode: 'manual' | 'automatic';
-  status: 'idle' | 'processing' | 'error' | 'completed';
+  status: 'idle' | 'processing' | 'error' | 'completed' | 'session_lost';
+  sessionLostAtCase?: string;
   onStart: () => void;
   onStop: () => void;
   onModeChange: (mode: 'manual' | 'automatic') => void;
@@ -20,6 +21,7 @@ export function WorkflowControl({
   isRunning,
   mode,
   status,
+  sessionLostAtCase,
   onStart,
   onStop,
   onModeChange
@@ -31,6 +33,8 @@ export function WorkflowControl({
       case 'processing':
         return 'default';
       case 'error':
+        return 'destructive';
+      case 'session_lost':
         return 'destructive';
       case 'completed':
         return 'outline';
@@ -47,6 +51,8 @@ export function WorkflowControl({
         return 'Processing';
       case 'error':
         return 'Error';
+      case 'session_lost':
+        return sessionLostAtCase ? `Session Lost at Case ${sessionLostAtCase}` : 'Session Lost';
       case 'completed':
         return 'Completed';
       default:

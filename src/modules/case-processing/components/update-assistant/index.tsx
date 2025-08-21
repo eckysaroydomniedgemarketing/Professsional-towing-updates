@@ -22,13 +22,17 @@ interface UpdateAssistantProps {
   sessionId: string
   onSkip: () => void
   onPostUpdate: (content: string, addressId: string) => Promise<void>
+  automaticMode: boolean
+  onGetNextCase: () => void
 }
 
 export function UpdateAssistant({ 
   caseData, 
   sessionId, 
   onSkip, 
-  onPostUpdate 
+  onPostUpdate,
+  automaticMode,
+  onGetNextCase
 }: UpdateAssistantProps) {
   const [templates, setTemplates] = useState<Template[]>([])
   const [selectedAddressId, setSelectedAddressId] = useState<string>("")
@@ -37,6 +41,7 @@ export function UpdateAssistant({
   const [isLoading, setIsLoading] = useState(false)
   const [isPosting, setIsPosting] = useState(false)
   const [alertMessage, setAlertMessage] = useState<{ type: 'success' | 'error', message: string } | null>(null)
+  const [countdown, setCountdown] = useState<number | null>(null)
   const [lastUpdateAddress, setLastUpdateAddress] = useState<string>("")
 
   // Load templates and last update on mount
@@ -204,73 +209,55 @@ export function UpdateAssistant({
         throw new Error('Selected address not found')
       }
       
-      console.log('Starting to fill RDN update form...')
+      console.log('Calling API to post update to RDN portal...')
       
-      // Scroll to the form section
-      await window.mcp__playwright__browser_evaluate({
-        function: "() => { document.querySelector('#updatesForm')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return true; }"
-      })
-      
-      // Wait briefly for scroll
-      await window.mcp__playwright__browser_wait_for({ time: 1 })
-      
-      // Select Type dropdown - "(O) Agent-Update" with value="36"
-      await window.mcp__playwright__browser_select_option({
-        element: 'Type dropdown',
-        ref: '#updates_type',
-        values: ['36']
-      })
-      
-      // Find and select matching address in dropdown
-      const addressOptions = await window.mcp__playwright__browser_evaluate({
-        function: `() => {
-          const select = document.querySelector('#is_address_update_select');
-          if (!select) return [];
-          return Array.from(select.options).map(opt => ({
-            value: opt.value,
-            text: opt.textContent.trim()
-          }));
-        }`
-      })
-      
-      // Use improved address matching from service
-      const matchingOption = findAndValidateAddress(
-        addressOptions || [],
-        selectedAddress.full_address || ''
-      )
-      
-      if (matchingOption) {
-        await window.mcp__playwright__browser_select_option({
-          element: 'Address dropdown',
-          ref: '#is_address_update_select',
-          values: [matchingOption.value]
+      // Call API endpoint to handle automation
+      const response = await fetch('/api/case-processing/post-update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          caseId: caseData.id,
+          addressId: selectedAddressId,
+          draftContent: draftContent,
+          addressText: selectedAddress.full_address
         })
-        console.log(`Selected address: "${matchingOption.text}"`)
-      } else {
-        throw new Error(`Could not find matching address in dropdown for: ${selectedAddress.full_address}`)
+      })
+      
+      const result = await response.json()
+      
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to post update')
       }
       
-      // Fill Details textarea with draft content
-      await window.mcp__playwright__browser_type({
-        element: 'Details textarea',
-        ref: '#comments',
-        text: draftContent
-      })
-      
-      // Click Create button to submit
-      await window.mcp__playwright__browser_click({
-        element: 'Create button',
-        ref: '#create_button'
-      })
-      
-      // Wait for submission
-      await window.mcp__playwright__browser_wait_for({ time: 2 })
+      console.log('Update posted successfully via API')
       
       // Show success message
       setAlertMessage({ type: 'success', message: '✓ Update posted successfully to RDN portal!' })
       
-      // Clear the alert after 5 seconds
-      setTimeout(() => setAlertMessage(null), 5000)
+      // Clear draft after successful post
+      setDraftContent('')
+      
+      // Handle automatic mode
+      if (automaticMode) {
+        // Start countdown for auto-navigation
+        let count = 3
+        setCountdown(count)
+        
+        const countdownInterval = setInterval(() => {
+          count--
+          if (count > 0) {
+            setCountdown(count)
+          } else {
+            clearInterval(countdownInterval)
+            setCountdown(null)
+            setAlertMessage(null)
+            // Navigate to next case
+            onGetNextCase()
+          }
+        }, 1000)
+      }
       
     } catch (error) {
       console.error('Error posting update:', error)
@@ -310,7 +297,26 @@ export function UpdateAssistant({
                 <XCircle className="h-4 w-4 text-red-500" />
               )}
               <AlertDescription className={alertMessage.type === 'success' ? 'text-green-700' : 'text-red-700'}>
-                {alertMessage.message}
+                <div className="flex items-center justify-between">
+                  <span>{alertMessage.message}</span>
+                  {alertMessage.type === 'success' && (
+                    <div className="flex items-center gap-2">
+                      {automaticMode && countdown !== null ? (
+                        <span className="text-sm font-medium">
+                          Moving to next case in {countdown}...
+                        </span>
+                      ) : !automaticMode && (
+                        <Button
+                          size="sm"
+                          onClick={onGetNextCase}
+                          className="ml-4"
+                        >
+                          Next Case →
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </div>
               </AlertDescription>
             </Alert>
           )}

@@ -202,10 +202,45 @@ class WorkflowManagerService {
       }
 
       // Open case in new tab
-      const casePage = await rdnVisibilityService.openCaseInNewTab(caseId);
-      
-      if (!casePage) {
-        throw new Error(`Failed to open case ${caseId}`);
+      let casePage;
+      try {
+        casePage = await rdnVisibilityService.openCaseInNewTab(caseId);
+        
+        if (!casePage) {
+          throw new Error(`Failed to open case ${caseId}`);
+        }
+      } catch (openError) {
+        // Check if it's a session loss error
+        if (openError instanceof Error && openError.message.startsWith('SESSION_LOST')) {
+          console.error('Session lost while opening case:', caseId);
+          
+          // Update state to indicate session loss
+          this.updateState({
+            currentStatus: 'session_lost',
+            error: openError.message,
+            sessionLostAtCase: caseId,
+            isRunning: false
+          });
+          
+          // Log the session loss
+          console.error(`SESSION LOST: Processing stopped at case ${caseId}. User must re-login.`);
+          
+          // Close browser and clean up resources
+          console.log('Closing browser due to session loss...');
+          await rdnVisibilityService.closeBrowser();
+          
+          // Clean up local references
+          this.mainPage = null;
+          
+          // Stop the workflow completely
+          this.stopWorkflow();
+          
+          // Throw the error to stop processing
+          throw openError;
+        }
+        
+        // Re-throw other errors
+        throw openError;
       }
 
       // Process the case
@@ -258,18 +293,26 @@ class WorkflowManagerService {
   stopWorkflow(): void {
     if (this.abortController) {
       this.abortController.abort();
+      this.abortController = null;
     }
     
     this.updateState({
       isRunning: false,
-      currentStatus: 'idle'
+      currentStatus: this.state.currentStatus === 'session_lost' ? 'session_lost' : 'idle'
     });
   }
 
   /**
    * Reset workflow state
    */
-  reset(): void {
+  async reset(): Promise<void> {
+    // Close browser if it exists
+    if (this.mainPage) {
+      console.log('Resetting workflow - closing browser...');
+      await rdnVisibilityService.closeBrowser();
+    }
+    
+    // Reset state to initial values
     this.state = {
       isRunning: false,
       currentCaseId: null,
@@ -277,9 +320,11 @@ class WorkflowManagerService {
       processedCount: 0,
       totalProcessed: 0,
       currentStatus: 'idle',
-      error: undefined
+      error: undefined,
+      sessionLostAtCase: undefined
     };
     
+    // Clear all references
     this.mainPage = null;
     this.abortController = null;
   }

@@ -85,6 +85,7 @@ export interface CaseValidationResult {
     userUpdateCount: number
     userUpdateAuthors?: string[]
     validationMessage: string
+    isAuthorizedUser?: boolean
   }
   exclusionKeywordResults?: ExclusionKeywordResults
   reasons: string[]

@@ -322,6 +322,8 @@ export function CaseProcessingLayout() {
                 sessionId={currentSessionId}
                 onSkip={handleSkipUpdate}
                 onPostUpdate={handlePostUpdate}
+                automaticMode={automaticMode}
+                onGetNextCase={handleGetNextCase}
               />
             </div>
           </div>

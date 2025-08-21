@@ -4,12 +4,9 @@ import { SidebarItem } from "./sidebar-item";
 import { SidebarSection } from "./sidebar-section";
 import { 
   LayoutDashboard, 
-  Briefcase, 
-  Truck, 
-  Users,
   Settings,
   FileText,
-  BarChart
+  Eye
 } from "lucide-react";
 
 export function AppSidebar() {
@@ -20,23 +17,11 @@ export function AppSidebar() {
           <SidebarItem href="/dashboard" icon={LayoutDashboard}>
             Dashboard
           </SidebarItem>
-          <SidebarItem href="/jobs" icon={Briefcase}>
-            Jobs
+          <SidebarItem href="/case-processing" icon={FileText}>
+            Case Processing
           </SidebarItem>
-          <SidebarItem href="/fleet" icon={Truck}>
-            Fleet
-          </SidebarItem>
-          <SidebarItem href="/customers" icon={Users}>
-            Customers
-          </SidebarItem>
-        </SidebarSection>
-        
-        <SidebarSection title="Reports">
-          <SidebarItem href="/reports/revenue" icon={BarChart}>
-            Revenue
-          </SidebarItem>
-          <SidebarItem href="/reports/invoices" icon={FileText}>
-            Invoices
+          <SidebarItem href="/agent-updates-visibility" icon={Eye}>
+            Agent Updates
           </SidebarItem>
         </SidebarSection>
         

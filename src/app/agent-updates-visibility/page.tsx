@@ -107,7 +107,8 @@ export default function AgentUpdatesVisibilityPage() {
   };
 
   // Map workflow status for UI
-  const getUIStatus = (): 'idle' | 'processing' | 'error' | 'completed' => {
+  const getUIStatus = (): 'idle' | 'processing' | 'error' | 'completed' | 'session_lost' => {
+    if (workflowState.currentStatus === 'session_lost') return 'session_lost';
     if (workflowState.error) return 'error';
     if (workflowState.isRunning) return 'processing';
     if (workflowState.currentStatus === 'completed') return 'completed';
@@ -150,11 +151,24 @@ export default function AgentUpdatesVisibilityPage() {
         </Alert>
       )}
 
+      {/* Session Lost Alert */}
+      {workflowState.currentStatus === 'session_lost' && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Session lost while processing case {workflowState.sessionLostAtCase}. 
+            Another user may have logged in with the same credentials. 
+            Please re-login to continue processing.
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Workflow Control */}
       <WorkflowControl
         isRunning={workflowState.isRunning || isProcessing}
         mode={selectedMode}
         status={getUIStatus()}
+        sessionLostAtCase={workflowState.sessionLostAtCase}
         onStart={handleStart}
         onStop={handleStop}
         onModeChange={handleModeChange}
