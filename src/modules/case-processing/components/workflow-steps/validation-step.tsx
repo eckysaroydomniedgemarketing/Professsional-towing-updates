@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -56,6 +57,61 @@ export function ValidationStep({
   } = useKeywordAnalysis(caseData, validationResult?.hasAgentUpdate)
 
   const autoSkipCountdown = useAutoSkip(automaticMode, validationResult, onGetNextCase)
+  
+  // Auto-click Update Draft button in automatic mode
+  const [autoClickCountdown, setAutoClickCountdown] = useState<number | null>(null)
+  
+  useEffect(() => {
+    // Start countdown when:
+    // 1. Automatic mode is ON
+    // 2. Validation passed
+    // 3. Not currently loading or analyzing
+    // 4. No countdown already running
+    if (
+      automaticMode && 
+      validationResult?.passed && 
+      !isLoading && 
+      autoClickCountdown === null &&
+      !keywordAnalysis?.hasExclusionKeywords
+    ) {
+      console.log('[Auto-Click] Starting 10-second countdown for Update Draft button')
+      setAutoClickCountdown(10)
+      
+      const interval = setInterval(() => {
+        setAutoClickCountdown(prev => {
+          if (prev === null || prev <= 1) {
+            clearInterval(interval)
+            if (prev === 1) {
+              // Check if button would be enabled before clicking
+              const buttonDisabled = 
+                isLoading || 
+                !validationResult || 
+                keywordAnalysis?.hasExclusionKeywords ||
+                !validationResult.passed
+
+              if (!buttonDisabled) {
+                console.log('[Auto-Click] Button is active, auto-clicking Update Draft')
+                // Click the Update Draft button
+                if (validationResult?.hasUserUpdate && onShowUpdateAssistant) {
+                  onShowUpdateAssistant()
+                } else {
+                  onNext()
+                }
+              } else {
+                console.log('[Auto-Click] Button is disabled, cancelling auto-click')
+              }
+            }
+            return null
+          }
+          return prev - 1
+        })
+      }, 1000)
+      
+      return () => {
+        clearInterval(interval)
+      }
+    }
+  }, [automaticMode, validationResult, isLoading, isAnalyzingKeywords, keywordAnalysis, onNext, onShowUpdateAssistant])
 
   return (
     <Card className="max-w-full">
@@ -63,6 +119,12 @@ export function ValidationStep({
         <CardTitle className="text-2xl">Case Validation Review</CardTitle>
         {automaticMode && autoSkipCountdown !== null && (
           <AutoSkipCountdown countdown={autoSkipCountdown} />
+        )}
+        {automaticMode && autoClickCountdown !== null && (
+          <div className="flex items-center gap-2 text-sm text-blue-600 mt-2">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span>Auto-clicking Update Draft in {autoClickCountdown} seconds...</span>
+          </div>
         )}
         <CardDescription>
           Reviewing case #{caseData?.id || 'N/A'} eligibility for update posting
@@ -159,9 +221,13 @@ export function ValidationStep({
               }
             }} 
             disabled={(() => {
-              if (isLoading || !validationResult || isAnalyzingKeywords) return true
-              if (keywordAnalysis?.hasExclusionKeywords || keywordAnalysis?.error !== undefined) return true
+              if (isLoading || !validationResult) return true
+              if (autoClickCountdown !== null) return true // Disable during auto-click countdown
               
+              // Only block if found exclusion keywords (not while analyzing)
+              if (keywordAnalysis?.hasExclusionKeywords) return true
+              
+              // Don't block on errors - let validation result determine button state
               // Only allow if validation fully passed
               return !validationResult.passed
             })()}
