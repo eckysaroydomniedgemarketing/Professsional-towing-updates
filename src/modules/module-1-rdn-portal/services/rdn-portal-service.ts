@@ -254,6 +254,35 @@ export class RDNPortalService {
     await this.browserManager.takeScreenshot(filename)
   }
 
+  async navigateToPage(pageNumber: number): Promise<NavigationResult> {
+    const page = this.browserManager.getPage()
+    if (!page) {
+      return {
+        success: false,
+        nextStep: NavigationStep.ERROR,
+        error: 'No browser page available'
+      }
+    }
+    
+    const result = await this.navigationManager.navigateToSpecificPage(page, pageNumber)
+    if (result.success) {
+      this.state.currentStep = NavigationStep.CASE_LISTING
+    }
+    return result
+  }
+
+  async continueAfterPageSelection(): Promise<NavigationResult> {
+    const result = await this.workflowExecutor.continueAfterPageSelection(
+      this.state,
+      this.lastProcessedCaseId
+    )
+    this.state = result.updatedState
+    if (result.lastCaseId) {
+      this.lastProcessedCaseId = result.lastCaseId
+    }
+    return result.result
+  }
+
   async close(): Promise<void> {
     this.authManager.resetAuthStatus()
     await this.browserManager.close()

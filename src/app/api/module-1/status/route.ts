@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server'
 import { 
   getPortalService, 
   getWorkflowError,
-  getNavigationData 
+  getNavigationData,
+  getPageInfo,
+  getNavigationStep
 } from '@/modules/module-1-rdn-portal/services/workflow-state.service'
+import { NavigationStep } from '@/modules/module-1-rdn-portal/types'
 
 export async function GET() {
   try {
@@ -21,14 +24,21 @@ export async function GET() {
     const state = await portalService.getState()
     const currentUrl = await portalService.getCurrentUrl()
     const navigationData = getNavigationData()
+    const pageInfo = getPageInfo()
+    const navStep = getNavigationStep()
     
     console.log('[STATUS API] Returning navigation data:', navigationData)
     
+    // Check if we're in PAGE_SELECTION state
+    const currentStep = navStep === NavigationStep.PAGE_SELECTION ? NavigationStep.PAGE_SELECTION : state.currentStep
+    
     return NextResponse.json({
       ...state,
+      currentStep,
       currentUrl,
       workflowError: workflowError || undefined,
-      data: navigationData || undefined
+      data: navigationData || undefined,
+      pageInfo: currentStep === NavigationStep.PAGE_SELECTION ? pageInfo : undefined
     })
   } catch (error) {
     return NextResponse.json({ 

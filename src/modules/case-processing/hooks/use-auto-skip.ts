@@ -12,7 +12,7 @@ export function useAutoSkip(
     // Check if we should auto-skip
     if (automaticMode && validationResult && !validationResult.passed && onGetNextCase) {
       // Start countdown
-      setAutoSkipCountdown(2)
+      setAutoSkipCountdown(10)
       
       const countdownInterval = setInterval(() => {
         setAutoSkipCountdown(prev => {
@@ -24,12 +24,12 @@ export function useAutoSkip(
         })
       }, 1000)
       
-      // Skip to next case after 2 seconds
+      // Skip to next case after 10 seconds
       const skipTimer = setTimeout(() => {
         console.log('[useAutoSkip] Auto-skipping to next case due to validation failure')
         onGetNextCase()
         setAutoSkipCountdown(null)
-      }, 2000)
+      }, 10000)
       
       // Cleanup on unmount or if conditions change
       return () => {

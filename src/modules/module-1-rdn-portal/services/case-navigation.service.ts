@@ -109,7 +109,7 @@ export class CaseNavigationService {
       
       // Ensure page is in focus and loaded
       await page.bringToFront()
-      await page.waitForLoadState('networkidle')
+      await page.waitForLoadState('domcontentloaded')
       console.log('[CASE-NAV] Case listing page brought to front')
       
       // Get the mainFrame iframe where the case table is located
@@ -224,7 +224,7 @@ export class CaseNavigationService {
       ])
       
       // Switch to new tab and wait for it to load
-      await newPage.waitForLoadState('networkidle')
+      await newPage.waitForLoadState('domcontentloaded')
       
       // Update browser manager's page reference to the new tab
       browserManager.setPage(newPage)

@@ -37,6 +37,7 @@ export interface CaseAddress {
   zip_code: string | null;
   is_covered: boolean | null;
   google_maps_verified: boolean | null;
+  address_validity: boolean | null;
   created_at?: string;
 }
 

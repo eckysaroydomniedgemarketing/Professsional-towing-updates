@@ -11,6 +11,8 @@ export interface NavigationState {
   sessionStartTime?: Date
   lastActivityTime?: Date
   currentCaseId?: string
+  totalPages?: number
+  currentPage?: number
 }
 
 export enum NavigationStep {
@@ -20,6 +22,7 @@ export enum NavigationStep {
   LOGIN_COMPLETE = 'LOGIN_COMPLETE',
   DASHBOARD = 'DASHBOARD',
   CASE_LISTING = 'CASE_LISTING',
+  PAGE_SELECTION = 'PAGE_SELECTION',
   CASE_DETAIL = 'CASE_DETAIL',
   PROCESSING_CASE = 'PROCESSING_CASE',
   EXTRACTING_DATA = 'EXTRACTING_DATA',

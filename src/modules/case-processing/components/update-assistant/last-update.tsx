@@ -42,6 +42,11 @@ export function LastUpdate({ caseId, sessionId, currentAddressType }: LastUpdate
           <div className="text-sm text-muted-foreground">Loading...</div>
         ) : lastUpdate ? (
           <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="text-xs">
+                {lastUpdate.update_author}
+              </Badge>
+            </div>
             <div className="flex items-center gap-2 text-sm">
               <Clock className="h-4 w-4 text-muted-foreground" />
               <span className="font-medium">Date:</span>
@@ -74,6 +79,7 @@ export function LastUpdate({ caseId, sessionId, currentAddressType }: LastUpdate
             <Separator />
 
             <div className="space-y-2">
+
               <div className="flex items-center gap-2 text-sm">
                 <FileText className="h-4 w-4 text-muted-foreground" />
                 <span className="font-medium">Template Used:</span>
@@ -83,12 +89,6 @@ export function LastUpdate({ caseId, sessionId, currentAddressType }: LastUpdate
                   {lastUpdate.update_content}
                 </p>
               </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="text-xs">
-                {lastUpdate.update_author}
-              </Badge>
             </div>
           </div>
         ) : (

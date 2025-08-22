@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { WorkflowStatus } from './workflow-status'
+import { PageSelectionDialog } from './page-selection-dialog'
 import { NavigationStep } from '../types'
 import { Play, Pause, RotateCcw, Eye } from 'lucide-react'
 
@@ -19,6 +20,8 @@ export function WorkflowControl({ onWorkflowComplete, autoStart = false, isGetNe
   const [error, setError] = useState<string>()
   const [sessionUrl, setSessionUrl] = useState<string>()
   const [currentCaseId, setCurrentCaseId] = useState<string>()
+  const [showPageDialog, setShowPageDialog] = useState(false)
+  const [pageInfo, setPageInfo] = useState<{ totalPages: number; currentPage: number }>({ totalPages: 1, currentPage: 1 })
   const hasStartedRef = useRef(false)
 
   useEffect(() => {
@@ -87,7 +90,15 @@ export function WorkflowControl({ onWorkflowComplete, autoStart = false, isGetNe
           setSessionUrl(status.currentUrl)
           setCurrentCaseId(status.currentCaseId)
           
-          if (status.error) {
+          // Handle PAGE_SELECTION step
+          if (status.currentStep === NavigationStep.PAGE_SELECTION) {
+            if (status.pageInfo) {
+              setPageInfo(status.pageInfo)
+              setShowPageDialog(true)
+              // Pause polling while dialog is open
+              clearInterval(pollInterval)
+            }
+          } else if (status.error) {
             setError(status.error)
             clearInterval(pollInterval)
             setIsRunning(false)
@@ -159,6 +170,56 @@ export function WorkflowControl({ onWorkflowComplete, autoStart = false, isGetNe
     }
   }
 
+  const handlePageSelection = async (pageNumber: number) => {
+    setShowPageDialog(false)
+    
+    try {
+      // Call API to navigate to selected page
+      const response = await fetch('/api/module-1/select-page', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pageNumber })
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to navigate to page')
+      }
+      
+      // Resume polling after page navigation
+      const pollInterval = setInterval(async () => {
+        const statusResponse = await fetch('/api/module-1/status')
+        if (statusResponse.ok) {
+          const status = await statusResponse.json()
+          setCurrentStep(status.currentStep)
+          setSessionUrl(status.currentUrl)
+          setCurrentCaseId(status.currentCaseId)
+          
+          if (status.error) {
+            setError(status.error)
+            clearInterval(pollInterval)
+            setIsRunning(false)
+          } else if (status.currentStep === NavigationStep.CASE_DETAIL || 
+                     status.currentStep === NavigationStep.EXTRACTION_COMPLETE) {
+            clearInterval(pollInterval)
+            setIsRunning(false)
+            
+            if (onWorkflowComplete) {
+              const caseId = status.data?.caseId || (() => {
+                const caseIdMatch = status.currentUrl?.match(/case_id=(\d+)/)
+                return caseIdMatch ? caseIdMatch[1] : undefined
+              })()
+              const sessionId = status.data?.sessionId
+              onWorkflowComplete(caseId, sessionId, status.data)
+            }
+          }
+        }
+      }, 1000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to navigate to page')
+      setIsRunning(false)
+    }
+  }
+
   return (
     <div className="bg-white rounded-lg shadow p-6 space-y-6">
       {autoStart && !isRunning && (
@@ -208,6 +269,13 @@ export function WorkflowControl({ onWorkflowComplete, autoStart = false, isGetNe
           <span className="font-medium">Current URL:</span> {sessionUrl}
         </div>
       )}
+      
+      <PageSelectionDialog
+        open={showPageDialog}
+        totalPages={pageInfo.totalPages}
+        currentPage={pageInfo.currentPage}
+        onSelectPage={handlePageSelection}
+      />
     </div>
   )
 }

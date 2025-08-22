@@ -43,6 +43,7 @@ export function ValidationZipCode({ caseData, validationResult }: ValidationZipC
               <TableHead className="w-[100px]">Address #</TableHead>
               <TableHead>Full Address</TableHead>
               <TableHead>ZIP Code</TableHead>
+              <TableHead className="text-center">Address Status</TableHead>
               <TableHead className="text-right">Coverage Status</TableHead>
             </TableRow>
           </TableHeader>
@@ -55,6 +56,24 @@ export function ValidationZipCode({ caseData, validationResult }: ValidationZipC
                   <Badge variant="secondary" className="font-mono">
                     {address.zip_code || 'N/A'}
                   </Badge>
+                </TableCell>
+                <TableCell className="text-center">
+                  {address.address_validity === true ? (
+                    <div className="flex items-center justify-center gap-1">
+                      <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      <span className="text-green-600 font-medium">Valid</span>
+                    </div>
+                  ) : address.address_validity === false ? (
+                    <div className="flex items-center justify-center gap-1">
+                      <XCircle className="h-4 w-4 text-red-500" />
+                      <span className="text-red-600 font-medium">Invalid</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center gap-1">
+                      <AlertCircle className="h-4 w-4 text-yellow-500" />
+                      <span className="text-yellow-600 font-medium">Unknown</span>
+                    </div>
+                  )}
                 </TableCell>
                 <TableCell className="text-right">
                   {validationResult?.zipCodeValid !== undefined && (

@@ -16,6 +16,7 @@ const WORKFLOW_STEPS = [
   { key: NavigationStep.AUTHENTICATING, label: "Authenticate", progress: 30 },
   { key: NavigationStep.DASHBOARD, label: "Dashboard Access", progress: 45 },
   { key: NavigationStep.CASE_LISTING, label: "Case Listing", progress: 60 },
+  { key: NavigationStep.PAGE_SELECTION, label: "Page Selection", progress: 65 },
   { key: NavigationStep.CASE_DETAIL, label: "Case Detail", progress: 75 },
   { key: NavigationStep.PROCESSING_CASE, label: "Processing Case", progress: 80 },
   { key: NavigationStep.EXTRACTING_DATA, label: "Extracting Data", progress: 90 },
@@ -25,6 +26,7 @@ const WORKFLOW_STEPS = [
 
 const GET_NEXT_CASE_STEPS = [
   { key: NavigationStep.CASE_LISTING, label: "Case Listing", progress: 20 },
+  { key: NavigationStep.PAGE_SELECTION, label: "Page Selection", progress: 30 },
   { key: NavigationStep.PROCESSING_CASE, label: "Processing Case", progress: 40 },
   { key: NavigationStep.EXTRACTING_DATA, label: "Extracting Data", progress: 70 },
   { key: NavigationStep.RETURNING_TO_LISTING, label: "Returning to Case Listing", progress: 90 },

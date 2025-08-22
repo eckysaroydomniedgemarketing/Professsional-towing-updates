@@ -5,7 +5,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { FileEdit, MapPin, CheckCircle2, XCircle } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { FileEdit, MapPin, CheckCircle2, XCircle, AlertTriangle } from "lucide-react"
 import { CaseAddress } from "../../types/case.types"
 import { Template } from "../../services/template.service"
 
@@ -30,7 +31,9 @@ export function DraftSection({
   draftContent,
   lastUpdateAddress
 }: DraftSectionProps) {
-  const selectedAddress = addresses.find(a => a.id === selectedAddressId)
+  const selectedAddress = selectedAddressId === 'NO_VALID_ADDRESS' 
+    ? null 
+    : addresses.find(a => a.id === selectedAddressId)
   
   // Check if address is being alternated
   const isAlternating = addresses.length === 1 || 
@@ -67,7 +70,9 @@ export function DraftSection({
             </div>
           </Label>
           <div className="p-3 bg-muted/50 rounded-md border">
-            {selectedAddress ? (
+            {selectedAddressId === 'NO_VALID_ADDRESS' ? (
+              <p className="text-sm text-muted-foreground">No valid address available</p>
+            ) : selectedAddress ? (
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-sm">{selectedAddress.address_type || 'Unknown Type'}</span>
@@ -85,40 +90,59 @@ export function DraftSection({
           </div>
         </div>
 
+        {/* Invalid Address Warning */}
+        {isAddressInvalid && (
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>
+              This address is marked as invalid in the system. Please verify the address details before proceeding with the update.
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Address Checklist */}
-        <div className="space-y-2">
-          <Label>Address Validation</Label>
-          <div className="space-y-2 p-3 bg-muted/30 rounded-md">
+        {selectedAddressId !== 'NO_VALID_ADDRESS' && (
+          <div className="space-y-2">
+            <Label>Address Validation</Label>
+            <div className="space-y-2 p-3 bg-muted/30 rounded-md">
+              <div className="flex items-center gap-2">
+                {isAlternating ? (
+                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                ) : (
+                  <XCircle className="h-4 w-4 text-red-500" />
+                )}
+                <span className={`text-sm ${isAlternating ? 'text-green-700' : 'text-red-700'}`}>
+                  Address is used alternately
+                  {addresses.length === 1 && ' (only one address available)'}
+                </span>
+              </div>
             <div className="flex items-center gap-2">
-              {isAlternating ? (
-                <CheckCircle2 className="h-4 w-4 text-green-500" />
-              ) : (
-                <XCircle className="h-4 w-4 text-red-500" />
-              )}
-              <span className={`text-sm ${isAlternating ? 'text-green-700' : 'text-red-700'}`}>
-                Address is used alternately
-                {addresses.length === 1 && ' (only one address available)'}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              {isAddressValid ? (
+              {selectedAddress?.address_validity === true ? (
                 <>
                   <CheckCircle2 className="h-4 w-4 text-green-500" />
                   <span className="text-sm text-green-700">
-                    Address is valid
+                    Address is marked as valid
+                  </span>
+                </>
+              ) : selectedAddress?.address_validity === false ? (
+                <>
+                  <XCircle className="h-4 w-4 text-red-500" />
+                  <span className="text-sm text-red-700">
+                    Address is marked as invalid
                   </span>
                 </>
               ) : (
                 <>
-                  <XCircle className="h-4 w-4 text-red-500" />
-                  <span className="text-sm text-red-700">
-                    Address is invalid
+                  <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                  <span className="text-sm text-yellow-700">
+                    Address validity unknown
                   </span>
                 </>
               )}
             </div>
           </div>
         </div>
+        )}
 
         <div className="space-y-2">
           <Label>Auto-Selected Template</Label>

@@ -19,11 +19,11 @@ export default async function DashboardPage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
-          {/* Case Processing Workflow Card */}
+          {/* Case Update Needed Listing Card */}
           <Card className="border-2 hover:border-primary/50 transition-colors">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-xl">Case Processing Workflow</CardTitle>
+                <CardTitle className="text-xl">Case Update Needed Listing</CardTitle>
                 <FileText className="h-6 w-6 text-primary" />
               </div>
               <CardDescription>
@@ -64,7 +64,7 @@ export default async function DashboardPage() {
             <CardFooter>
               <Link href="/case-processing" className="w-full">
                 <Button className="w-full" size="lg">
-                  Go to Case Processing
+                  Go to Case Update Needed Listing
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>

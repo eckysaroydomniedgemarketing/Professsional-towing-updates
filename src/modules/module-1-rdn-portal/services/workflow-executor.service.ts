@@ -3,6 +3,7 @@ import { BrowserManager } from './browser-manager.service'
 import { PortalAuthWorkflowService } from './portal-auth-workflow.service'
 import { PortalNavigationWorkflowService } from './portal-navigation-workflow.service'
 import { CaseNavigationService } from './case-navigation.service'
+import { NavigationManager } from './navigation-manager.service'
 
 export class WorkflowExecutorService {
   constructor(
@@ -114,7 +115,7 @@ export class WorkflowExecutorService {
       const caseListingResult = await this.navWorkflow.navigateToCaseListing(authResult.updatedState)
       if (!caseListingResult.result.success) return { ...caseListingResult, lastCaseId: lastProcessedCaseId }
       
-      // Step 4: Configure filters
+      // Step 4: Configure filters BEFORE page selection
       const filters: CaseListingFilters = {
         caseWorker: '',
         entriesPerPage: 25,
@@ -123,7 +124,32 @@ export class WorkflowExecutorService {
       const filterResult = await this.navWorkflow.configureFilters(caseListingResult.updatedState, filters)
       if (!filterResult.result.success) return { ...filterResult, lastCaseId: lastProcessedCaseId }
       
-      // Step 5: Process single case for Module 3 integration
+      // Step 5: Extract page info AFTER filters are applied
+      const page = this.browserManager.getPage()
+      if (page) {
+        const navigationManager = new NavigationManager()
+        const pageInfo = await navigationManager.extractPageInfo(page)
+        
+        if (pageInfo && pageInfo.totalPages > 1) {
+          // Multiple pages exist - pause for user selection
+          console.log('[WORKFLOW] Multiple pages detected, pausing for page selection')
+          const { setPageInfo, setNavigationStep } = await import('./workflow-state.service')
+          setPageInfo(pageInfo.totalPages, pageInfo.currentPage)
+          setNavigationStep(NavigationStep.PAGE_SELECTION)
+          
+          return { 
+            result: {
+              success: true,
+              nextStep: NavigationStep.PAGE_SELECTION,
+              data: { waitingForPageSelection: true }
+            },
+            updatedState: filterResult.updatedState,
+            lastCaseId: lastProcessedCaseId
+          }
+        }
+      }
+      
+      // Step 6: Process single case (no page selection needed)
       const processingResult = await this.navWorkflow.processMultipleCases(filterResult.updatedState, 1)
       
       // Store the last processed case ID from the first case
@@ -140,6 +166,40 @@ export class WorkflowExecutorService {
           success: false,
           nextStep: state.currentStep,
           error: error instanceof Error ? error.message : 'Workflow execution failed'
+        },
+        updatedState: state,
+        lastCaseId: lastProcessedCaseId
+      }
+    }
+  }
+
+  async continueAfterPageSelection(
+    state: NavigationState,
+    lastProcessedCaseId: string | null
+  ): Promise<{ result: NavigationResult; updatedState: NavigationState; lastCaseId: string | null }> {
+    try {
+      console.log('[WORKFLOW] Continuing workflow after page selection')
+      
+      // Update state to CASE_LISTING
+      const updatedState = { ...state, currentStep: NavigationStep.CASE_LISTING }
+      
+      // Filters already applied - just process the case from selected page
+      const processingResult = await this.navWorkflow.processMultipleCases(updatedState, 1)
+      
+      // Store the last processed case ID from the first case
+      let newLastCaseId = lastProcessedCaseId
+      if (processingResult.result.success && processingResult.result.data?.caseId) {
+        newLastCaseId = processingResult.result.data.caseId
+        console.log(`[WORKFLOW] Stored last processed case ID: ${newLastCaseId}`)
+      }
+      
+      return { ...processingResult, lastCaseId: newLastCaseId }
+    } catch (error) {
+      return {
+        result: {
+          success: false,
+          nextStep: state.currentStep,
+          error: error instanceof Error ? error.message : 'Workflow continuation failed'
         },
         updatedState: state,
         lastCaseId: lastProcessedCaseId

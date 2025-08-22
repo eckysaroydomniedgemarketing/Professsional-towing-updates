@@ -21,6 +21,7 @@ export interface CaseAddress {
   city?: string
   state?: string
   is_primary?: boolean
+  address_validity?: boolean | null
 }
 
 export interface Case {

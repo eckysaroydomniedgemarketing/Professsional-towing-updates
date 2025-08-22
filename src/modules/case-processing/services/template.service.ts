@@ -47,7 +47,7 @@ export async function getLastUserUpdate(caseId: string, currentSessionId: string
     .select('id, update_date, update_content, address_associated, update_author')
     .eq('case_id', caseId)
     .ilike('update_author', '%(User)%')
-    .neq('session_id', currentSessionId)
+    .eq('session_id', currentSessionId)
     .order('update_date', { ascending: false })
     .limit(1)
     .single()
