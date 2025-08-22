@@ -222,7 +222,6 @@ export function ValidationStep({
             }} 
             disabled={(() => {
               if (isLoading || !validationResult) return true
-              if (autoClickCountdown !== null) return true // Disable during auto-click countdown
               
               // Only block if found exclusion keywords (not while analyzing)
               if (keywordAnalysis?.hasExclusionKeywords) return true
