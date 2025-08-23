@@ -152,15 +152,102 @@ export class RDNPortalService {
       if (!page) {
         return {
           success: false,
-          error: 'No browser page available'
+          error: 'No browser page available',
+          nextStep: 'error' as const
         }
       }
 
       console.log('[RDN-PORTAL] Starting to post update to RDN portal')
       
+      // Check current page URL
+      const currentUrl = page.url()
+      console.log('[RDN-PORTAL] Current URL:', currentUrl)
+      
+      // Verify we're on a case detail page
+      if (!currentUrl.includes('case_id=')) {
+        return {
+          success: false,
+          error: 'Not on case detail page. Please navigate to a case first.',
+          nextStep: 'error' as const
+        }
+      }
+      
+      // Navigate to Updates tab if not already there
+      console.log('[RDN-PORTAL] Checking if on Updates tab')
+      
+      // Check if Updates tab is already active
+      const isOnUpdatesTab = await page.evaluate(() => {
+        const activeTab = document.querySelector('.nav-tabs .active, .tab-active, [aria-selected="true"]')
+        return activeTab?.textContent?.toLowerCase().includes('update') || false
+      })
+      
+      if (!isOnUpdatesTab) {
+        console.log('[RDN-PORTAL] Navigating to Updates tab')
+        
+        // Try multiple selectors for Updates tab
+        const updatesTabClicked = await page.evaluate(() => {
+          const selectors = [
+            'a[href="#updates"]',
+            'a[href*="updates"]',
+            'button:has-text("Updates")',
+            '.nav-tabs a:has-text("Updates")',
+            '[data-tab="updates"]',
+            'a:has-text("Updates")'
+          ]
+          
+          for (const selector of selectors) {
+            try {
+              const element = document.querySelector(selector) as HTMLElement
+              if (element) {
+                element.click()
+                return true
+              }
+            } catch (e) {
+              continue
+            }
+          }
+          return false
+        })
+        
+        if (updatesTabClicked) {
+          console.log('[RDN-PORTAL] Clicked Updates tab, waiting for content to load')
+          await page.waitForTimeout(2000)
+        } else {
+          console.log('[RDN-PORTAL] Could not find Updates tab, attempting to proceed anyway')
+        }
+      }
+      
+      // Wait for update form to be visible
+      console.log('[RDN-PORTAL] Waiting for update form elements')
+      
+      try {
+        // Wait for the updates_type dropdown
+        await page.waitForSelector('#updates_type', { timeout: 5000 })
+        console.log('[RDN-PORTAL] Update form found')
+      } catch (e) {
+        // Check if form exists with alternative selectors
+        const formExists = await page.evaluate(() => {
+          return !!(document.querySelector('#updates_type') || 
+                   document.querySelector('#updatesForm') || 
+                   document.querySelector('select[name*="update"]'))
+        })
+        
+        if (!formExists) {
+          console.error('[RDN-PORTAL] Update form not found on page')
+          return {
+            success: false,
+            error: 'Update form not found. Make sure you are on the Updates tab of a case.',
+            nextStep: 'error' as const
+          }
+        }
+      }
+      
       // Scroll to the form section
       await page.evaluate(() => {
-        document.querySelector('#updatesForm')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        const form = document.querySelector('#updatesForm') || 
+                    document.querySelector('#updates_type')?.closest('form') ||
+                    document.querySelector('form[name*="update"]')
+        form?.scrollIntoView({ behavior: 'smooth', block: 'center' })
       })
       
       // Wait briefly for scroll
@@ -217,13 +304,15 @@ export class RDNPortalService {
       
       return {
         success: true,
-        message: 'Update posted successfully to RDN portal'
+        message: 'Update posted successfully to RDN portal',
+        nextStep: 'complete' as const
       }
     } catch (error) {
       console.error('[RDN-PORTAL] Error posting update:', error)
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to post update'
+        error: error instanceof Error ? error.message : 'Failed to post update',
+        nextStep: 'error' as const
       }
     }
   }

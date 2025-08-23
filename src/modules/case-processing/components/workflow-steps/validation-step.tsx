@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Skeleton } from "@/components/ui/skeleton"
-import { ChevronRight, AlertCircle, Loader2 } from "lucide-react"
+import { Progress } from "@/components/ui/progress"
+import { ChevronRight, AlertCircle, Loader2, X } from "lucide-react"
 import { WorkflowStepProps } from "../../types"
 import { Case, CaseValidationResult } from "../../types/case.types"
 import { UpdateHistoryDisplay } from "./update-history-display"
@@ -60,58 +61,110 @@ export function ValidationStep({
   
   // Auto-click Update Draft button in automatic mode
   const [autoClickCountdown, setAutoClickCountdown] = useState<number | null>(null)
+  const [isAutoClickCancelled, setIsAutoClickCancelled] = useState(false)
+  const [hasAutoClicked, setHasAutoClicked] = useState(false)
+  const autoClickIntervalRef = useRef<NodeJS.Timeout | null>(null)
   
   useEffect(() => {
-    // Start countdown when:
-    // 1. Automatic mode is ON
-    // 2. Validation passed
-    // 3. Not currently loading or analyzing
-    // 4. No countdown already running
-    if (
-      automaticMode && 
-      validationResult?.passed && 
-      !isLoading && 
-      autoClickCountdown === null &&
-      !keywordAnalysis?.hasExclusionKeywords
-    ) {
-      console.log('[Auto-Click] Starting 10-second countdown for Update Draft button')
-      setAutoClickCountdown(10)
+    // Reset cancelled and completion state when validation result changes
+    if (!validationResult?.passed) {
+      setIsAutoClickCancelled(false)
+      setHasAutoClicked(false)
+    }
+  }, [validationResult])
+  
+  // Start countdown effect
+  useEffect(() => {
+    // Only check conditions when countdown is not running and hasn't completed
+    if (autoClickCountdown === null && autoClickIntervalRef.current === null) {
+      const shouldStartCountdown = 
+        automaticMode && 
+        validationResult?.passed && 
+        !isLoading && 
+        !isAnalyzingKeywords &&
+        !keywordAnalysis?.hasExclusionKeywords &&
+        !isAutoClickCancelled &&
+        !hasAutoClicked
       
-      const interval = setInterval(() => {
-        setAutoClickCountdown(prev => {
-          if (prev === null || prev <= 1) {
-            clearInterval(interval)
-            if (prev === 1) {
-              // Check if button would be enabled before clicking
-              const buttonDisabled = 
-                isLoading || 
-                !validationResult || 
-                keywordAnalysis?.hasExclusionKeywords ||
-                !validationResult.passed
+      console.log('[Auto-Click Debug]', {
+        automaticMode,
+        validationPassed: validationResult?.passed,
+        isLoading,
+        isAnalyzingKeywords,
+        hasCountdown: autoClickCountdown !== null,
+        hasInterval: autoClickIntervalRef.current !== null,
+        hasExclusionKeywords: keywordAnalysis?.hasExclusionKeywords,
+        isCancelled: isAutoClickCancelled,
+        hasCompleted: hasAutoClicked,
+        shouldStart: shouldStartCountdown
+      })
+      
+      if (shouldStartCountdown) {
+        console.log('[Auto-Click] ✅ Starting 10-second countdown for Update Draft button')
+        setAutoClickCountdown(10)
+      }
+    }
+  }, [automaticMode, validationResult, isLoading, isAnalyzingKeywords, keywordAnalysis, isAutoClickCancelled, hasAutoClicked, autoClickCountdown])
 
-              if (!buttonDisabled) {
-                console.log('[Auto-Click] Button is active, auto-clicking Update Draft')
-                // Click the Update Draft button
+  // Handle the actual countdown
+  useEffect(() => {
+    if (autoClickCountdown !== null && autoClickCountdown > 0 && !autoClickIntervalRef.current) {
+      console.log('[Auto-Click] Setting up interval for countdown:', autoClickCountdown)
+      
+      autoClickIntervalRef.current = setInterval(() => {
+        setAutoClickCountdown(prev => {
+          if (prev === null) return null
+          
+          console.log('[Auto-Click] Countdown tick:', prev - 1)
+          
+          if (prev <= 1) {
+            // Clear interval
+            if (autoClickIntervalRef.current) {
+              clearInterval(autoClickIntervalRef.current)
+              autoClickIntervalRef.current = null
+            }
+            
+            if (prev === 1 && !isAutoClickCancelled) {
+              console.log('[Auto-Click] Countdown complete, clicking button...')
+              // Perform the click action
+              setTimeout(() => {
+                console.log('[Auto-Click] ✅ Auto-clicking Update Draft button NOW!')
+                setHasAutoClicked(true)  // Mark as completed to prevent restart
                 if (validationResult?.hasUserUpdate && onShowUpdateAssistant) {
                   onShowUpdateAssistant()
                 } else {
                   onNext()
                 }
-              } else {
-                console.log('[Auto-Click] Button is disabled, cancelling auto-click')
-              }
+              }, 100)
             }
+            
             return null
           }
+          
           return prev - 1
         })
       }, 1000)
-      
-      return () => {
-        clearInterval(interval)
+    }
+    
+    // Cleanup
+    return () => {
+      if (autoClickIntervalRef.current) {
+        clearInterval(autoClickIntervalRef.current)
+        autoClickIntervalRef.current = null
       }
     }
-  }, [automaticMode, validationResult, isLoading, isAnalyzingKeywords, keywordAnalysis, onNext, onShowUpdateAssistant])
+  }, [autoClickCountdown, isAutoClickCancelled, validationResult, onShowUpdateAssistant, onNext])
+  
+  const handleCancelAutoClick = () => {
+    console.log('[Auto-Click] ❌ Cancelled by user')
+    // Clear the interval if it's running
+    if (autoClickIntervalRef.current) {
+      clearInterval(autoClickIntervalRef.current)
+      autoClickIntervalRef.current = null
+    }
+    setAutoClickCountdown(null)
+    setIsAutoClickCancelled(true)
+  }
 
   return (
     <Card className="max-w-full">
@@ -121,9 +174,28 @@ export function ValidationStep({
           <AutoSkipCountdown countdown={autoSkipCountdown} />
         )}
         {automaticMode && autoClickCountdown !== null && (
-          <div className="flex items-center gap-2 text-sm text-blue-600 mt-2">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <span>Auto-clicking Update Draft in {autoClickCountdown} seconds...</span>
+          <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+                <span className="text-base font-medium text-blue-900">
+                  Auto-clicking "Update Draft" in {autoClickCountdown} seconds...
+                </span>
+              </div>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={handleCancelAutoClick}
+                className="text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+              >
+                <X className="h-4 w-4 mr-1" />
+                Cancel
+              </Button>
+            </div>
+            <Progress 
+              value={(10 - autoClickCountdown) * 10} 
+              className="h-2 bg-blue-100" 
+            />
           </div>
         )}
         <CardDescription>
