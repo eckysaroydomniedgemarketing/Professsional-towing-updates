@@ -34,8 +34,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Use the portal service to post the update
-    const result = await portalService.postUpdate(addressId, draftContent, addressText)
+    // Use the portal service to post the update (pass caseId for auto-navigation)
+    const result = await portalService.postUpdate(addressId, draftContent, addressText, caseId)
     
     if (result.success) {
       console.log('[Post Update API] Update posted successfully')

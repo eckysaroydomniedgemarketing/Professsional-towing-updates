@@ -1,27 +1,21 @@
 import { Page, BrowserContext } from 'playwright'
 import { NavigationResult, NavigationStep } from '../types'
 import { setPageInfo, setNavigationStep, getSelectedPage } from './workflow-state.service'
-
 export class NavigationManager {
   private debug = true
   private caseListingUrl: string | null = null
-
   constructor() {}
-
   private log(step: string, message: string, data?: unknown) {
     if (this.debug) {
       const timestamp = new Date().toISOString()
       console.log(`[${timestamp}] [RDN-${step}]`, message, data ? JSON.stringify(data, null, 2) : '')
     }
   }
-
   async navigateToDashboard(page: Page): Promise<NavigationResult> {
     this.log('NAV', 'Starting navigation to dashboard')
     try {
-      await page.waitForSelector('iframe[name="mainFrame"]', { timeout: 10000 })
-      
-      this.log('NAV', 'Dashboard loaded successfully')
-      
+      await page.waitForSelector('iframe[name="mainFrame"]', { timeout: 10000 })      
+      this.log('NAV', 'Dashboard loaded successfully')      
       return {
         success: true,
         nextStep: NavigationStep.DASHBOARD
@@ -37,32 +31,25 @@ export class NavigationManager {
       }
     }
   }
-
   async navigateToCaseListing(page: Page, context: BrowserContext): Promise<NavigationResult> {
     this.log('NAV', 'Starting navigation to case listing')
     try {
       const currentUrl = page.url()
-      this.log('NAV', 'Current URL', { url: currentUrl })
-      
+      this.log('NAV', 'Current URL', { url: currentUrl })      
       // Check if we're on case detail page
-      const isOnCaseDetail = currentUrl.includes('case2') || currentUrl.includes('case_id=')
-      
+      const isOnCaseDetail = currentUrl.includes('case2') || currentUrl.includes('case_id=')      
       // Try to get the mainFrame
-      let frame = page.frame({ name: 'mainFrame' })
-      
+      let frame = page.frame({ name: 'mainFrame' })      
       if (isOnCaseDetail) {
-        this.log('NAV', 'Currently on case detail page, switching tabs')
-        
+        this.log('NAV', 'Currently on case detail page, switching tabs')        
         const pages = context.pages()
-        this.log('NAV', 'Current open tabs', { count: pages.length })
-        
+        this.log('NAV', 'Current open tabs', { count: pages.length })        
         if (pages.length > 1) {
           for (const p of pages) {
             const url = p.url()
             if (url.includes('three_day_updates.php') || url.includes('mainFrame')) {
               this.log('NAV', 'Found case listing tab, switching to it')
-              await p.bringToFront()
-              
+              await p.bringToFront()              
               const targetFrame = p.frame({ name: 'mainFrame' })
               if (targetFrame) {
                 const frameUrl = targetFrame.url()
@@ -70,26 +57,18 @@ export class NavigationManager {
                   await targetFrame.goto('three_day_updates.php?num_of_days=3')
                   await page.waitForLoadState('networkidle')
                 }
-              }
-              
+              }              
               const frame = page.frame({ name: 'mainFrame' })
               if (frame) {
                 await frame.waitForSelector('#casestable tbody tr', { 
                   state: 'visible', 
                   timeout: 10000 
-                })
-                
+                })                
                 this.log('NAV', 'Successfully returned to case listing tab')
                 return {
                   success: true,
                   nextStep: NavigationStep.CASE_LISTING
-                }
-              }
-            }
-          }
-        }
-        
-        // Fallback: Try frame navigation
+                }            }            }          }        }             // Fallback: Try frame navigation
         if (frame) {
           try {
             this.log('NAV', 'Attempting frame navigation to three_day_updates.php')
@@ -99,8 +78,7 @@ export class NavigationManager {
             await frame.waitForSelector('#casestable tbody tr', { 
               state: 'visible', 
               timeout: 10000 
-            })
-            
+            })            
             this.log('NAV', 'Successfully navigated to case listing via frame')
             return {
               success: true,
@@ -111,14 +89,10 @@ export class NavigationManager {
               error: e instanceof Error ? e.message : 'Unknown error' 
             })
           }
-        }
-        
-        throw new Error('All navigation methods from case detail failed')
-      }
-      
+        }        
+        throw new Error('All navigation methods from case detail failed')      }      
       // Original flow - from dashboard
-      this.log('NAV', 'Looking for Case Update Needed Listing link')
-      
+      this.log('NAV', 'Looking for Case Update Needed Listing link')      
       if (!frame) {
         this.log('NAV', 'Waiting for mainFrame iframe')
         await page.waitForSelector('iframe[name="mainFrame"]')
@@ -127,22 +101,16 @@ export class NavigationManager {
         if (!frame) {
           throw new Error('mainFrame iframe not found')
         }
-      }
-      
-      await frame.waitForSelector('a:has-text("Case Update Needed Listing")', { timeout: 5000 })
-      
+      }      
+      await frame.waitForSelector('a:has-text("Case Update Needed Listing")', { timeout: 5000 })      
       this.log('NAV', 'Clicking Case Update Needed Listing')
-      await frame.click('a:has-text("Case Update Needed Listing")')
-      
-      await page.waitForLoadState('networkidle')
-      
-      this.log('NAV', 'Successfully navigated to case listing')
-      
+      await frame.click('a:has-text("Case Update Needed Listing")')      
+      await page.waitForLoadState('networkidle')      
+      this.log('NAV', 'Successfully navigated to case listing')      
       // Store the URL for later use
       if (frame) {
         this.caseListingUrl = frame.url()
-      }
-      
+      }      
       // Just return success - page extraction will be done after filters
       return {
         success: true,
@@ -155,11 +123,7 @@ export class NavigationManager {
       return {
         success: false,
         nextStep: NavigationStep.DASHBOARD,
-        error: error instanceof Error ? error.message : 'Failed to navigate to case listing'
-      }
-    }
-  }
-
+        error: error instanceof Error ? error.message : 'Failed to navigate to case listing'      }    }  }
   async clickUpdatesTab(page: Page): Promise<boolean> {
     try {
       this.log('NAV', 'Looking for Updates tab')
@@ -232,7 +196,6 @@ export class NavigationManager {
       }
     }
   }
-
   async extractPageInfo(page: Page): Promise<{ totalPages: number; currentPage: number } | null> {
     try {
       const frame = page.frame({ name: 'mainFrame' })
@@ -297,13 +260,11 @@ export class NavigationManager {
             if (activeText) {
               currentPage = parseInt(activeText, 10) || 1
             }
-          }
-          
+          }          
           this.log('NAV', 'Pagination buttons found', {
             totalPages: paginateButtons.length,
             currentPage
-          })
-          
+          })          
           return {
             currentPage,
             totalPages: paginateButtons.length
@@ -322,7 +283,6 @@ export class NavigationManager {
       return null
     }
   }
-
   async navigateToSpecificPage(page: Page, pageNumber: number): Promise<NavigationResult> {
     try {
       const frame = page.frame({ name: 'mainFrame' })
@@ -333,9 +293,7 @@ export class NavigationManager {
           error: 'mainFrame not found'
         }
       }
-
       this.log('NAV', `Navigating to page ${pageNumber}`)
-
       // Hide Intercom widget if present to prevent click interference
       try {
         await page.evaluate(() => {
@@ -347,9 +305,7 @@ export class NavigationManager {
         this.log('NAV', 'Intercom widget hidden')
       } catch (e) {
         // Continue even if Intercom hiding fails
-      }
-
-      // Method 1: Try direct page button click first
+      }      // Method 1: Try direct page button click first
       try {
         const dataTablesPageButton = await frame.$(`.dataTables_paginate .paginate_button:has-text("${pageNumber}"):not(.current)`)
         if (dataTablesPageButton) {
@@ -359,12 +315,8 @@ export class NavigationManager {
           return {
             success: true,
             nextStep: NavigationStep.CASE_LISTING
-          }
-        }
-      } catch (e) {
-        this.log('NAV', 'Direct page button not visible or clickable')
-      }
-
+          }        }      } catch (e) {
+        this.log('NAV', 'Direct page button not visible or clickable')      }
       // Method 2: Progressive navigation for ellipsis pagination
       // Navigate towards target page until it becomes visible
       const currentPageInfo = await this.extractPageInfo(page)
@@ -480,16 +432,7 @@ export class NavigationManager {
                       this.log('NAV', `Successfully jumped to page ${pageNumber}`)
                       return {
                         success: true,
-                        nextStep: NavigationStep.CASE_LISTING
-                      }
-                    }
-                  }
-                }
-              } catch (e) {
-                this.log('NAV', 'Direct page button click failed', { error: e })
-              }
-            }
-            
+                        nextStep: NavigationStep.CASE_LISTING                      }                    }                  }                }              } catch (e) {                this.log('NAV', 'Direct page button click failed', { error: e })            }            }            
             // Method 2: Use JavaScript to click Previous button in the frame context
             try {
               const moved = await frame.evaluate(() => {
@@ -498,18 +441,15 @@ export class NavigationManager {
                 if (prevBtn && !prevBtn.classList.contains('disabled')) {
                   prevBtn.click()
                   return true
-                }
-                
+                }                
                 // Fallback: Try other Previous button selectors
                 const altPrevBtn = document.querySelector('.dataTables_paginate .previous:not(.disabled)')
                 if (altPrevBtn) {
                   altPrevBtn.click()
                   return true
-                }
-                
+                }                
                 return false
-              })
-              
+              })              
               if (moved) {
                 await page.waitForTimeout(2000)
                 const afterClick = await this.extractPageInfo(page)
@@ -533,22 +473,16 @@ export class NavigationManager {
             return {
               success: true,
               nextStep: NavigationStep.CASE_LISTING
-            }
-          }
-          
+            }          }          
           attempts++
-        }
-      }
-      
+        }      }      
       // If page 1 is requested and we're already there
       if (pageNumber === 1) {
         this.log('NAV', `Already on page 1`)
         return {
           success: true,
           nextStep: NavigationStep.CASE_LISTING
-        }
-      }
-      
+        }      }      
       this.log('NAV', `Could not navigate to page ${pageNumber}`)
       return {
         success: false,
@@ -563,7 +497,4 @@ export class NavigationManager {
         success: false,
         nextStep: NavigationStep.ERROR,
         error: error instanceof Error ? error.message : 'Failed to navigate to page'
-      }
-    }
-  }
-}
+      }    }  }}

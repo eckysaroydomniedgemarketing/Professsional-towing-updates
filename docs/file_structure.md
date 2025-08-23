@@ -146,7 +146,7 @@
 |   |   |   |   |   +-- update-generation-step.tsx — 61 lines — Update generation UI
 |   |   |   |   |   +-- update-history-display.tsx — 163 lines — Update history viewer
 |   |   |   |   |   +-- update-review-step.tsx — 99 lines — Update review interface
-|   |   |   |   |   +-- validation-step.tsx — 185 lines — Case validation step
+|   |   |   |   |   +-- validation-step.tsx — 322 lines — Case validation step
 |   |   |   |   +-- case-processing-layout.tsx — 333 lines — Case processing page layout
 |   |   |   |   +-- workflow-sidebar.tsx — 186 lines — Workflow navigation sidebar
 |   |   |   +-- hooks/
@@ -191,10 +191,10 @@
 |   |   |   |   +-- browser-manager.service.ts — 168 lines — Browser automation manager
 |   |   |   |   +-- case-navigation.service.ts — 303 lines — Case navigation automation
 |   |   |   |   +-- case-processor.service.ts — 369 lines — Case processing logic
-|   |   |   |   +-- navigation-manager.service.ts — 466 lines — Navigation management service
+|   |   |   |   +-- navigation-manager.service.ts — 499 lines — Navigation management service
 |   |   |   |   +-- portal-auth-workflow.service.ts — 53 lines — Portal auth workflow
 |   |   |   |   +-- portal-navigation-workflow.service.ts — 138 lines — Portal navigation workflow
-|   |   |   |   +-- rdn-portal-service.ts — 293 lines — RDN portal integration
+|   |   |   |   +-- rdn-portal-service.ts — 382 lines — RDN portal integration
 |   |   |   |   +-- workflow-executor.service.ts — 208 lines — Workflow execution manager
 |   |   |   |   +-- workflow-state.service.ts — 78 lines — Workflow state management
 |   |   |   +-- types/

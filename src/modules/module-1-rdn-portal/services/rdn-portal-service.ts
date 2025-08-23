@@ -146,7 +146,64 @@ export class RDNPortalService {
     return result.result
   }
 
-  async postUpdate(addressId: string, draftContent: string, addressText?: string): Promise<NavigationResult> {
+  // Helper function to parse address into components
+  private parseAddress(address: string): { streetNumber: string; streetName: string; city: string; state: string; zip: string } {
+    const normalized = address.toUpperCase().trim()
+    const parts = normalized.split(',').map(p => p.trim())
+    
+    // Extract street components
+    const streetParts = (parts[0] || '').split(' ')
+    const streetNumber = streetParts[0] || ''
+    const streetName = streetParts.slice(1).join(' ')
+    
+    // Extract city
+    const city = parts[1] || ''
+    
+    // Extract state and ZIP
+    const stateZip = (parts[2] || '').split(' ').filter(p => p)
+    const state = stateZip[0] || ''
+    const zip = stateZip[1] || ''
+    
+    return { streetNumber, streetName, city, state, zip }
+  }
+
+  // Helper function to find best matching address
+  private findBestAddressMatch(targetAddress: string, options: Array<{value: string; text: string}>): {value: string; text: string; score: number} | null {
+    const target = this.parseAddress(targetAddress)
+    
+    let bestMatch = null
+    let bestScore = 0
+    
+    for (const option of options) {
+      const candidate = this.parseAddress(option.text)
+      let score = 0
+      
+      // Score each component (weighted by importance)
+      if (target.streetNumber && target.streetNumber === candidate.streetNumber) score += 30
+      if (target.streetName && target.streetName.toLowerCase() === candidate.streetName.toLowerCase()) score += 30
+      if (target.city && target.city.toLowerCase() === candidate.city.toLowerCase()) score += 20
+      if (target.state && target.state === candidate.state) score += 10
+      
+      // ZIP matching - full or partial
+      if (target.zip && candidate.zip) {
+        if (target.zip === candidate.zip) {
+          score += 10
+        } else if (target.zip.substring(0, 3) === candidate.zip.substring(0, 3)) {
+          score += 5 // Partial ZIP match
+        }
+      }
+      
+      if (score > bestScore) {
+        bestScore = score
+        bestMatch = { ...option, score }
+      }
+    }
+    
+    // Accept match if score >= 60 (at least street number + street name match)
+    return bestScore >= 60 ? bestMatch : null
+  }
+
+  async postUpdate(addressId: string, draftContent: string, addressText?: string, caseId?: string): Promise<NavigationResult> {
     try {
       const page = this.browserManager.getPage()
       if (!page) {
@@ -163,8 +220,50 @@ export class RDNPortalService {
       const currentUrl = page.url()
       console.log('[RDN-PORTAL] Current URL:', currentUrl)
       
+      // If caseId provided and not on the correct case page, navigate to it
+      if (caseId && !currentUrl.includes(`case_id=${caseId}`)) {
+        console.log(`[RDN-PORTAL] Not on case ${caseId} page, navigating to it...`)
+        
+        try {
+          // Try frame navigation first (for iframe context)
+          const mainFrame = page.frame({ name: 'mainFrame' })
+          if (mainFrame) {
+            console.log('[RDN-PORTAL] Using frame navigation')
+            await mainFrame.goto(`case2/?tab=1&case_id=${caseId}`, {
+              waitUntil: 'networkidle',
+              timeout: 30000
+            })
+          } else {
+            // Fallback to JavaScript navigation
+            console.log('[RDN-PORTAL] Using JavaScript navigation')
+            await page.evaluate((caseId) => {
+              window.location.href = `/alpha_rdn/module/default/case2/?tab=1&case_id=${caseId}`
+            }, caseId)
+          }
+          
+          // Wait for navigation and page to load
+          await page.waitForTimeout(3000)
+          
+          // Verify navigation succeeded
+          const newUrl = page.url()
+          if (newUrl.includes(`case_id=${caseId}`)) {
+            console.log(`[RDN-PORTAL] Successfully navigated to case ${caseId}`)
+          } else {
+            throw new Error('Navigation completed but not on expected case page')
+          }
+        } catch (navError) {
+          console.error('[RDN-PORTAL] Failed to navigate to case page:', navError)
+          return {
+            success: false,
+            error: `Failed to navigate to case ${caseId}: ${navError instanceof Error ? navError.message : 'Unknown error'}`,
+            nextStep: 'error' as const
+          }
+        }
+      }
+      
       // Verify we're on a case detail page
-      if (!currentUrl.includes('case_id=')) {
+      const updatedUrl = page.url()
+      if (!updatedUrl.includes('case_id=')) {
         return {
           success: false,
           error: 'Not on case detail page. Please navigate to a case first.',
@@ -268,22 +367,30 @@ export class RDNPortalService {
           }))
         })
         
-        // Find matching option
-        const normalizedTarget = addressText.toLowerCase().replace(/[,\s]+/g, ' ').trim()
-        const matchingOption = addressOptions.find((opt: any) => {
-          const normalizedOption = opt.text.toLowerCase().replace(/[,\s]+/g, ' ').trim()
-          return normalizedOption === normalizedTarget || 
-                 normalizedOption.includes(normalizedTarget) || 
-                 normalizedTarget.includes(normalizedOption)
-        })
+        console.log(`[RDN-PORTAL] Looking for address match for: "${addressText}"`)
+        console.log(`[RDN-PORTAL] Available options: ${addressOptions.length}`)
         
-        if (matchingOption) {
-          await page.selectOption('#is_address_update_select', matchingOption.value)
-          console.log(`[RDN-PORTAL] Selected address: "${matchingOption.text}"`)
+        // Use smart address matching
+        const bestMatch = this.findBestAddressMatch(addressText, addressOptions)
+        
+        if (bestMatch) {
+          await page.selectOption('#is_address_update_select', bestMatch.value)
+          console.log(`[RDN-PORTAL] Selected best matching address: "${bestMatch.text}" (score: ${bestMatch.score})`)
         } else {
-          // Fallback to addressId
-          await page.selectOption('#is_address_update_select', addressId)
-          console.log(`[RDN-PORTAL] Selected address by ID: ${addressId}`)
+          // No good match found, try to use addressId as fallback
+          console.log('[RDN-PORTAL] No good address match found, trying addressId fallback')
+          try {
+            await page.selectOption('#is_address_update_select', addressId)
+            console.log(`[RDN-PORTAL] Selected address by ID: ${addressId}`)
+          } catch (e) {
+            console.error('[RDN-PORTAL] Failed to select by addressId, selecting first option')
+            // Last resort - select first non-empty option
+            const firstOption = addressOptions.find((opt: any) => opt.value && opt.value !== '')
+            if (firstOption) {
+              await page.selectOption('#is_address_update_select', firstOption.value)
+              console.log(`[RDN-PORTAL] Selected first available address: "${firstOption.text}"`)
+            }
+          }
         }
       } else {
         // Use addressId directly

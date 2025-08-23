@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -37,6 +37,9 @@ export function UpdateAssistant({
   const [autoPostCountdown, setAutoPostCountdown] = useState<number | null>(null)
   const [autoPostTimer, setAutoPostTimer] = useState<NodeJS.Timeout | null>(null)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
+  
+  // Use ref to track if posting is in progress (prevents race conditions)
+  const isPostingRef = useRef(false)
   
   // Use custom hook for template loading
   const {
@@ -133,6 +136,12 @@ export function UpdateAssistant({
   }
 
   const handlePostUpdate = async () => {
+    // Prevent duplicate calls - check both state and ref
+    if (isPosting || isPostingRef.current) {
+      console.log('[Post Update] Already posting, ignoring duplicate call')
+      return
+    }
+    
     if (!selectedAddressId || !draftContent) {
       setAlertMessage({ type: 'error', message: 'Please ensure draft is generated' })
       return
@@ -145,7 +154,9 @@ export function UpdateAssistant({
       setAutoPostTimer(null)
     }
     
+    // Set both state and ref to prevent race conditions
     setIsPosting(true)
+    isPostingRef.current = true
     setAlertMessage(null)
     
     try {
@@ -217,6 +228,7 @@ export function UpdateAssistant({
       setTimeout(() => setAlertMessage(null), 5000)
     } finally {
       setIsPosting(false)
+      isPostingRef.current = false // Reset the ref as well
     }
   }
 
