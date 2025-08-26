@@ -10,7 +10,7 @@ export async function POST() {
       );
     }
 
-    workflowService.stopWorkflow();
+    await workflowService.stopWorkflow();
     const state = workflowService.getState();
     
     return NextResponse.json({

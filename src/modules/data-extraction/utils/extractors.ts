@@ -7,6 +7,7 @@ import { normalizeStatus } from './status-normalizer';
 import { cleanText } from './text-utils';
 import { extractAddresses } from './address-extractors';
 import { extractUpdates, extractAdditionalInfo } from './update-extractors';
+import { navigateAndExtractVinDetails } from './vin-details-extractor';
 
 // Extract case details from the top section
 export async function extractCaseDetails(page: Page, caseId: string): Promise<CaseDetails> {
@@ -186,7 +187,10 @@ export async function extractVehicle(page: Page, caseId: string): Promise<CaseVe
     model: null,
     color: null,
     license_plate: null,
-    license_state: null
+    license_state: null,
+    market_class: null,
+    driving_wheels: null,
+    transmission_type: null
   };
 
   // Extract VIN
@@ -232,6 +236,39 @@ export async function extractVehicle(page: Page, caseId: string): Promise<CaseVe
     vehicle.license_state = await stateElement.textContent() || null;
   }
 
+  // Extract additional details from VIN Details page using direct URL construction
+  try {
+    console.log('Constructing Vehicle Details URL...');
+    
+    // Construct the VIN details URL directly using case ID and VIN
+    if (caseId && vehicle.vin) {
+      const baseUrl = 'https://app.recoverydatabase.net';
+      const vinDetailsUrl = `${baseUrl}/mod02_SA/case_info/vindetails.php?case_ID=${caseId}&vin=${vehicle.vin}`;
+      
+      console.log('Vehicle Details URL constructed:', vinDetailsUrl);
+      const vinDetails = await navigateAndExtractVinDetails(page, vinDetailsUrl);
+      
+      // Merge VIN details with vehicle data
+      if (vinDetails.market_class) {
+        vehicle.market_class = vinDetails.market_class;
+        console.log('Market Class added to vehicle data:', vehicle.market_class);
+      }
+      if (vinDetails.driving_wheels) {
+        vehicle.driving_wheels = vinDetails.driving_wheels;
+        console.log('Driving Wheels added to vehicle data:', vehicle.driving_wheels);
+      }
+      if (vinDetails.transmission_type) {
+        vehicle.transmission_type = vinDetails.transmission_type;
+        console.log('Transmission Type added to vehicle data:', vehicle.transmission_type);
+      }
+    } else {
+      console.log('Case ID or VIN not available, skipping VIN details extraction');
+    }
+  } catch (error) {
+    console.log('Warning: Error extracting VIN details, continuing with basic vehicle data:', error);
+    // Continue with basic vehicle data even if VIN details extraction fails
+  }
+
   return vehicle;
 }
 
@@ -239,3 +276,6 @@ export async function extractVehicle(page: Page, caseId: string): Promise<CaseVe
 export { extractAddresses } from './address-extractors';
 export { extractUpdates, extractAdditionalInfo } from './update-extractors';
 export { cleanText } from './text-utils';
+
+// Export invoice extraction function
+export { InvoiceProcessorService } from '../services/invoice-processor.service';

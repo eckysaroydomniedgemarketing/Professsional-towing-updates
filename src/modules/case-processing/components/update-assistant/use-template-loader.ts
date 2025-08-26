@@ -3,6 +3,8 @@ import { Case } from "../../types/case.types"
 import { 
   fetchActiveTemplates, 
   getLastUserUpdate,
+  mapAddressTypeToCategory,
+  isUpdateAllowed,
   Template 
 } from "../../services/template.service"
 
@@ -16,53 +18,32 @@ export function useTemplateLoader(
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("")
   const [isLoading, setIsLoading] = useState(false)
   const [lastUpdateAddress, setLastUpdateAddress] = useState<string>("")
+  const [updateBlockedInfo, setUpdateBlockedInfo] = useState<{ allowed: boolean; daysUntilAllowed: number; message: string }>({ 
+    allowed: true, 
+    daysUntilAllowed: 0, 
+    message: '' 
+  })
 
   useEffect(() => {
-    let retryCount = 0
-    const maxRetries = 3
-    
     async function loadTemplatesAndSelectAddress() {
       setIsLoading(true)
       
-      // Load templates
-      while (retryCount < maxRetries) {
-        try {
-          const templateList = await fetchActiveTemplates()
-          console.log(`Fetched ${templateList.length} active templates`)
-          setTemplates(templateList)
-          
-          // Auto-select a random template
-          if (templateList.length > 0) {
-            const randomIndex = Math.floor(Math.random() * templateList.length)
-            const selectedTemplate = templateList[randomIndex]
-            console.log('Auto-selected template:', selectedTemplate.id, selectedTemplate.category || 'No category')
-            setSelectedTemplateId(selectedTemplate.id)
-          } else {
-            console.warn('No active templates found in database')
-          }
-          
-          break // Success, exit retry loop
-        } catch (error) {
-          retryCount++
-          console.error(`Failed to fetch templates (attempt ${retryCount}/${maxRetries}):`, error)
-          
-          if (retryCount === maxRetries) {
-            console.error('Failed to load templates after maximum retries')
-            setTemplates([])
-          } else {
-            // Wait 1 second before retry
-            await new Promise(resolve => setTimeout(resolve, 1000))
-          }
-        }
-      }
-      
-      // Fetch last update to get the previously used address
+      // Fetch last update to get the previously used address and check date
       let lastUsedAddressId = null
+      let lastUpdateDate = null
       try {
         const lastUpdate = await getLastUserUpdate(caseData.id, sessionId)
-        if (lastUpdate && lastUpdate.address_associated) {
-          setLastUpdateAddress(lastUpdate.address_associated)
-          console.log('Last update used address text:', lastUpdate.address_associated)
+        if (lastUpdate) {
+          lastUpdateDate = lastUpdate.update_date
+          
+          // Check if update is allowed based on date
+          const dateValidation = isUpdateAllowed(lastUpdateDate)
+          setUpdateBlockedInfo(dateValidation)
+          console.log('Date validation:', dateValidation)
+          
+          if (lastUpdate.address_associated) {
+            setLastUpdateAddress(lastUpdate.address_associated)
+            console.log('Last update used address text:', lastUpdate.address_associated)
           
           // Try to find which address was used by matching components
           const lastUsedAddress = caseData.addresses.find(addr => {
@@ -105,6 +86,10 @@ export function useTemplateLoader(
           } else {
             console.log('Could not match last used address to any current address')
           }
+          }
+        } else {
+          // No previous update found, allow posting
+          setUpdateBlockedInfo({ allowed: true, daysUntilAllowed: 0, message: 'No previous update found' })
         }
       } catch (error) {
         console.log('No previous update found or error fetching:', error)
@@ -151,6 +136,12 @@ export function useTemplateLoader(
         
         if (selectedAddress) {
           setSelectedAddressId(selectedAddress.id)
+          
+          // Load templates based on selected address category
+          await loadTemplatesForAddress(selectedAddress.address_type)
+        } else if (selectedAddressId === 'NO_VALID_ADDRESS') {
+          // Load templates for no-address scenario
+          await loadTemplatesForAddress(undefined)
         }
       }
       
@@ -159,8 +150,96 @@ export function useTemplateLoader(
       setTimeout(() => setIsInitialLoad(false), 1000)
     }
     
+    async function loadTemplatesForAddress(addressType: string | undefined) {
+      const category = mapAddressTypeToCategory(addressType)
+      console.log(`Loading templates for address type: "${addressType}" -> category: "${category}"`)
+      
+      let retryCount = 0
+      const maxRetries = 3
+      
+      while (retryCount < maxRetries) {
+        try {
+          const templateList = await fetchActiveTemplates(category)
+          console.log(`Fetched ${templateList.length} templates for category: ${category}`)
+          setTemplates(templateList)
+          
+          // Auto-select a random template from the category
+          if (templateList.length > 0) {
+            const randomIndex = Math.floor(Math.random() * templateList.length)
+            const selectedTemplate = templateList[randomIndex]
+            console.log('Auto-selected template:', selectedTemplate.id, 'from category:', category)
+            setSelectedTemplateId(selectedTemplate.id)
+          } else {
+            console.warn(`No templates found for category: ${category}`)
+            setSelectedTemplateId('')
+          }
+          
+          break // Success, exit retry loop
+        } catch (error) {
+          retryCount++
+          console.error(`Failed to fetch templates (attempt ${retryCount}/${maxRetries}):`, error)
+          
+          if (retryCount === maxRetries) {
+            console.error('Failed to load templates after maximum retries')
+            setTemplates([])
+            setSelectedTemplateId('')
+          } else {
+            // Wait 1 second before retry
+            await new Promise(resolve => setTimeout(resolve, 1000))
+          }
+        }
+      }
+    }
+    
     loadTemplatesAndSelectAddress()
   }, [caseData.id, caseData.addresses, sessionId, setIsInitialLoad])
+  
+  // Add effect to reload templates when address selection changes
+  useEffect(() => {
+    if (!selectedAddressId || !caseData.addresses) return
+    
+    async function reloadTemplatesForNewAddress() {
+      if (selectedAddressId === 'NO_VALID_ADDRESS') {
+        await loadTemplatesForAddress(undefined)
+      } else {
+        const address = caseData.addresses.find(a => a.id === selectedAddressId)
+        if (address) {
+          await loadTemplatesForAddress(address.address_type)
+        }
+      }
+    }
+    
+    async function loadTemplatesForAddress(addressType: string | undefined) {
+      const category = mapAddressTypeToCategory(addressType)
+      console.log(`Reloading templates for address type: "${addressType}" -> category: "${category}"`)
+      
+      try {
+        const templateList = await fetchActiveTemplates(category)
+        console.log(`Fetched ${templateList.length} templates for category: ${category}`)
+        setTemplates(templateList)
+        
+        // Auto-select a random template from the category
+        if (templateList.length > 0) {
+          const randomIndex = Math.floor(Math.random() * templateList.length)
+          const selectedTemplate = templateList[randomIndex]
+          console.log('Auto-selected template:', selectedTemplate.id, 'from category:', category)
+          setSelectedTemplateId(selectedTemplate.id)
+        } else {
+          console.warn(`No templates found for category: ${category}`)
+          setSelectedTemplateId('')
+        }
+      } catch (error) {
+        console.error('Failed to reload templates:', error)
+        setTemplates([])
+        setSelectedTemplateId('')
+      }
+    }
+    
+    // Only reload if address was manually changed (not during initial load)
+    if (!isLoading) {
+      reloadTemplatesForNewAddress()
+    }
+  }, [selectedAddressId, caseData.addresses, isLoading])
 
   return {
     templates,
@@ -168,6 +247,7 @@ export function useTemplateLoader(
     selectedTemplateId,
     isLoading,
     lastUpdateAddress,
+    updateBlockedInfo,
     setSelectedAddressId,
     setSelectedTemplateId
   }

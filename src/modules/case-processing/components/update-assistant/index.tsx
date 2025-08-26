@@ -48,6 +48,7 @@ export function UpdateAssistant({
     selectedTemplateId,
     isLoading,
     lastUpdateAddress,
+    updateBlockedInfo,
     setSelectedAddressId,
     setSelectedTemplateId
   } = useTemplateLoader(caseData, sessionId, setIsInitialLoad)
@@ -97,7 +98,8 @@ export function UpdateAssistant({
     // 4. No alert message (no errors)
     // 5. No existing countdown
     // 6. Not initial load (to prevent immediate trigger)
-    if (automaticMode && draftContent && !isPosting && !alertMessage && autoPostCountdown === null && !isInitialLoad) {
+    // 7. Update is allowed (date validation passed)
+    if (automaticMode && draftContent && !isPosting && !alertMessage && autoPostCountdown === null && !isInitialLoad && updateBlockedInfo.allowed) {
       console.log('[Auto-Post] Starting 10-second review countdown')
       setAutoPostCountdown(10)
       
@@ -108,7 +110,7 @@ export function UpdateAssistant({
             // Trigger post update when countdown reaches 0
             if (prev === 1) {
               console.log('[Auto-Post] Countdown complete, posting update')
-              handlePostUpdate()
+              handlePostUpdate(true) // Pass true for automatic mode
             }
             return null
           }
@@ -124,7 +126,7 @@ export function UpdateAssistant({
         }
       }
     }
-  }, [automaticMode, draftContent, isPosting, alertMessage, isInitialLoad])
+  }, [automaticMode, draftContent, isPosting, alertMessage, isInitialLoad, updateBlockedInfo.allowed])
 
   const handleCancelAutoPost = () => {
     console.log('[Auto-Post] Cancelled by user')
@@ -135,7 +137,7 @@ export function UpdateAssistant({
     setAutoPostCountdown(null)
   }
 
-  const handlePostUpdate = async () => {
+  const handlePostUpdate = async (isAutomatic: boolean = false) => {
     // Prevent duplicate calls - check both state and ref
     if (isPosting || isPostingRef.current) {
       console.log('[Post Update] Already posting, ignoring duplicate call')
@@ -170,7 +172,7 @@ export function UpdateAssistant({
         addressText = selectedAddress.full_address
       }
       
-      console.log('Calling API to post update to RDN portal...')
+      console.log(`Calling API to post update to RDN portal (${isAutomatic ? 'automatic' : 'manual'} mode)...`)
       
       // Call API endpoint to handle automation
       const response = await fetch('/api/case-processing/post-update', {
@@ -182,7 +184,9 @@ export function UpdateAssistant({
           caseId: caseData.id,
           addressId: selectedAddressId === 'NO_VALID_ADDRESS' ? null : selectedAddressId,
           draftContent: draftContent,
-          addressText: addressText
+          addressText: addressText,
+          postingMode: isAutomatic ? 'automatic' : 'manual',
+          sessionId: sessionId
         })
       })
       
@@ -250,6 +254,26 @@ export function UpdateAssistant({
       
       <CardContent className="flex-1">
         <div className="space-y-4">
+          {/* Date Validation Alert */}
+          {!updateBlockedInfo.allowed && (
+            <>
+              <Card className="border-yellow-500 bg-yellow-50">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-2">
+                    <SkipForward className="h-5 w-5 text-yellow-600" />
+                    <div>
+                      <p className="font-medium text-yellow-800">{updateBlockedInfo.message}</p>
+                      <p className="text-sm text-yellow-700 mt-1">
+                        Updates can only be posted after 2 days (excluding today) from the last update.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Separator />
+            </>
+          )}
+
           {/* Alert Messages */}
           <UpdateAlert
             alertMessage={alertMessage}
@@ -320,8 +344,8 @@ export function UpdateAssistant({
         )}
         
         <Button
-          onClick={handlePostUpdate}
-          disabled={!selectedAddressId || !selectedTemplateId || !draftContent || isPosting || autoPostCountdown !== null}
+          onClick={() => handlePostUpdate(false)} // Pass false for manual mode
+          disabled={!selectedAddressId || !selectedTemplateId || !draftContent || isPosting || autoPostCountdown !== null || !updateBlockedInfo.allowed}
           className="gap-2"
         >
           {isPosting ? (

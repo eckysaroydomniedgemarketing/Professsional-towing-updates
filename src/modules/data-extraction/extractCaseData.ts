@@ -15,11 +15,12 @@ import {
   extractVehicle,
   extractAddresses,
   extractUpdates,
-  extractAdditionalInfo
+  extractAdditionalInfo,
+  InvoiceProcessorService
 } from './utils/extractors';
 
 /**
- * Main function to extract all case data from My Summary and Updates tabs and store in database
+ * Main function to extract all case data from My Summary, Invoices, and Updates tabs and store in database
  * @param caseId - The case ID to extract data for
  * @param page - Playwright page object (starts on My Summary tab)
  * @param isOnMySummary - Whether the page is currently on My Summary tab (default: true)
@@ -72,6 +73,18 @@ export async function extractCaseData(
       
       // Extract case details including Additional Info from My Summary
       caseDetails = await extractCaseDetails(page, caseId);
+      
+      // Navigate to Invoices tab to extract invoice data
+      console.log('Navigating to Invoices tab...');
+      const invoiceProcessor = new InvoiceProcessorService(page);
+      const invoiceResult = await invoiceProcessor.processInvoicesForCase(caseId);
+      
+      if (invoiceResult.success) {
+        console.log(`Invoice extraction: ${invoiceResult.message}`);
+        recordsInserted += invoiceResult.itemCount;
+      } else {
+        console.log(`Warning: Invoice extraction failed: ${invoiceResult.message}`);
+      }
       
       // Now navigate to Updates tab for remaining extraction
       console.log('Clicking Updates tab...');

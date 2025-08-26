@@ -23,6 +23,9 @@ export interface CaseVehicle {
   color: string | null;
   license_plate: string | null;
   license_state: string | null;
+  market_class?: string | null;
+  driving_wheels?: string | null;
+  transmission_type?: string | null;
   additional_details?: any;
   created_at?: string;
 }

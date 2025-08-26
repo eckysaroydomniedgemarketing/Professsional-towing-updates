@@ -2,7 +2,16 @@ import { currentUser } from "@clerk/nextjs/server";
 import { AppLayout } from "@/components/app-layout";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, FileText, Eye, CheckCircle2, AlertCircle } from "lucide-react";
+import { 
+  ArrowRight, 
+  FileText, 
+  Eye, 
+  CheckCircle2, 
+  AlertCircle,
+  XCircle,
+  Clock,
+  DollarSign
+} from "lucide-react";
 import Link from "next/link";
 
 export default async function DashboardPage() {
@@ -18,7 +27,7 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {/* Case Update Needed Listing Card */}
           <Card className="border-2 hover:border-primary/50 transition-colors">
             <CardHeader>
@@ -117,6 +126,162 @@ export default async function DashboardPage() {
               <Link href="/agent-updates-visibility" className="w-full">
                 <Button className="w-full" size="lg" variant="secondary">
                   Go to Agent Updates
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+
+          {/* Pending Close Card */}
+          <Card className="border-2 hover:border-primary/50 transition-colors">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">Pending Close Management</CardTitle>
+                <XCircle className="h-6 w-6 text-primary" />
+              </div>
+              <CardDescription>
+                Process cases with Pending Close status
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <span className="text-sm">Change status from Pending Close to Closed</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <span className="text-sm">Automatic or manual processing modes</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <span className="text-sm">Track processed cases with detailed logs</span>
+                </div>
+              </div>
+              
+              <div className="pt-2 space-y-1">
+                <p className="text-sm text-muted-foreground">
+                  Streamline case closure workflow
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Process multiple cases efficiently
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Verify status changes in real-time
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Export processing reports
+                </p>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Link href="/pending-close" className="w-full">
+                <Button className="w-full" size="lg" variant="outline">
+                  Go to Pending Close
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+
+          {/* On Hold Card */}
+          <Card className="border-2 hover:border-primary/50 transition-colors">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">On Hold Management</CardTitle>
+                <Clock className="h-6 w-6 text-primary" />
+              </div>
+              <CardDescription>
+                Process cases with Pending On Hold status
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm">Change status from Pending On Hold to Hold</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm">Batch processing capabilities</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm">Real-time status tracking</span>
+                </div>
+              </div>
+              
+              <div className="pt-2 space-y-1">
+                <p className="text-sm text-muted-foreground">
+                  Manage cases requiring hold status
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Process cases in automatic mode
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Track VIN and case details
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Generate processing logs
+                </p>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Link href="/on-hold" className="w-full">
+                <Button className="w-full" size="lg" variant="secondary">
+                  Go to On Hold
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+
+          {/* Billing Card */}
+          <Card className="border-2 hover:border-primary/50 transition-colors">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">Billing & Invoicing</CardTitle>
+                <DollarSign className="h-6 w-6 text-primary" />
+              </div>
+              <CardDescription>
+                Manage client billing and fee calculations
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <span className="text-sm">Extract invoice data from documents</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <span className="text-sm">Calculate case update fees</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <span className="text-sm">Generate billing reports</span>
+                </div>
+              </div>
+              
+              <div className="pt-2 space-y-1">
+                <p className="text-sm text-muted-foreground">
+                  Comprehensive billing management
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Process client fee sheets
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Track billing by client and date
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  • Export invoice summaries
+                </p>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Link href="/billing" className="w-full">
+                <Button className="w-full" size="lg">
+                  Go to Billing
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>

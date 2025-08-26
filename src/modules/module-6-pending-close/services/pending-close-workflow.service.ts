@@ -76,10 +76,24 @@ export class PendingCloseWorkflowService {
     this.state.status = 'processing';
   }
   
-  stopWorkflow(): void {
+  async stopWorkflow(): Promise<void> {
     this.stopRequested = true;
     this.state.status = 'idle';
     this.state.endTime = new Date();
+    
+    // Close browser instance
+    if (this.page) {
+      try {
+        const browser = this.page.context().browser();
+        if (browser) {
+          await browser.close();
+          console.log('[PENDING-CLOSE-WORKFLOW] Browser closed successfully');
+        }
+      } catch (error) {
+        console.error('[PENDING-CLOSE-WORKFLOW] Error closing browser:', error);
+      }
+      this.page = null;
+    }
   }
   
   getState(): WorkflowState {
@@ -191,7 +205,8 @@ export class PendingCloseWorkflowService {
         console.error('[PENDING-CLOSE-WORKFLOW] Failed to get current page from navigation service');
       }
       
-      await this.delay(2000);
+      // Wait for page to be fully loaded
+      await currentPage.waitForLoadState('networkidle');
       
       // Extract case details before change
       const beforeDetails = await this.caseStatusService.extractCaseDetails();
@@ -206,9 +221,7 @@ export class PendingCloseWorkflowService {
         };
       }
       
-      await this.delay(1000);
-      
-      // Verify change
+      // Verify change (page already loaded in changeStatusToClose)
       const verified = await this.caseStatusService.verifyStatusChange();
       
       // Log to database

@@ -76,10 +76,24 @@ export class OnHoldWorkflowService {
     this.state.status = 'processing';
   }
   
-  stopWorkflow(): void {
+  async stopWorkflow(): Promise<void> {
     this.stopRequested = true;
     this.state.status = 'idle';
     this.state.endTime = new Date();
+    
+    // Close browser instance
+    if (this.page) {
+      try {
+        const browser = this.page.context().browser();
+        if (browser) {
+          await browser.close();
+          console.log('[ON-HOLD-WORKFLOW] Browser closed successfully');
+        }
+      } catch (error) {
+        console.error('[ON-HOLD-WORKFLOW] Error closing browser:', error);
+      }
+      this.page = null;
+    }
   }
   
   getState(): WorkflowState {

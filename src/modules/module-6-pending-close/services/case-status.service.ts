@@ -47,11 +47,15 @@ export class CaseStatusService {
       console.log('[PENDING-CLOSE] Modal dialog appeared with submit button');
       
       // Click the submit button in modal
+      console.log('[PENDING-CLOSE] Clicking submit button...');
       await this.page.click(modalSubmitSelector);
-      console.log('[PENDING-CLOSE] Clicked submit button in modal dialog');
       
-      // Wait for the change to process (page reloads after submit)
-      await this.page.waitForTimeout(3000);
+      // Wait for the page to automatically refresh after submit
+      console.log('[PENDING-CLOSE] Waiting for page to refresh...');
+      await this.page.waitForLoadState('domcontentloaded');
+      await this.page.waitForLoadState('load');
+      await this.page.waitForLoadState('networkidle');
+      console.log('[PENDING-CLOSE] Page refresh completed');
       
       console.log('[PENDING-CLOSE] Status change completed successfully');
       return true;
@@ -166,8 +170,9 @@ export class CaseStatusService {
     if (!this.page) return false;
     
     try {
-      // Wait for any status badge to update
-      await this.page.waitForTimeout(1000);
+      // Page should already be fully loaded from changeStatusToClose
+      // Just a small delay to ensure any final DOM updates
+      await this.page.waitForTimeout(500);
       
       // Check if status is now "Closed"
       const statusSelectors = [
