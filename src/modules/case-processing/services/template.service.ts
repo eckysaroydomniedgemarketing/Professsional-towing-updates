@@ -45,31 +45,12 @@ export async function fetchActiveTemplates(category: string): Promise<Template[]
   }))
 }
 
-export function mapAddressTypeToCategory(addressType: string | undefined): string {
-  if (!addressType) {
-    return 'No-Address-Generic'
-  }
-
-  const type = addressType.toLowerCase().trim()
-  
-  // Map address types to template categories
-  if (type.includes('home')) {
-    return 'HOME'
-  } else if (type.includes('work')) {
-    return 'WORK'
-  } else if (type.includes('previous')) {
-    return 'PREVIOUS'
-  } else if (type.includes('dmv')) {
-    return 'DMV'
-  } else if (type.includes('additional')) {
-    return 'ADDITIONAL'
-  } else if (type.includes('3rd party')) {
-    return 'THIRD_PARTY'
-  } else if (type.includes('unknown')) {
-    return 'GENERAL'
+export function determineTemplateCategory(hasValidAddresses: boolean): string {
+  // Simple logic: only two categories
+  if (hasValidAddresses) {
+    return 'generic'
   } else {
-    // Default for any other address types
-    return 'GENERAL'
+    return 'all-invalid-address'
   }
 }
 

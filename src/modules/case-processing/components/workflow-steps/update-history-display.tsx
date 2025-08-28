@@ -1,8 +1,10 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Table,
   TableBody,
@@ -28,13 +30,18 @@ interface UpdateHistoryDisplayProps {
   updates?: CaseUpdate[]
   keywordAnalysis?: ExclusionKeywordResults | null
   databaseKeywordResult?: DatabaseKeywordResult | null
+  automaticMode?: boolean
+  onAgentUpdateSelected?: (update: CaseUpdate | null) => void
 }
 
 export function UpdateHistoryDisplay({ 
   updates, 
   keywordAnalysis, 
-  databaseKeywordResult 
+  databaseKeywordResult,
+  automaticMode = false,
+  onAgentUpdateSelected
 }: UpdateHistoryDisplayProps) {
+  const [selectedUpdateId, setSelectedUpdateId] = useState<string | null>(null)
   
   if (!updates || updates.length === 0) {
     return null
@@ -42,6 +49,24 @@ export function UpdateHistoryDisplay({
 
   // Updates are already the 10 most recent from service (ordered by update_date DESC)
   const recentUpdates = updates
+  
+  // Check if update is an agent update
+  const isAgentUpdate = (update: CaseUpdate) => {
+    return update.update_author?.toLowerCase().includes('agent') || false
+  }
+  
+  // Handle checkbox change
+  const handleCheckboxChange = (update: CaseUpdate, checked: boolean) => {
+    if (automaticMode) return // Disabled in automatic mode
+    
+    if (checked) {
+      setSelectedUpdateId(update.id || null)
+      onAgentUpdateSelected?.(update)
+    } else {
+      setSelectedUpdateId(null)
+      onAgentUpdateSelected?.(null)
+    }
+  }
   
   // Helper to check if update contains keywords
   const updateHasKeywords = (updateContent: string) => {
@@ -96,6 +121,7 @@ export function UpdateHistoryDisplay({
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-[50px]">Select</TableHead>
                 <TableHead className="w-[80px]">Update #</TableHead>
                 <TableHead className="w-[150px]">Last Updated By</TableHead>
                 <TableHead className="w-[150px]">Update Date</TableHead>
@@ -107,9 +133,22 @@ export function UpdateHistoryDisplay({
               {recentUpdates.map((update, index) => {
                 const keywordFound = update.details ? updateHasKeywords(update.details) : false
                 const updateNumber = index + 1
+                const isAgent = isAgentUpdate(update)
                 
                 return (
                   <TableRow key={update.id || index}>
+                    <TableCell>
+                      {isAgent ? (
+                        <Checkbox
+                          checked={selectedUpdateId === update.id}
+                          onCheckedChange={(checked) => handleCheckboxChange(update, checked as boolean)}
+                          disabled={automaticMode}
+                          aria-label={`Select agent update ${updateNumber}`}
+                        />
+                      ) : (
+                        <span className="text-muted-foreground text-xs">-</span>
+                      )}
+                    </TableCell>
                     <TableCell className="font-medium">
                       #{updateNumber}
                     </TableCell>

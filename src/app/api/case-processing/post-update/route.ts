@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   try {
     // Parse request body
     body = await request.json()
-    const { caseId, addressId, draftContent, addressText, postingMode = 'manual', sessionId } = body
+    const { caseId, addressId, draftContent, addressText, postingMode = 'manual', sessionId, autoClickProtocol = false } = body
     
     console.log('[Post Update API] Request received:', {
       caseId,
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Use the portal service to post the update (pass caseId for auto-navigation)
-    const result = await portalService.postUpdate(addressId, draftContent, addressText, caseId)
+    const result = await portalService.postUpdate(addressId, draftContent, addressText, caseId, autoClickProtocol)
     
     // Save to database regardless of success/failure
     await saveUpdateHistory({

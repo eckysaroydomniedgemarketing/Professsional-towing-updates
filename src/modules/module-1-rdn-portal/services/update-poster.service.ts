@@ -23,10 +23,11 @@ export class UpdatePosterService {
       // Check for any update-related elements that indicate we're on the right page
       return !!(
         document.querySelector('#updatesForm') ||
+        document.querySelector('form[name="updatesform"]') ||  // RDN form name
         document.querySelector('#updates_type') ||
         document.querySelector('#is_address_update_select') ||
-        document.querySelector('form[name="updatesform"]') ||
-        document.querySelector('[name="comments"]')
+        document.querySelector('[name="comments"]') ||
+        document.querySelector('#create_button')  // The submit button
       )
     })
     
@@ -44,6 +45,7 @@ export class UpdatePosterService {
         const hasFormInFrame = await frame.evaluate(() => {
           return !!(
             document.querySelector('#updatesForm') ||
+            document.querySelector('form[name="updatesform"]') ||
             document.querySelector('#updates_type') ||
             document.querySelector('#is_address_update_select')
           )
@@ -62,22 +64,9 @@ export class UpdatePosterService {
     return { exists: false, frame: null }
   }
 
-  /**
-   * Navigate to specific case page
-   */
-  private async navigateToCase(page: Page, caseId: string): Promise<void> {
-    console.log(`[UPDATE-POSTER] Navigating to case ${caseId}...`)
-    
-    await page.goto(`https://app.recoverydatabase.net/alpha_rdn/module/default/case2/?tab=1&case_id=${caseId}`, {
-      waitUntil: 'networkidle',
-      timeout: 30000
-    })
-    
-    // Wait for navigation and page to load
-    await page.waitForTimeout(3000)
-    
-    console.log(`[UPDATE-POSTER] Successfully navigated to case ${caseId}`)
-  }
+  // Removed navigateToCase method - no longer needed
+  // We should never navigate the entire page when already on a case
+  // Instead, we just switch tabs within the case page
 
   /**
    * Navigate to Updates tab
@@ -94,9 +83,11 @@ export class UpdatePosterService {
     if (!isOnUpdatesTab) {
       console.log('[UPDATE-POSTER] Navigating to Updates tab')
       
-      // Try multiple selectors for Updates tab
+      // Try multiple selectors for Updates tab (including RDN-specific ones)
       const updatesTabClicked = await targetFrame.evaluate(() => {
         const selectors = [
+          '#tab_6 a',                    // RDN specific Updates tab ID
+          '[onclick*="switchTab(6)"]',   // RDN onclick handler for tab 6
           'a[href="#updates"]',
           'a[href*="updates"]',
           'button:has-text("Updates")',
@@ -121,7 +112,9 @@ export class UpdatePosterService {
       
       if (updatesTabClicked) {
         console.log('[UPDATE-POSTER] Clicked Updates tab, waiting for content to load')
-        await targetFrame.page().waitForTimeout(2000)
+        // Get page object - targetFrame could be Page or Frame
+        const pageObj = 'waitForTimeout' in targetFrame ? targetFrame : targetFrame.page()
+        await pageObj.waitForTimeout(2000)
         return true
       } else {
         console.log('[UPDATE-POSTER] Could not find Updates tab, attempting to proceed anyway')
@@ -151,52 +144,68 @@ export class UpdatePosterService {
     })
     
     // Wait briefly for scroll
-    await targetFrame.page().waitForTimeout(1000)
+    const pageObj = 'waitForTimeout' in targetFrame ? targetFrame : targetFrame.page()
+    await pageObj.waitForTimeout(1000)
     
     // Select Type dropdown - "(O) Agent-Update" with value="36"
     await targetFrame.selectOption('#updates_type', '36')
     console.log('[UPDATE-POSTER] Selected Agent-Update type')
     
-    // Find and select matching address in dropdown
-    if (addressText) {
-      const addressOptions = await targetFrame.evaluate(() => {
-        const select = document.querySelector('#is_address_update_select') as HTMLSelectElement
-        if (!select) return []
-        return Array.from(select.options).map(opt => ({
-          value: opt.value,
-          text: opt.textContent?.trim() || ''
-        }))
-      })
-      
+    // Check if address dropdown has any options
+    const addressOptions = await targetFrame.evaluate(() => {
+      const select = document.querySelector('#is_address_update_select') as HTMLSelectElement
+      if (!select) return []
+      return Array.from(select.options).map(opt => ({
+        value: opt.value,
+        text: opt.textContent?.trim() || ''
+      }))
+    })
+    
+    console.log(`[UPDATE-POSTER] Address dropdown has ${addressOptions.length} options`)
+    
+    // Only try to select address if dropdown has options
+    if (addressOptions.length > 0) {
       console.log(`[UPDATE-POSTER] Looking for address match for: "${addressText}"`)
-      console.log(`[UPDATE-POSTER] Available options: ${addressOptions.length}`)
       
-      // Use smart address matching
-      const bestMatch = this.addressMatcher.findBestAddressMatch(addressText, addressOptions)
-      
-      if (bestMatch) {
-        await targetFrame.selectOption('#is_address_update_select', bestMatch.value)
-        console.log(`[UPDATE-POSTER] Selected best matching address: "${bestMatch.text}" (score: ${bestMatch.score})`)
+      if (addressText) {
+        // Use smart address matching
+        const bestMatch = this.addressMatcher.findBestAddressMatch(addressText, addressOptions)
+        
+        if (bestMatch) {
+          await targetFrame.selectOption('#is_address_update_select', bestMatch.value)
+          console.log(`[UPDATE-POSTER] Selected best matching address: "${bestMatch.text}" (score: ${bestMatch.score})`)
+        } else {
+          // No good match found, try to use addressId as fallback
+          console.log('[UPDATE-POSTER] No good address match found, trying addressId fallback')
+          try {
+            await targetFrame.selectOption('#is_address_update_select', addressId)
+            console.log(`[UPDATE-POSTER] Selected address by ID: ${addressId}`)
+          } catch (e) {
+            console.error('[UPDATE-POSTER] Failed to select by addressId, selecting first option')
+            // Last resort - select first non-empty option
+            const firstOption = addressOptions.find((opt: any) => opt.value && opt.value !== '')
+            if (firstOption) {
+              await targetFrame.selectOption('#is_address_update_select', firstOption.value)
+              console.log(`[UPDATE-POSTER] Selected first available address: "${firstOption.text}"`)
+            }
+          }
+        }
       } else {
-        // No good match found, try to use addressId as fallback
-        console.log('[UPDATE-POSTER] No good address match found, trying addressId fallback')
+        // Use addressId directly
         try {
           await targetFrame.selectOption('#is_address_update_select', addressId)
           console.log(`[UPDATE-POSTER] Selected address by ID: ${addressId}`)
         } catch (e) {
-          console.error('[UPDATE-POSTER] Failed to select by addressId, selecting first option')
-          // Last resort - select first non-empty option
+          // If addressId selection fails, select first option
           const firstOption = addressOptions.find((opt: any) => opt.value && opt.value !== '')
           if (firstOption) {
             await targetFrame.selectOption('#is_address_update_select', firstOption.value)
-            console.log(`[UPDATE-POSTER] Selected first available address: "${firstOption.text}"`)
+            console.log(`[UPDATE-POSTER] Selected first available address as fallback`)
           }
         }
       }
     } else {
-      // Use addressId directly
-      await targetFrame.selectOption('#is_address_update_select', addressId)
-      console.log(`[UPDATE-POSTER] Selected address by ID: ${addressId}`)
+      console.log('[UPDATE-POSTER] Address dropdown is empty, skipping address selection')
     }
     
     // Fill Details textarea with draft content
@@ -208,7 +217,91 @@ export class UpdatePosterService {
     console.log('[UPDATE-POSTER] Clicked create button')
     
     // Wait for submission
-    await targetFrame.page().waitForTimeout(2000)
+    await pageObj.waitForTimeout(2000)
+  }
+
+  /**
+   * Click protocol buttons after posting update
+   */
+  private async clickProtocolButtons(page: Page): Promise<void> {
+    try {
+      console.log('[UPDATE-POSTER] Waiting for page to refresh after update posting...')
+      await page.waitForTimeout(3000)
+      
+      // Find the most recent update (should be the first one after refresh)
+      const updateFound = await page.evaluate(() => {
+        // Look for update containers - adjust selector based on actual RDN structure
+        const updates = document.querySelectorAll('[id^="updatearea_"], .update-container, .case-update')
+        return updates.length > 0
+      })
+      
+      if (!updateFound) {
+        console.log('[UPDATE-POSTER] No update containers found after refresh')
+        return
+      }
+      
+      // Click Transfer to Client button
+      const transferClicked = await page.evaluate(() => {
+        const buttons = Array.from(document.querySelectorAll('button'))
+        const transferBtn = buttons.find(btn => 
+          btn.className.includes('js-transfer2client') || 
+          btn.textContent?.includes('Transfer to Client')
+        )
+        if (transferBtn) {
+          (transferBtn as HTMLElement).click()
+          return true
+        }
+        return false
+      })
+      
+      if (transferClicked) {
+        console.log('[UPDATE-POSTER] Clicked Transfer to Client button')
+        await page.waitForTimeout(500)
+      }
+      
+      // Click Client button
+      const clientClicked = await page.evaluate(() => {
+        const buttons = Array.from(document.querySelectorAll('button'))
+        const clientBtn = buttons.find(btn => 
+          btn.textContent?.trim() === 'Client' ||
+          (btn.className.includes('btn-link') && btn.textContent?.includes('Client'))
+        )
+        if (clientBtn && !clientBtn.textContent?.includes('Transfer')) {
+          (clientBtn as HTMLElement).click()
+          return true
+        }
+        return false
+      })
+      
+      if (clientClicked) {
+        console.log('[UPDATE-POSTER] Clicked Client button')
+        await page.waitForTimeout(500)
+      }
+      
+      // Click Collector button
+      const collectorClicked = await page.evaluate(() => {
+        const buttons = Array.from(document.querySelectorAll('button'))
+        const collectorBtn = buttons.find(btn => 
+          btn.textContent?.trim() === 'Collector' ||
+          btn.getAttribute('onclick')?.includes('emailSlider(\'collector\'') ||
+          (btn.className.includes('btn-link') && btn.textContent?.includes('Collector'))
+        )
+        if (collectorBtn) {
+          (collectorBtn as HTMLElement).click()
+          return true
+        }
+        return false
+      })
+      
+      if (collectorClicked) {
+        console.log('[UPDATE-POSTER] Clicked Collector button')
+        await page.waitForTimeout(500)
+      }
+      
+      console.log('[UPDATE-POSTER] Protocol buttons clicking completed')
+    } catch (error) {
+      console.error('[UPDATE-POSTER] Error clicking protocol buttons:', error)
+    }
   }
 
   /**
@@ -218,15 +311,60 @@ export class UpdatePosterService {
     addressId: string,
     draftContent: string,
     addressText?: string,
-    caseId?: string
+    caseId?: string,
+    autoClickProtocol: boolean = false
   ): Promise<NavigationResult> {
     try {
-      const page = this.browserManager.getPage()
-      if (!page) {
-        return {
-          success: false,
-          error: 'No browser page available',
-          nextStep: 'error' as const
+      // Always use the case page (Tab 1) for posting updates
+      let casePage = this.browserManager.getCasePage()
+      let page: Page
+      
+      if (casePage) {
+        console.log('[UPDATE-POSTER] Using case detail page (Tab 1) for update posting')
+        page = casePage
+      } else {
+        // Try to find case tab from browser context
+        console.log('[UPDATE-POSTER] Case page reference lost, searching for case tab...')
+        const context = this.browserManager.getContext()
+        
+        if (context) {
+          const pages = context.pages()
+          console.log(`[UPDATE-POSTER] Found ${pages.length} open tabs`)
+          
+          // Find the case tab (has case_id in URL)
+          const caseTab = pages.find(p => {
+            const url = p.url()
+            const isCase = url.includes('case_id=') && (url.includes('/case') || url.includes('case2'))
+            if (isCase) {
+              console.log(`[UPDATE-POSTER] Found potential case tab with URL: ${url}`)
+            }
+            return isCase
+          })
+          
+          if (caseTab) {
+            console.log('[UPDATE-POSTER] Found case tab, setting as case page reference')
+            // Bring the case tab to front
+            await caseTab.bringToFront()
+            console.log('[UPDATE-POSTER] Brought case tab to front')
+            this.browserManager.setCasePage(caseTab)
+            page = caseTab
+          } else {
+            // No case tab found - this is an error
+            console.error('[UPDATE-POSTER] No case tab found among open tabs')
+            const tabUrls = pages.map(p => p.url()).join(', ')
+            console.error(`[UPDATE-POSTER] Open tab URLs: ${tabUrls}`)
+            return {
+              success: false,
+              error: 'No case tab found. Please ensure a case is open before posting updates.',
+              nextStep: 'error' as const
+            }
+          }
+        } else {
+          return {
+            success: false,
+            error: 'Browser context not available',
+            nextStep: 'error' as const
+          }
         }
       }
 
@@ -240,52 +378,45 @@ export class UpdatePosterService {
       let formCheck = await this.checkForUpdateForm(page)
       console.log('[UPDATE-POSTER] Update form exists:', formCheck.exists)
       
-      // Store the frame context for later use
-      let targetFrame = formCheck.frame || page
-      
-      // Check if we're already on a case page
-      const isOnCasePage = currentUrl.includes('/case') || currentUrl.includes('case_id')
-      
-      // Only navigate if form doesn't exist and caseId is provided
-      // But skip navigation if we're already on ANY case page with the form
-      if (!formCheck.exists && caseId && !isOnCasePage) {
-        try {
-          await this.navigateToCase(page, caseId)
+      // If form doesn't exist, we need to switch to Updates tab
+      if (!formCheck.exists) {
+        console.log('[UPDATE-POSTER] Form not found, switching to Updates tab within case page')
+        
+        // Navigate to Updates tab within the same case page
+        const tabNavigated = await this.navigateToUpdatesTab(page)
+        
+        if (tabNavigated) {
+          console.log('[UPDATE-POSTER] Updates tab clicked, waiting for form to appear')
+          // Give time for tab content to load
+          await page.waitForTimeout(2000)
           
-          // Re-check for form after navigation
+          // Re-check for form after switching tabs
           formCheck = await this.checkForUpdateForm(page)
           
-          if (!formCheck.exists) {
-            throw new Error('Navigation completed but update form not found')
+          if (formCheck.exists) {
+            console.log('[UPDATE-POSTER] Update form found after switching to Updates tab')
+          } else {
+            console.error('[UPDATE-POSTER] Form still not found after switching tabs')
+            return {
+              success: false,
+              error: 'Could not find update form. Make sure you are on a case page.',
+              nextStep: 'error' as const
+            }
           }
-          
-          // Update target frame if form was found
-          targetFrame = formCheck.frame || page
-        } catch (navError) {
-          console.error('[UPDATE-POSTER] Failed to navigate to case page:', navError)
+        } else {
+          console.error('[UPDATE-POSTER] Could not navigate to Updates tab')
           return {
             success: false,
-            error: `Failed to navigate to case ${caseId}: ${navError instanceof Error ? navError.message : 'Unknown error'}`,
+            error: 'Failed to switch to Updates tab within case page',
             nextStep: 'error' as const
           }
         }
-      } else if (formCheck.exists) {
-        console.log('[UPDATE-POSTER] Already on case page with update form, skipping navigation')
-      } else if (isOnCasePage) {
-        console.log('[UPDATE-POSTER] Already on a case page, will try to navigate to Updates tab')
+      } else {
+        console.log('[UPDATE-POSTER] Update form already visible, no tab switching needed')
       }
       
-      // Navigate to Updates tab if not already there
-      const tabNavigated = await this.navigateToUpdatesTab(targetFrame)
-      
-      if (tabNavigated) {
-        // Re-check for form after clicking Updates tab
-        formCheck = await this.checkForUpdateForm(page)
-        if (formCheck.exists) {
-          console.log('[UPDATE-POSTER] Update form appeared after clicking Updates tab')
-          targetFrame = formCheck.frame || page
-        }
-      }
+      // Store the frame context for later use
+      let targetFrame = formCheck.frame || page
       
       // Wait for update form to be visible
       console.log('[UPDATE-POSTER] Waiting for update form elements')
@@ -314,6 +445,12 @@ export class UpdatePosterService {
       
       // Fill and submit the form
       await this.fillAndSubmitForm(targetFrame, addressId, draftContent, addressText)
+      
+      // If auto-click protocol is enabled, click the protocol buttons after page refreshes
+      if (autoClickProtocol) {
+        console.log('[UPDATE-POSTER] Auto-click protocol buttons enabled')
+        await this.clickProtocolButtons(page)
+      }
       
       return {
         success: true,

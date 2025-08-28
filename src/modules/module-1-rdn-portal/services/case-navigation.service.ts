@@ -32,6 +32,10 @@ export class CaseNavigationService {
       updatedState.currentStep = NavigationStep.CASE_DETAIL
       updatedState.currentCaseId = caseId
       
+      // Set case page reference when navigating to specific case
+      this.browserManager.setCasePage(page)
+      console.log(`[CASE-NAV] Set case page reference for specific case ${caseId}`)
+      
       // Extract case data after navigating to the case
       console.log(`[CASE-NAV] Starting data extraction for case ${caseId}`)
       updatedState.currentStep = NavigationStep.EXTRACTING_DATA
@@ -112,18 +116,50 @@ export class CaseNavigationService {
       await page.waitForLoadState('domcontentloaded')
       console.log('[CASE-NAV] Case listing page brought to front')
       
+      // Validate we're on the correct page (not a case detail)
+      const currentUrl = page.url()
+      console.log(`[CASE-NAV] Current page URL: ${currentUrl}`)
+      
+      if (currentUrl.includes('case_id=') && !currentUrl.includes('case_listing')) {
+        console.error('[CASE-NAV] ERROR: Still on case detail page, not listing page')
+        return {
+          result: {
+            success: false,
+            nextStep: NavigationStep.ERROR,
+            error: 'Wrong tab selected - still on case detail page. URL: ' + currentUrl
+          },
+          updatedState: state,
+          lastCaseId: lastProcessedCaseId
+        }
+      }
+      
       // Get the mainFrame iframe where the case table is located
       const frame = page.frame({ name: 'mainFrame' })
       if (!frame) {
         console.log('[CASE-NAV] mainFrame not found, waiting for it')
-        await page.waitForSelector('iframe[name="mainFrame"]', { timeout: 10000 })
+        try {
+          await page.waitForSelector('iframe[name="mainFrame"]', { timeout: 10000 })
+        } catch (error) {
+          console.error('[CASE-NAV] Timeout waiting for mainFrame iframe')
+          console.error('[CASE-NAV] Page might be incorrect. Current URL:', currentUrl)
+          return {
+            result: {
+              success: false,
+              nextStep: NavigationStep.ERROR,
+              error: `Could not find mainFrame iframe. Page URL: ${currentUrl}`
+            },
+            updatedState: state,
+            lastCaseId: lastProcessedCaseId
+          }
+        }
+        
         const frameRetry = page.frame({ name: 'mainFrame' })
         if (!frameRetry) {
           return {
             result: {
               success: false,
               nextStep: NavigationStep.ERROR,
-              error: 'Could not access mainFrame iframe'
+              error: 'Could not access mainFrame iframe after waiting'
             },
             updatedState: state,
             lastCaseId: lastProcessedCaseId
@@ -226,8 +262,10 @@ export class CaseNavigationService {
       // Switch to new tab and wait for it to load
       await newPage.waitForLoadState('domcontentloaded')
       
-      // Update browser manager's page reference to the new tab
+      // Update browser manager's page references
       browserManager.setPage(newPage)
+      browserManager.setCasePage(newPage)  // Track this as the case detail page
+      console.log(`[CASE-NAV] Set case page reference for case ${caseId}`)
       
       // Extract data for the new case
       if (caseId) {

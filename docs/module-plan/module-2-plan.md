@@ -124,23 +124,23 @@ Module 2 is a pure data extraction module. It extracts all case-related data fro
   </div>
   ```
   
-- **Multiple Addresses**: Cases can have multiple addresses (home, work, alternate, etc.)
+- **Multiple Addresses**: Cases can have multiple addresses with validity status
   - **Address List Structure** (likely in a section or table):
     ```html
     <div class="addresses-section">
       <div class="address-entry">
-        <span class="address-type">Home</span>
+        <span class="address-type">Address Type</span>
         <span class="address-text">1101 EUCLID AVE APT 518<br>CLEVELAND, OH 44115</span>
       </div>
       <div class="address-entry">
-        <span class="address-type">Work</span>
+        <span class="address-type">Address Type</span>
         <span class="address-text">2200 MAIN ST<br>CLEVELAND, OH 44116</span>
       </div>
     </div>
     ```
   
 - **Data to Extract**: 
-  - All addresses with their types (Home, Work, Alternate, etc.)
+  - All addresses with their types (stored as-is from RDN)
   - Full address for each
   - ZIP code for each address (last 5 digits)
   - Primary/default address indicator
@@ -286,7 +286,7 @@ Module 2 is a pure data extraction module. It extracts all case-related data fro
 - **Columns**:
   - `id` (UUID, primary key)
   - `case_id` (text, foreign key to case_updates.case_id)
-  - `address_type` (text) - Values: 'Home', 'Work', 'Alternate', etc.
+  - `address_type` (text) - Stored as-is from RDN portal
   - `full_address` (text)
   - `street_address` (text)
   - `city` (text)

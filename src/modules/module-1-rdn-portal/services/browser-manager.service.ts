@@ -4,6 +4,8 @@ export class BrowserManager {
   private browser: Browser | null = null
   private context: BrowserContext | null = null
   private page: Page | null = null
+  private listingPage: Page | null = null  // Track case listing page
+  private casePage: Page | null = null      // Track case detail page
   private debug = true
   private initializationComplete = false
 
@@ -89,6 +91,31 @@ export class BrowserManager {
     this.log('BROWSER', 'Page reference updated', { hasPage: !!page })
   }
 
+  // New methods for tracking specific pages
+  setListingPage(page: Page | null): void {
+    this.listingPage = page
+    this.log('BROWSER', 'Listing page reference updated', { 
+      hasListingPage: !!page,
+      url: page?.url()
+    })
+  }
+
+  getListingPage(): Page | null {
+    return this.listingPage
+  }
+
+  setCasePage(page: Page | null): void {
+    this.casePage = page
+    this.log('BROWSER', 'Case page reference updated', { 
+      hasCasePage: !!page,
+      url: page?.url()
+    })
+  }
+
+  getCasePage(): Page | null {
+    return this.casePage
+  }
+
   async getCurrentUrl(): Promise<string | null> {
     if (!this.page) return null
     return this.page.url()
@@ -121,6 +148,8 @@ export class BrowserManager {
       this.browser = null
       this.context = null
       this.page = null
+      this.listingPage = null
+      this.casePage = null
       this.log('BROWSER', 'Browser closed successfully')
     }
   }

@@ -164,9 +164,10 @@ export class RDNPortalService {
     addressId: string,
     draftContent: string,
     addressText?: string,
-    caseId?: string
+    caseId?: string,
+    autoClickProtocol?: boolean
   ): Promise<NavigationResult> {
-    return this.updatePoster.postUpdate(addressId, draftContent, addressText, caseId)
+    return this.updatePoster.postUpdate(addressId, draftContent, addressText, caseId, autoClickProtocol)
   }
 
   async executeFullWorkflow(): Promise<NavigationResult> {

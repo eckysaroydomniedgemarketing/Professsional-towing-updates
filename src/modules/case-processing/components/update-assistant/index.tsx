@@ -10,6 +10,7 @@ import { LastUpdate } from "./last-update"
 import { DraftSection } from "./draft-section"
 import { UpdateAlert } from "./update-alert"
 import { AutoPostCountdown } from "./auto-post-countdown"
+import { AIGeneratedContent } from "./ai-generated-content"
 import { useTemplateLoader } from "./use-template-loader"
 import { generateDraft } from "../../services/template.service"
 
@@ -20,6 +21,8 @@ interface UpdateAssistantProps {
   onPostUpdate: (content: string, addressId: string) => Promise<void>
   automaticMode: boolean
   onGetNextCase: () => void
+  selectedAgentUpdate?: any
+  autoClickProtocol?: boolean
 }
 
 export function UpdateAssistant({ 
@@ -28,7 +31,9 @@ export function UpdateAssistant({
   onSkip, 
   onPostUpdate,
   automaticMode,
-  onGetNextCase
+  onGetNextCase,
+  selectedAgentUpdate,
+  autoClickProtocol = false
 }: UpdateAssistantProps) {
   const [draftContent, setDraftContent] = useState<string>("")
   const [isPosting, setIsPosting] = useState(false)
@@ -37,6 +42,8 @@ export function UpdateAssistant({
   const [autoPostCountdown, setAutoPostCountdown] = useState<number | null>(null)
   const [autoPostTimer, setAutoPostTimer] = useState<NodeJS.Timeout | null>(null)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const [aiGeneratedContent, setAiGeneratedContent] = useState<string | null>(null)
+  const [isLoadingAi, setIsLoadingAi] = useState(false)
   
   // Use ref to track if posting is in progress (prevents race conditions)
   const isPostingRef = useRef(false)
@@ -53,6 +60,79 @@ export function UpdateAssistant({
     setSelectedTemplateId
   } = useTemplateLoader(caseData, sessionId, setIsInitialLoad)
 
+  // Process agent update with AI when selected
+  const processAgentUpdate = async () => {
+    if (!selectedAgentUpdate || !selectedAddressId || !selectedTemplateId) {
+      console.log('Missing requirements for AI processing:', { 
+        hasAgentUpdate: !!selectedAgentUpdate, 
+        hasAddress: !!selectedAddressId, 
+        hasTemplate: !!selectedTemplateId 
+      })
+      return
+    }
+
+    const template = templates.find(t => t.id === selectedTemplateId)
+    if (!template) return
+
+    setIsLoadingAi(true)
+    setAiGeneratedContent(null)
+
+    try {
+      const selectedAddress = caseData.addresses?.find(a => a.id === selectedAddressId)
+      const addressText = selectedAddress?.full_address || 'No address available'
+      
+      console.log('Processing agent update with AI:', {
+        address: addressText,
+        agentUpdate: selectedAgentUpdate.details,
+        template: template.template_text
+      })
+
+      const response = await fetch('/api/case-processing/process-agent-update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          selectedAddress: addressText,
+          agentUpdate: selectedAgentUpdate.details || '',
+          selectedTemplate: template.template_text
+        })
+      })
+
+      const result = await response.json()
+      
+      if (result.success) {
+        setAiGeneratedContent(result.processedContent)
+        console.log('AI processing successful')
+      } else {
+        console.error('AI processing failed:', result.error)
+      }
+    } catch (error) {
+      console.error('Error processing agent update:', error)
+    } finally {
+      setIsLoadingAi(false)
+    }
+  }
+
+  // Trigger AI processing when agent update and selections are ready
+  useEffect(() => {
+    if (selectedAgentUpdate && selectedAddressId && selectedTemplateId && !automaticMode) {
+      processAgentUpdate()
+    }
+  }, [selectedAgentUpdate, selectedAddressId, selectedTemplateId])
+
+  // Handle using AI content as draft
+  const handleUseAiAsDraft = () => {
+    if (aiGeneratedContent) {
+      setDraftContent(aiGeneratedContent)
+      console.log('Using AI-generated content as draft')
+    }
+  }
+
+  // Handle regenerate AI content
+  const handleRegenerateAi = () => {
+    processAgentUpdate()
+  }
 
   // Generate draft when selections change
   useEffect(() => {
@@ -186,7 +266,8 @@ export function UpdateAssistant({
           draftContent: draftContent,
           addressText: addressText,
           postingMode: isAutomatic ? 'automatic' : 'manual',
-          sessionId: sessionId
+          sessionId: sessionId,
+          autoClickProtocol: autoClickProtocol
         })
       })
       
@@ -292,6 +373,19 @@ export function UpdateAssistant({
           />
 
           <Separator />
+
+          {/* AI Generated Content Section */}
+          {selectedAgentUpdate && !automaticMode && (
+            <>
+              <AIGeneratedContent
+                content={aiGeneratedContent}
+                isLoading={isLoadingAi}
+                onUseAsDraft={handleUseAiAsDraft}
+                onRegenerate={handleRegenerateAi}
+              />
+              <Separator />
+            </>
+          )}
 
           {/* Draft Section */}
           {isLoading ? (

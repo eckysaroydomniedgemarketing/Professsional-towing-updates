@@ -29,7 +29,7 @@ import { useAutoSkip } from "../../hooks/use-auto-skip"
 interface ValidationStepProps extends WorkflowStepProps {
   caseData?: Case
   onValidationComplete?: (result: CaseValidationResult | null) => void
-  onShowUpdateAssistant?: () => void
+  onShowUpdateAssistant?: (selectedAgentUpdate?: any) => void
   onGetNextCase?: () => void
   automaticMode?: boolean
 }
@@ -44,6 +44,9 @@ export function ValidationStep({
   onGetNextCase,
   automaticMode = false
 }: ValidationStepProps) {
+  // Track selected agent update
+  const [selectedAgentUpdate, setSelectedAgentUpdate] = useState<any>(null)
+  
   // Use custom hooks
   const { validationResult, isLoading, showClientExclusion } = useValidationLogic(
     caseData,
@@ -131,7 +134,7 @@ export function ValidationStep({
                 console.log('[Auto-Click] ✅ Auto-clicking Update Draft button NOW!')
                 setHasAutoClicked(true)  // Mark as completed to prevent restart
                 if (validationResult?.hasUserUpdate && onShowUpdateAssistant) {
-                  onShowUpdateAssistant()
+                  onShowUpdateAssistant(selectedAgentUpdate)
                 } else {
                   onNext()
                 }
@@ -256,6 +259,8 @@ export function ValidationStep({
                 updates={caseData.updates}
                 keywordAnalysis={keywordAnalysis}
                 databaseKeywordResult={databaseKeywordResult}
+                automaticMode={automaticMode}
+                onAgentUpdateSelected={setSelectedAgentUpdate}
               />
             )}
 
@@ -287,7 +292,7 @@ export function ValidationStep({
             onClick={() => {
               // If user update exists, show Update Assistant; otherwise continue to next step
               if (validationResult?.hasUserUpdate && onShowUpdateAssistant) {
-                onShowUpdateAssistant()
+                onShowUpdateAssistant(selectedAgentUpdate)
               } else {
                 onNext()
               }

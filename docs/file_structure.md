@@ -1,15 +1,11 @@
-# Project File Structure
+# File Structure Map
 
-+-- .claude/
-|   +-- .mcp.json — 43 lines — MCP server configuration for Claude
-|   +-- settings.local.json — 44 lines — Local Claude settings
-|
 +-- public/
-|   +-- file.svg — 0 lines — SVG icon for file representation
-|   +-- globe.svg — 0 lines — SVG icon for global/internet representation  
-|   +-- next.svg — 0 lines — Next.js framework logo
-|   +-- vercel.svg — 0 lines — Vercel platform logo
-|   +-- window.svg — 0 lines — SVG icon for window/browser representation
+|   +-- file.svg — 1 lines — SVG icon for file representation
+|   +-- globe.svg — 1 lines — SVG icon for global/internet representation  
+|   +-- next.svg — 1 lines — Next.js framework logo
+|   +-- vercel.svg — 1 lines — Vercel platform logo
+|   +-- window.svg — 1 lines — SVG icon for window/browser representation
 |
 +-- src/
 |   +-- app/
@@ -88,7 +84,7 @@
 |   |   |   |   +-- page.tsx — 21 lines — Dynamic sign-in page component
 |   |   +-- sso-callback/
 |   |   |   +-- page.tsx — 24 lines — SSO callback handler page
-|   |   +-- favicon.ico — 30 lines — Application favicon
+|   |   +-- favicon.ico — 1 lines — Application favicon
 |   |   +-- globals.css — 75 lines — Global CSS styles
 |   |   +-- layout.tsx — 38 lines — Root layout component
 |   |   +-- page.module.css — 167 lines — Page-specific CSS module
@@ -128,7 +124,6 @@
 |   |   |   +-- select.tsx — 160 lines — Select dropdown component
 |   |   |   +-- separator.tsx — 30 lines — Separator component
 |   |   |   +-- sheet.tsx — 140 lines — Sheet/drawer component
-|   |   |   +-- sidebar.tsx — 1 lines — Sidebar re-export
 |   |   |   +-- skeleton.tsx — 15 lines — Skeleton loader component
 |   |   |   +-- switch.tsx — 28 lines — Switch toggle component
 |   |   |   +-- table.tsx — 116 lines — Table component
@@ -159,7 +154,7 @@
 |   |   |   |   |   +-- index.tsx — 365 lines — Update assistant main component
 |   |   |   |   |   +-- last-update.tsx — 101 lines — Last update display component
 |   |   |   |   |   +-- update-alert.tsx — 51 lines — Update alert component
-|   |   |   |   |   +-- use-template-loader.ts — 253 lines — Template loader hook
+|   |   |   |   |   |   +-- use-template-loader.ts — 243 lines — Template loader hook
 |   |   |   |   +-- validation/
 |   |   |   |   |   +-- validation-keyword-analysis.tsx — 202 lines — Keyword analysis component
 |   |   |   |   |   +-- validation-order-status.tsx — 76 lines — Order status validation
@@ -194,9 +189,9 @@
 |   |   |   |   +-- openrouter.service.ts — 211 lines — OpenRouter API service
 |   |   |   |   +-- post-update.service.ts — 49 lines — Post update service
 |   |   |   |   +-- supabase-case.service.ts — 370 lines — Supabase case operations
-|   |   |   |   +-- template.service.ts — 154 lines — Template management service
+|   |   |   |   +-- template.service.ts — 135 lines — Template management service
 |   |   |   |   +-- update-history.service.ts — 52 lines — Update history service
-|   |   |   |   +-- update-poster.service.ts — 386 lines — Update posting service
+|   |   |   |   +-- update-poster.service.ts — 495 lines — Update posting service
 |   |   |   |   +-- validation-logic.service.ts — 96 lines — Validation logic service
 |   |   |   +-- types/
 |   |   |   |   +-- case.types.ts — 92 lines — Case type definitions
@@ -231,15 +226,15 @@
 |   |   |   +-- services/
 |   |   |   |   +-- address-matcher.service.ts — 94 lines — Address matching and parsing
 |   |   |   |   +-- auth-manager.service.ts — 124 lines — Authentication management
-|   |   |   |   +-- browser-manager.service.ts — 168 lines — Browser automation service
-|   |   |   |   +-- case-navigation.service.ts — 303 lines — Case navigation service
+|   |   |   |   +-- browser-manager.service.ts — 197 lines — Browser automation service
+|   |   |   |   +-- case-navigation.service.ts — 341 lines — Case navigation service
 |   |   |   |   +-- case-processor.service.ts — 369 lines — Case processing service
 |   |   |   |   +-- navigation-manager.service.ts — 499 lines — Navigation management
 |   |   |   |   +-- portal-auth-workflow.service.ts — 53 lines — Portal auth workflow
 |   |   |   |   +-- portal-navigation-workflow.service.ts — 138 lines — Portal navigation
 |   |   |   |   +-- rdn-portal-service.ts — 234 lines — RDN portal main service
-|   |   |   |   +-- update-poster.service.ts — 331 lines — Update posting service
-|   |   |   |   +-- workflow-executor.service.ts — 208 lines — Workflow execution service
+|   |   |   |   +-- update-poster.service.ts — 360 lines — Update posting service
+|   |   |   |   +-- workflow-executor.service.ts — 279 lines — Workflow execution service
 |   |   |   |   +-- workflow-state.service.ts — 78 lines — Workflow state management
 |   |   |   +-- types/
 |   |   |   |   +-- index.ts — 64 lines — Module type definitions
@@ -329,13 +324,14 @@
 |   |   +-- 20240101000000_create_case_tables.sql — 42 lines — Case tables migration
 |   |   +-- 20240108_create_pending_close_log.sql — 41 lines — Pending close log migration
 |
-+-- CLAUDE.md — 74 lines — Claude AI project instructions
-+-- README.md — 162 lines — Project documentation
++-- CLAUDE.md — 70 lines — Claude AI project instructions
++-- README.md — 36 lines — Project documentation
 +-- components.json — 16 lines — shadcn/ui component configuration
 +-- eslint.config.mjs — 16 lines — ESLint configuration
 +-- next-env.d.ts — 5 lines — Next.js TypeScript environment definitions
 +-- next.config.ts — 11 lines — Next.js configuration
-+-- package-lock.json — 🔥 8382 lines — NPM dependency lock file
++-- dev.log — 🔥 > 500 lines — Development log file
++-- package-lock.json — 🔥 > 500 lines — NPM dependency lock file
 +-- package.json — 54 lines — Project dependencies and scripts
 +-- postcss.config.mjs — 8 lines — PostCSS configuration
 +-- tailwind.config.ts — 94 lines — Tailwind CSS configuration

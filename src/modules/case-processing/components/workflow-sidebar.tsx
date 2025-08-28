@@ -25,6 +25,8 @@ interface WorkflowSidebarProps {
   totalSteps?: number
   automaticMode?: boolean
   onAutomaticModeChange?: (mode: boolean) => void
+  autoClickProtocol?: boolean
+  onAutoClickProtocolChange?: (value: boolean) => void
 }
 
 export function WorkflowSidebar({
@@ -40,7 +42,9 @@ export function WorkflowSidebar({
   currentStep = 0,
   totalSteps = 8,
   automaticMode = false,
-  onAutomaticModeChange
+  onAutomaticModeChange,
+  autoClickProtocol = false,
+  onAutoClickProtocolChange
 }: WorkflowSidebarProps) {
   const [caseIdInput, setCaseIdInput] = useState("")
   const [automationEnabled, setAutomationEnabled] = useState(false)
@@ -113,6 +117,35 @@ export function WorkflowSidebar({
             {automaticMode && (
               <p className="text-xs text-muted-foreground">
                 Rejected cases will automatically skip to the next case
+              </p>
+            )}
+          </div>
+          
+          <Separator />
+          
+          {/* Protocol Buttons Automation */}
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="protocol-automation"
+                checked={autoClickProtocol}
+                onCheckedChange={(checked) => {
+                  if (onAutoClickProtocolChange) {
+                    onAutoClickProtocolChange(checked)
+                  }
+                }}
+                disabled={workflowStatus === 'running' || showWorkflowControl}
+              />
+              <Label 
+                htmlFor="protocol-automation" 
+                className="text-sm font-normal cursor-pointer"
+              >
+                Auto-click Protocol Buttons
+              </Label>
+            </div>
+            {autoClickProtocol && (
+              <p className="text-xs text-muted-foreground">
+                Automatically clicks Transfer to Client, Client & Collector buttons after posting
               </p>
             )}
           </div>

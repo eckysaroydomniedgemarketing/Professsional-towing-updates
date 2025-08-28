@@ -57,17 +57,88 @@ export class WorkflowExecutorService {
         const pages = context.pages()
         console.log(`[WORKFLOW] Found ${pages.length} open tabs`)
         
-        // Close all tabs except the first one (case listing)
-        if (pages.length > 1) {
-          for (let i = pages.length - 1; i > 0; i--) {
-            await pages[i].close()
-            console.log(`[WORKFLOW] Closed tab ${i}`)
+        // Identify tabs by their content/URL instead of position
+        let listingPage = null
+        const tabsToClose = []
+        
+        for (let i = 0; i < pages.length; i++) {
+          const page = pages[i]
+          const url = page.url()
+          console.log(`[WORKFLOW] Tab ${i}: URL=${url}`)
+          
+          try {
+            // Check if this page has the mainFrame iframe (only listing page has it)
+            const hasMainFrame = await page.$('iframe[name="mainFrame"]') !== null
+            
+            // Check URL patterns
+            const isListingUrl = !url.includes('case_id=') || url.includes('case_listing')
+            
+            console.log(`[WORKFLOW] Tab ${i}: hasMainFrame=${hasMainFrame}, isListingUrl=${isListingUrl}`)
+            
+            if (hasMainFrame && isListingUrl) {
+              // This is the case listing page
+              listingPage = page
+              console.log(`[WORKFLOW] Tab ${i} identified as case listing page`)
+            } else {
+              // This is a case detail page or other page
+              tabsToClose.push(page)
+              console.log(`[WORKFLOW] Tab ${i} marked for closing`)
+            }
+          } catch (error) {
+            console.log(`[WORKFLOW] Error checking tab ${i}:`, error)
+            // If we can't check the tab, mark it for closing unless it's the only one
+            if (pages.length > 1) {
+              tabsToClose.push(page)
+            }
           }
         }
         
-        // Switch to first tab (should be case listing)
-        const listingPage = pages[0]
+        // If we couldn't identify the listing page, use fallback logic
+        if (!listingPage && pages.length > 0) {
+          console.log('[WORKFLOW] Could not identify listing page, using first tab as fallback')
+          listingPage = pages[0]
+          // Remove it from tabs to close if it was added
+          const index = tabsToClose.indexOf(listingPage)
+          if (index > -1) {
+            tabsToClose.splice(index, 1)
+          }
+        }
+        
+        // Close identified non-listing tabs
+        for (const page of tabsToClose) {
+          try {
+            await page.close()
+            console.log('[WORKFLOW] Closed non-listing tab')
+          } catch (error) {
+            console.log('[WORKFLOW] Error closing tab:', error)
+          }
+        }
+        
+        // Clear case page reference when closing tabs
+        this.browserManager.setCasePage(null)
+        console.log('[WORKFLOW] Cleared case page reference')
+        
+        // Ensure we have the listing page
+        if (!listingPage) {
+          return {
+            result: {
+              success: false,
+              nextStep: NavigationStep.ERROR,
+              error: 'Could not find case listing page'
+            },
+            updatedState: state,
+            lastCaseId: lastProcessedCaseId
+          }
+        }
+        
+        // Bring the listing page to front
         await listingPage.bringToFront()
+        console.log('[WORKFLOW] Case listing page brought to front')
+        
+        // Update browser manager's page references
+        this.browserManager.setPage(listingPage)
+        this.browserManager.setListingPage(listingPage)
+        console.log('[WORKFLOW] Updated browser manager page references')
         
         // Update state to show we're back at case listing
         updatedState.currentStep = NavigationStep.CASE_LISTING

@@ -3,7 +3,7 @@ import { Case } from "../../types/case.types"
 import { 
   fetchActiveTemplates, 
   getLastUserUpdate,
-  mapAddressTypeToCategory,
+  determineTemplateCategory,
   isUpdateAllowed,
   Template 
 } from "../../services/template.service"
@@ -105,8 +105,9 @@ export function useTemplateLoader(
         console.log(`Found ${validAddresses.length} valid addresses out of ${caseData.addresses.length} total`)
         
         let selectedAddress = null
+        const hasValidAddresses = validAddresses.length > 0
         
-        if (validAddresses.length === 0) {
+        if (!hasValidAddresses) {
           // No valid addresses available
           console.log('Warning: No valid addresses available for this case')
           setSelectedAddressId('NO_VALID_ADDRESS')
@@ -136,13 +137,10 @@ export function useTemplateLoader(
         
         if (selectedAddress) {
           setSelectedAddressId(selectedAddress.id)
-          
-          // Load templates based on selected address category
-          await loadTemplatesForAddress(selectedAddress.address_type)
-        } else if (selectedAddressId === 'NO_VALID_ADDRESS') {
-          // Load templates for no-address scenario
-          await loadTemplatesForAddress(undefined)
         }
+        
+        // Load templates based on whether we have valid addresses
+        await loadTemplatesBasedOnValidity(hasValidAddresses)
       }
       
       setIsLoading(false)
@@ -150,9 +148,9 @@ export function useTemplateLoader(
       setTimeout(() => setIsInitialLoad(false), 1000)
     }
     
-    async function loadTemplatesForAddress(addressType: string | undefined) {
-      const category = mapAddressTypeToCategory(addressType)
-      console.log(`Loading templates for address type: "${addressType}" -> category: "${category}"`)
+    async function loadTemplatesBasedOnValidity(hasValidAddresses: boolean) {
+      const category = determineTemplateCategory(hasValidAddresses)
+      console.log(`Loading templates for category: "${category}" (hasValidAddresses: ${hasValidAddresses})`)
       
       let retryCount = 0
       const maxRetries = 3
@@ -199,19 +197,11 @@ export function useTemplateLoader(
     if (!selectedAddressId || !caseData.addresses) return
     
     async function reloadTemplatesForNewAddress() {
-      if (selectedAddressId === 'NO_VALID_ADDRESS') {
-        await loadTemplatesForAddress(undefined)
-      } else {
-        const address = caseData.addresses.find(a => a.id === selectedAddressId)
-        if (address) {
-          await loadTemplatesForAddress(address.address_type)
-        }
-      }
-    }
-    
-    async function loadTemplatesForAddress(addressType: string | undefined) {
-      const category = mapAddressTypeToCategory(addressType)
-      console.log(`Reloading templates for address type: "${addressType}" -> category: "${category}"`)
+      // Determine if we have valid addresses
+      const hasValidAddresses = selectedAddressId !== 'NO_VALID_ADDRESS'
+      
+      const category = determineTemplateCategory(hasValidAddresses)
+      console.log(`Reloading templates for category: "${category}" (hasValidAddresses: ${hasValidAddresses})`)
       
       try {
         const templateList = await fetchActiveTemplates(category)

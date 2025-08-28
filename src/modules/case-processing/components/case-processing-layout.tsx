@@ -36,10 +36,12 @@ export function CaseProcessingLayout() {
   const [caseData, setCaseData] = useState<Case | null>(null)
   const [validationResults, setValidationResults] = useState<any>(null)
   const [showUpdateAssistant, setShowUpdateAssistant] = useState(false)
+  const [selectedAgentUpdate, setSelectedAgentUpdate] = useState<any>(null)
   const [currentSessionId, setCurrentSessionId] = useState<string>('')
   const [isGetNextCase, setIsGetNextCase] = useState(false)
   const [workflowKey, setWorkflowKey] = useState(0)
   const [automaticMode, setAutomaticMode] = useState(false)
+  const [autoClickProtocol, setAutoClickProtocol] = useState(false)
   const [targetCaseId, setTargetCaseId] = useState<string | null>(null)
 
   const steps: WorkflowStep[] = [
@@ -242,7 +244,10 @@ export function CaseProcessingLayout() {
 
     switch (currentStep) {
       case 'validation':
-        return <ValidationStep {...props} caseData={caseData} automaticMode={automaticMode} onValidationComplete={setValidationResults} onShowUpdateAssistant={() => setShowUpdateAssistant(true)} onGetNextCase={handleGetNextCase} />
+        return <ValidationStep {...props} caseData={caseData} automaticMode={automaticMode} onValidationComplete={setValidationResults} onShowUpdateAssistant={(agentUpdate) => {
+          setSelectedAgentUpdate(agentUpdate)
+          setShowUpdateAssistant(true)
+        }} onGetNextCase={handleGetNextCase} />
       case 'update-review':
         return <UpdateReviewStep {...props} />
       case 'submission':
@@ -273,6 +278,8 @@ export function CaseProcessingLayout() {
           totalSteps={steps.length}
           automaticMode={automaticMode}
           onAutomaticModeChange={setAutomaticMode}
+          autoClickProtocol={autoClickProtocol}
+          onAutoClickProtocolChange={setAutoClickProtocol}
         />
 
         <SidebarInset className="flex flex-col flex-1">
@@ -324,6 +331,8 @@ export function CaseProcessingLayout() {
                 onPostUpdate={handlePostUpdate}
                 automaticMode={automaticMode}
                 onGetNextCase={handleGetNextCase}
+                selectedAgentUpdate={selectedAgentUpdate}
+                autoClickProtocol={autoClickProtocol}
               />
             </div>
           </div>

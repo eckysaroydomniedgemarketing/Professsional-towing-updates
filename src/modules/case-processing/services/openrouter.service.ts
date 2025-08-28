@@ -7,6 +7,18 @@ interface AnalysisResult {
   }
 }
 
+interface ProcessAgentUpdateRequest {
+  selectedAddress: string
+  agentUpdate: string
+  selectedTemplate: string
+}
+
+interface ProcessAgentUpdateResponse {
+  processedContent: string
+  success: boolean
+  error?: string
+}
+
 export class OpenRouterService {
   private static readonly API_KEY = process.env.OPENROUTER_API_KEY!
   private static readonly BASE_URL = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1'
@@ -209,4 +221,87 @@ NEVER return multiple JSON objects. Always return exactly ONE JSON object.`
       }
     }
   }
+
+  static async processAgentUpdate(request: ProcessAgentUpdateRequest): Promise<ProcessAgentUpdateResponse> {
+    try {
+      // Check if API key is configured
+      if (!this.API_KEY || this.API_KEY === 'undefined') {
+        console.error('OpenRouter API key not configured')
+        return {
+          processedContent: '',
+          success: false,
+          error: 'API key not configured'
+        }
+      }
+
+      const prompt = `I own vehicle repossession business in the usa. we need to send case updates to our clients regularly. project file has list of standard template. when i give you agent update, combine one of the standard updates and agent update. final output should not have exact wording and ready to be sent to client - dont change the meaning.
+
+Address: ${request.selectedAddress}
+
+Agent Update: ${request.agentUpdate}
+
+Template: ${request.selectedTemplate}
+
+Please combine the agent update with the template to create a professional client-ready update. The output should:
+1. Not use exact wording from either source
+2. Maintain the original meaning
+3. Be professional and ready to send to client
+4. Include relevant details from both the agent update and template
+
+Return ONLY the combined update text, no explanations or additional formatting.`
+
+      const response = await fetch(`${this.BASE_URL}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.API_KEY}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://professional-towing.com',
+          'X-Title': 'Professional Towing RDN Automation'
+        },
+        body: JSON.stringify({
+          model: this.MODEL,
+          messages: [
+            {
+              role: 'user',
+              content: [
+                {
+                  type: 'text',
+                  text: prompt
+                }
+              ]
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 500
+        })
+      })
+
+      if (!response.ok) {
+        console.error('OpenRouter API error:', response.status, response.statusText)
+        return {
+          processedContent: '',
+          success: false,
+          error: `API error: ${response.status}`
+        }
+      }
+
+      const data = await response.json()
+      const content = data.choices?.[0]?.message?.content || ''
+
+      return {
+        processedContent: content.trim(),
+        success: true
+      }
+
+    } catch (error) {
+      console.error('OpenRouter service error:', error)
+      return {
+        processedContent: '',
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      }
+    }
+  }
 }
+
+export { ProcessAgentUpdateRequest, ProcessAgentUpdateResponse }

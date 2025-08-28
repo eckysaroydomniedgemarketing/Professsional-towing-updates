@@ -51,17 +51,22 @@ export async function postUpdateToRDN(
     // Step 4: Fill Details textarea
     await fillDetailsTextarea(page, updateInfo.message);
     
-    // Step 5: Click Create button with verification
-    const submitted = await clickCreateButton(page);
-    
-    if (!submitted) {
-      throw new Error('Failed to submit update');
+    // Step 5: Validate form before submission
+    const formValid = await validateFormBeforeSubmit(page);
+    if (!formValid) {
+      throw new Error('Form validation failed - required fields not filled');
     }
     
-    // Step 6: Verify submission
-    const verified = await verifySubmission(page);
+    // Step 6: Submit with retry mechanism
+    const submitted = await submitFormWithRetry(page, updateInfo.message);
     
-    console.log(`[UPDATE-POSTER] Update posting ${verified ? 'successful' : 'completed but not verified'}`);
+    if (!submitted) {
+      // Take screenshot for debugging
+      await captureDebugInfo(page, caseId);
+      throw new Error('Failed to submit update after 3 attempts');
+    }
+    
+    console.log(`[UPDATE-POSTER] Update posting successful for case ${caseId}`);
     return true;
     
   } catch (error) {
@@ -95,6 +100,19 @@ async function scrollToForm(page: any): Promise<void> {
 async function selectTypeDropdown(page: any): Promise<void> {
   try {
     await page.selectOption('#updates_type', '36');
+    
+    // Wait for selection to be registered
+    await page.waitForFunction(
+      () => {
+        const select = document.querySelector('#updates_type') as HTMLSelectElement;
+        return select && select.value === '36';
+      },
+      { timeout: 5000 }
+    );
+    
+    // Additional wait for any onChange handlers
+    await page.waitForTimeout(500);
+    
     console.log('[UPDATE-POSTER] Selected type: (O) Agent-Update');
   } catch (error) {
     console.error('[UPDATE-POSTER] Failed to select type dropdown:', error);
@@ -140,6 +158,20 @@ async function selectAddressDropdown(page: any, selectedAddress: string): Promis
     
     // Select the matching option
     await page.selectOption('#is_address_update_select', match.value);
+    
+    // Wait for selection to be registered
+    await page.waitForFunction(
+      (expectedValue: string) => {
+        const select = document.querySelector('#is_address_update_select') as HTMLSelectElement;
+        return select && select.value === expectedValue;
+      },
+      match.value,
+      { timeout: 5000 }
+    );
+    
+    // Additional wait for any onChange handlers
+    await page.waitForTimeout(500);
+    
     console.log(`[UPDATE-POSTER] Selected address: "${match.text}"`);
     
   } catch (error) {
@@ -236,8 +268,22 @@ async function fillDetailsTextarea(page: any, message: string): Promise<void> {
     await page.keyboard.press('Control+A');
     await page.keyboard.press('Delete');
     
+    // Small wait after clearing
+    await page.waitForTimeout(200);
+    
     // Type the message (preserves newlines)
-    await page.type('#comments', message, { delay: 10 });
+    await page.type('#comments', message, { delay: 20 });
+    
+    // Verify content was entered correctly
+    const actualContent = await page.inputValue('#comments');
+    if (!actualContent || actualContent.length < message.length * 0.9) {
+      console.warn('[UPDATE-POSTER] Content verification failed, retrying...');
+      // Retry with fill method
+      await page.fill('#comments', message);
+    }
+    
+    // Wait for any input handlers
+    await page.waitForTimeout(500);
     
     console.log('[UPDATE-POSTER] Filled details textarea');
   } catch (error) {
@@ -247,141 +293,204 @@ async function fillDetailsTextarea(page: any, message: string): Promise<void> {
 }
 
 /**
- * Click Create button with multiple strategies
+ * Validate form is filled before submission
  */
-async function clickCreateButton(page: any): Promise<boolean> {
+async function validateFormBeforeSubmit(page: any): Promise<boolean> {
   try {
-    console.log('[UPDATE-POSTER] Clicking Create button');
-    
-    // Strategy 1: Direct click
-    try {
-      await page.click('#create_button');
-      console.log('[UPDATE-POSTER] Create button clicked');
-      
-      // Wait for response
-      await page.waitForTimeout(1000);
-      
-      // Check if click was successful
-      const clickSuccess = await verifyClickRegistered(page);
-      if (clickSuccess) {
-        return true;
-      }
-    } catch (clickError) {
-      console.log('[UPDATE-POSTER] Direct click failed, trying alternative');
-    }
-    
-    // Strategy 2: JavaScript click
-    try {
-      await page.evaluate(() => {
-        const button = document.querySelector('#create_button');
-        if (button) {
-          (button as HTMLElement).click();
-        }
-      });
-      
-      console.log('[UPDATE-POSTER] JavaScript click executed');
-      await page.waitForTimeout(1000);
-      
-      const clickSuccess = await verifyClickRegistered(page);
-      if (clickSuccess) {
-        return true;
-      }
-    } catch (jsError) {
-      console.log('[UPDATE-POSTER] JavaScript click failed');
-    }
-    
-    // Strategy 3: Direct function call if available
-    try {
-      const functionCalled = await page.evaluate(() => {
-        if (typeof (window as any).new_update === 'function') {
-          (window as any).new_update(true);
-          return true;
-        }
-        return false;
-      });
-      
-      if (functionCalled) {
-        console.log('[UPDATE-POSTER] Direct function call executed');
-        await page.waitForTimeout(1000);
-        return true;
-      }
-    } catch (funcError) {
-      console.log('[UPDATE-POSTER] Direct function call not available');
-    }
-    
-    // If all strategies fail, return false
-    console.error('[UPDATE-POSTER] All click strategies failed');
-    return false;
-    
-  } catch (error) {
-    console.error('[UPDATE-POSTER] Error clicking Create button:', error);
-    return false;
-  }
-}
-
-/**
- * Verify if the click was registered
- */
-async function verifyClickRegistered(page: any): Promise<boolean> {
-  try {
-    const indicators = await page.evaluate(() => {
-      const textarea = document.querySelector('#comments') as HTMLTextAreaElement;
-      const successMessage = document.querySelector('.alert-success, .success-message');
-      const loadingIndicator = document.querySelector('.loading, .spinner');
+    const formState = await page.evaluate(() => {
+      const typeSelect = document.querySelector('#updates_type') as HTMLSelectElement;
+      const addressSelect = document.querySelector('#is_address_update_select') as HTMLSelectElement;
+      const commentsTextarea = document.querySelector('#comments') as HTMLTextAreaElement;
       
       return {
-        textareaCleared: textarea ? textarea.value === '' : false,
-        successVisible: successMessage ? true : false,
-        loadingVisible: loadingIndicator ? true : false
+        typeValue: typeSelect?.value || '',
+        addressValue: addressSelect?.value || '',
+        commentsLength: commentsTextarea?.value?.length || 0,
+        formExists: !!(typeSelect && addressSelect && commentsTextarea)
       };
     });
     
-    return indicators.textareaCleared || indicators.successVisible || indicators.loadingVisible;
+    const isValid = formState.formExists && 
+                    formState.typeValue === '36' && 
+                    formState.addressValue && 
+                    formState.addressValue !== '0' && 
+                    formState.commentsLength > 0;
     
+    if (!isValid) {
+      console.error('[UPDATE-POSTER] Form validation failed:', formState);
+    }
+    
+    return isValid;
   } catch (error) {
-    console.log('[UPDATE-POSTER] Could not verify click registration');
+    console.error('[UPDATE-POSTER] Error validating form:', error);
     return false;
   }
 }
 
 /**
- * Verify the update was submitted successfully
+ * Submit form with retry mechanism
  */
-async function verifySubmission(page: any): Promise<boolean> {
-  try {
-    console.log('[UPDATE-POSTER] Verifying submission');
+async function submitFormWithRetry(page: any, expectedMessage: string): Promise<boolean> {
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    console.log(`[UPDATE-POSTER] Submission attempt ${attempt} of 3`);
     
-    // Wait for any of these conditions
-    const verified = await Promise.race([
-      // Textarea cleared
-      page.waitForFunction(
-        () => {
-          const textarea = document.querySelector('#comments') as HTMLTextAreaElement;
-          return textarea && textarea.value === '';
-        },
-        { timeout: 5000 }
-      ).then(() => true),
+    try {
+      // Different strategy for each attempt
+      if (attempt === 1) {
+        // Direct click
+        await page.click('#create_button');
+      } else if (attempt === 2) {
+        // JavaScript click
+        await page.evaluate(() => {
+          const button = document.querySelector('#create_button') as HTMLElement;
+          if (button) button.click();
+        });
+      } else {
+        // Direct function call
+        await page.evaluate(() => {
+          if (typeof (window as any).new_update === 'function') {
+            (window as any).new_update(true);
+          }
+        });
+      }
       
-      // Success message appears
-      page.waitForSelector('.alert-success, .success-message', {
-        timeout: 5000,
-        state: 'visible'
-      }).then(() => true),
+      console.log('[UPDATE-POSTER] Click executed, waiting for response...');
       
-      // Page navigates
-      page.waitForNavigation({ timeout: 5000 }).then(() => true)
-    ]).catch(() => false);
-    
-    if (verified) {
-      console.log('[UPDATE-POSTER] Submission verified');
-    } else {
-      console.log('[UPDATE-POSTER] Could not verify submission, but may have succeeded');
+      // Wait for network activity to settle
+      await page.waitForLoadState('networkidle', { timeout: 15000 });
+      
+      // Additional wait for server processing
+      await page.waitForTimeout(3000);
+      
+      // Verify submission
+      const success = await verifyUpdatePosted(page, expectedMessage);
+      
+      if (success) {
+        console.log(`[UPDATE-POSTER] Update verified on attempt ${attempt}`);
+        return true;
+      }
+      
+      console.log(`[UPDATE-POSTER] Attempt ${attempt} failed, update not found`);
+      
+      // Wait before retry
+      if (attempt < 3) {
+        await page.waitForTimeout(attempt * 2000);
+      }
+      
+    } catch (error) {
+      console.error(`[UPDATE-POSTER] Error on attempt ${attempt}:`, error);
+      
+      // Wait before retry
+      if (attempt < 3) {
+        await page.waitForTimeout(attempt * 2000);
+      }
     }
+  }
+  
+  return false;
+}
+
+/**
+ * Verify the update was actually posted
+ */
+async function verifyUpdatePosted(page: any, expectedMessage: string): Promise<boolean> {
+  try {
+    console.log('[UPDATE-POSTER] Checking if update appears in the list...');
     
-    return verified;
+    // Check multiple indicators
+    const updateFound = await page.evaluate((messageSnippet: string) => {
+      // Check if textarea was cleared (basic indicator)
+      const textarea = document.querySelector('#comments') as HTMLTextAreaElement;
+      const textareaCleared = textarea && textarea.value === '';
+      
+      // Look for the update in various possible locations
+      const updateContainers = [
+        '.update-content',
+        '.comment-text', 
+        '.case-update',
+        '[class*="update"]',
+        '[class*="comment"]',
+        'td:has(> span)',
+        'div.text-sm',
+        'p:not(#comments)'
+      ];
+      
+      let foundInList = false;
+      const snippet = messageSnippet.substring(0, 50).toLowerCase();
+      
+      for (const selector of updateContainers) {
+        const elements = document.querySelectorAll(selector);
+        for (const el of Array.from(elements)) {
+          const text = (el as HTMLElement).textContent?.toLowerCase() || '';
+          if (text.includes(snippet)) {
+            foundInList = true;
+            console.log(`Found update in: ${selector}`);
+            break;
+          }
+        }
+        if (foundInList) break;
+      }
+      
+      // Check for success messages
+      const successIndicators = document.querySelectorAll('.alert-success, .success-message, [class*="success"]');
+      const hasSuccessMessage = successIndicators.length > 0;
+      
+      // Check if form is reset
+      const typeSelect = document.querySelector('#updates_type') as HTMLSelectElement;
+      const formReset = typeSelect && (typeSelect.value === '' || typeSelect.value === '0');
+      
+      return {
+        textareaCleared,
+        foundInList,
+        hasSuccessMessage,
+        formReset,
+        verified: foundInList || (textareaCleared && (hasSuccessMessage || formReset))
+      };
+    }, expectedMessage);
+    
+    console.log('[UPDATE-POSTER] Verification results:', updateFound);
+    
+    return updateFound.verified;
     
   } catch (error) {
-    console.log('[UPDATE-POSTER] Verification error:', error);
+    console.error('[UPDATE-POSTER] Error verifying update:', error);
     return false;
+  }
+}
+
+/**
+ * Capture debug information on failure
+ */
+async function captureDebugInfo(page: any, caseId: string): Promise<void> {
+  try {
+    // Take screenshot
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const screenshotPath = `./debug-update-failure-${caseId}-${timestamp}.png`;
+    await page.screenshot({ 
+      path: screenshotPath,
+      fullPage: false 
+    });
+    console.log(`[UPDATE-POSTER] Debug screenshot saved: ${screenshotPath}`);
+    
+    // Log form state
+    const formState = await page.evaluate(() => {
+      const typeSelect = document.querySelector('#updates_type') as HTMLSelectElement;
+      const addressSelect = document.querySelector('#is_address_update_select') as HTMLSelectElement;
+      const commentsTextarea = document.querySelector('#comments') as HTMLTextAreaElement;
+      const createButton = document.querySelector('#create_button') as HTMLButtonElement;
+      
+      return {
+        type: typeSelect?.value,
+        address: addressSelect?.value,
+        commentsLength: commentsTextarea?.value?.length,
+        buttonEnabled: createButton ? !createButton.disabled : false,
+        formVisible: !!(typeSelect && addressSelect && commentsTextarea)
+      };
+    });
+    
+    console.log('[UPDATE-POSTER] Form state at failure:', formState);
+    
+  } catch (error) {
+    console.error('[UPDATE-POSTER] Could not capture debug info:', error);
   }
 }
