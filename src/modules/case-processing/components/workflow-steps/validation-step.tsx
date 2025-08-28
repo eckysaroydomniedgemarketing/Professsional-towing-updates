@@ -257,6 +257,7 @@ export function ValidationStep({
             {caseData?.updates && keywordAnalysis?.analysisComplete && (
               <UpdateHistoryDisplay 
                 updates={caseData.updates}
+                addresses={caseData.addresses}
                 keywordAnalysis={keywordAnalysis}
                 databaseKeywordResult={databaseKeywordResult}
                 automaticMode={automaticMode}

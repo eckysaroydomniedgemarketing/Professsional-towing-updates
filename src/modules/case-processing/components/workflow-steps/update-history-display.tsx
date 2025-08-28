@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CheckCircle2, AlertCircle } from "lucide-react"
-import { ExclusionKeywordResults } from "../../types/case.types"
+import { ExclusionKeywordResults, CaseAddress } from "../../types/case.types"
 import { DatabaseKeywordResult } from "../../services/keyword-check.service"
 
 interface CaseUpdate {
@@ -28,6 +28,7 @@ interface CaseUpdate {
 
 interface UpdateHistoryDisplayProps {
   updates?: CaseUpdate[]
+  addresses?: CaseAddress[]
   keywordAnalysis?: ExclusionKeywordResults | null
   databaseKeywordResult?: DatabaseKeywordResult | null
   automaticMode?: boolean
@@ -36,12 +37,16 @@ interface UpdateHistoryDisplayProps {
 
 export function UpdateHistoryDisplay({ 
   updates, 
+  addresses,
   keywordAnalysis, 
   databaseKeywordResult,
   automaticMode = false,
   onAgentUpdateSelected
 }: UpdateHistoryDisplayProps) {
   const [selectedUpdateId, setSelectedUpdateId] = useState<string | null>(null)
+  
+  // Check if there are any valid addresses
+  const hasValidAddresses = addresses?.some(addr => addr.address_validity !== false) || false
   
   if (!updates || updates.length === 0) {
     return null
@@ -138,7 +143,7 @@ export function UpdateHistoryDisplay({
                 return (
                   <TableRow key={update.id || index}>
                     <TableCell>
-                      {isAgent ? (
+                      {isAgent && hasValidAddresses ? (
                         <Checkbox
                           checked={selectedUpdateId === update.id}
                           onCheckedChange={(checked) => handleCheckboxChange(update, checked as boolean)}

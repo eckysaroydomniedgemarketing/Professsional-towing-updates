@@ -10,7 +10,6 @@ import { LastUpdate } from "./last-update"
 import { DraftSection } from "./draft-section"
 import { UpdateAlert } from "./update-alert"
 import { AutoPostCountdown } from "./auto-post-countdown"
-import { AIGeneratedContent } from "./ai-generated-content"
 import { useTemplateLoader } from "./use-template-loader"
 import { generateDraft } from "../../services/template.service"
 
@@ -121,21 +120,21 @@ export function UpdateAssistant({
     }
   }, [selectedAgentUpdate, selectedAddressId, selectedTemplateId])
 
-  // Handle using AI content as draft
-  const handleUseAiAsDraft = () => {
-    if (aiGeneratedContent) {
-      setDraftContent(aiGeneratedContent)
-      console.log('Using AI-generated content as draft')
-    }
-  }
-
-  // Handle regenerate AI content
-  const handleRegenerateAi = () => {
-    processAgentUpdate()
-  }
-
-  // Generate draft when selections change
+  // Set AI-generated content directly as draft when it's ready
   useEffect(() => {
+    if (aiGeneratedContent && selectedAgentUpdate) {
+      setDraftContent(aiGeneratedContent)
+      console.log('AI-generated content set as draft')
+    }
+  }, [aiGeneratedContent, selectedAgentUpdate])
+
+  // Generate draft when selections change (only when no agent update is selected)
+  useEffect(() => {
+    // Skip if we have an agent update (AI content will be used instead)
+    if (selectedAgentUpdate) {
+      return
+    }
+
     if (selectedTemplateId) {
       const template = templates.find(t => t.id === selectedTemplateId)
       
@@ -167,7 +166,7 @@ export function UpdateAssistant({
     } else {
       setDraftContent("")
     }
-  }, [selectedAddressId, selectedTemplateId, caseData.addresses, templates])
+  }, [selectedAddressId, selectedTemplateId, caseData.addresses, templates, selectedAgentUpdate])
 
   // Auto-post countdown when automatic mode is ON and draft is ready
   useEffect(() => {
@@ -374,19 +373,6 @@ export function UpdateAssistant({
 
           <Separator />
 
-          {/* AI Generated Content Section */}
-          {selectedAgentUpdate && !automaticMode && (
-            <>
-              <AIGeneratedContent
-                content={aiGeneratedContent}
-                isLoading={isLoadingAi}
-                onUseAsDraft={handleUseAiAsDraft}
-                onRegenerate={handleRegenerateAi}
-              />
-              <Separator />
-            </>
-          )}
-
           {/* Draft Section */}
           {isLoading ? (
             <Card>
@@ -411,6 +397,8 @@ export function UpdateAssistant({
               onTemplateChange={() => {}} 
               draftContent={draftContent}
               lastUpdateAddress={lastUpdateAddress}
+              isGeneratingAi={isLoadingAi}
+              selectedAgentUpdate={selectedAgentUpdate}
             />
           )}
         </div>

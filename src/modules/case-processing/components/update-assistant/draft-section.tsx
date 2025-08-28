@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { FileEdit, MapPin, CheckCircle2, XCircle, AlertTriangle } from "lucide-react"
+import { FileEdit, MapPin, CheckCircle2, XCircle, AlertTriangle, Loader2 } from "lucide-react"
 import { CaseAddress } from "../../types/case.types"
 import { Template } from "../../services/template.service"
 
@@ -19,6 +19,8 @@ interface DraftSectionProps {
   onTemplateChange: (id: string) => void
   draftContent: string
   lastUpdateAddress?: string
+  isGeneratingAi?: boolean
+  selectedAgentUpdate?: any
 }
 
 export function DraftSection({
@@ -29,7 +31,9 @@ export function DraftSection({
   onAddressChange,
   onTemplateChange,
   draftContent,
-  lastUpdateAddress
+  lastUpdateAddress,
+  isGeneratingAi = false,
+  selectedAgentUpdate
 }: DraftSectionProps) {
   const selectedAddress = selectedAddressId === 'NO_VALID_ADDRESS' 
     ? null 
@@ -165,14 +169,30 @@ export function DraftSection({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="draft-preview">Draft Preview</Label>
-          <Textarea
-            id="draft-preview"
-            value={draftContent}
-            readOnly
-            className="min-h-[150px] bg-muted/50"
-            placeholder="Select an address and template to generate draft"
-          />
+          <Label htmlFor="draft-preview">
+            Draft Preview
+            {selectedAgentUpdate && (
+              <Badge variant="secondary" className="ml-2 bg-blue-100 text-blue-800">
+                AI-Processed
+              </Badge>
+            )}
+          </Label>
+          {isGeneratingAi && selectedAgentUpdate ? (
+            <div className="min-h-[150px] bg-muted/50 rounded-md border flex items-center justify-center">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                <span>Processing agent update with AI...</span>
+              </div>
+            </div>
+          ) : (
+            <Textarea
+              id="draft-preview"
+              value={draftContent}
+              readOnly
+              className="min-h-[150px] bg-muted/50"
+              placeholder={selectedAgentUpdate ? "AI-processed update will appear here" : "Select an address and template to generate draft"}
+            />
+          )}
         </div>
       </CardContent>
     </Card>
