@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { InvoiceData } from './invoice-extractor.service';
+import { InvoiceData, InvoiceExtractionResult } from './invoice-extractor.service';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -98,6 +98,42 @@ export class InvoiceStorageService {
       return true;
     } catch (error) {
       console.error('Error in deleteInvoiceData:', error);
+      return false;
+    }
+  }
+
+  async updateCaseSubStatuses(caseId: string, subStatuses: string[]): Promise<boolean> {
+    try {
+      // Update the case_details table with sub-statuses
+      const { error } = await this.supabase
+        .from('case_details')
+        .update({ sub_statuses: subStatuses })
+        .eq('case_id', caseId);
+
+      if (error) {
+        console.error('Error updating case sub-statuses:', error);
+        return false;
+      }
+
+      console.log(`Updated case ${caseId} with ${subStatuses.length} sub-statuses`);
+      return true;
+    } catch (error) {
+      console.error('Error in updateCaseSubStatuses:', error);
+      return false;
+    }
+  }
+
+  async storeInvoiceDataWithSubStatuses(caseId: string, extractionResult: InvoiceExtractionResult): Promise<boolean> {
+    try {
+      // Store invoice data
+      const invoiceStored = await this.storeInvoiceData(caseId, extractionResult.invoices);
+      
+      // Store sub-statuses
+      const subStatusesStored = await this.updateCaseSubStatuses(caseId, extractionResult.subStatuses);
+      
+      return invoiceStored && subStatusesStored;
+    } catch (error) {
+      console.error('Error in storeInvoiceDataWithSubStatuses:', error);
       return false;
     }
   }

@@ -5,6 +5,43 @@ export class NavigationManager {
   private debug = true
   private caseListingUrl: string | null = null
   constructor() {}
+
+  // Helper method for robust waiting with retries for slow connections
+  private async waitForElementRobustly(
+    page: Page, 
+    selector: string, 
+    options: { timeout?: number; retries?: number; frame?: any } = {}
+  ): Promise<boolean> {
+    const { timeout = 30000, retries = 3, frame = null } = options
+    const context = frame || page
+
+    for (let i = 0; i < retries; i++) {
+      try {
+        this.log('NAV', `Attempt ${i + 1}/${retries} waiting for: ${selector}`)
+        
+        await context.waitForSelector(selector, { 
+          timeout: timeout,
+          state: 'visible'
+        })
+        
+        this.log('NAV', `Successfully found element: ${selector}`)
+        return true
+      } catch (error) {
+        this.log('NAV', `Attempt ${i + 1} failed for ${selector}`, { 
+          error: error instanceof Error ? error.message : 'Unknown error',
+          willRetry: i < retries - 1
+        })
+        
+        if (i < retries - 1) {
+          // Wait before retrying (progressive backoff)
+          await page.waitForTimeout((i + 1) * 2000)
+        }
+      }
+    }
+    
+    return false
+  }
+
   private log(step: string, message: string, data?: unknown) {
     if (this.debug) {
       const timestamp = new Date().toISOString()
@@ -14,7 +51,7 @@ export class NavigationManager {
   async navigateToDashboard(page: Page): Promise<NavigationResult> {
     this.log('NAV', 'Starting navigation to dashboard')
     try {
-      await page.waitForSelector('iframe[name="mainFrame"]', { timeout: 10000 })      
+      await page.waitForSelector('iframe[name="mainFrame"]', { timeout: 50000 })      
       this.log('NAV', 'Dashboard loaded successfully')      
       return {
         success: true,
@@ -55,7 +92,7 @@ export class NavigationManager {
                 const frameUrl = targetFrame.url()
                 if (!frameUrl.includes('three_day_updates.php')) {
                   await targetFrame.goto('three_day_updates.php?num_of_days=3')
-                  await page.waitForLoadState('networkidle')
+                  await page.waitForLoadState('networkidle', { timeout: 45000 })
                 }
               }              
               const frame = page.frame({ name: 'mainFrame' })
@@ -73,7 +110,7 @@ export class NavigationManager {
           try {
             this.log('NAV', 'Attempting frame navigation to three_day_updates.php')
             await frame.goto('three_day_updates.php?num_of_days=3')
-            await page.waitForLoadState('networkidle')
+            await page.waitForLoadState('networkidle', { timeout: 45000 })
             
             await frame.waitForSelector('#casestable tbody tr', { 
               state: 'visible', 
@@ -94,18 +131,79 @@ export class NavigationManager {
       // Original flow - from dashboard
       this.log('NAV', 'Looking for Case Update Needed Listing link')      
       if (!frame) {
-        this.log('NAV', 'Waiting for mainFrame iframe')
-        await page.waitForSelector('iframe[name="mainFrame"]')
+        this.log('NAV', 'Waiting for mainFrame iframe with robust retry mechanism')
+        
+        // Use our robust waiting method for the iframe
+        const iframeFound = await this.waitForElementRobustly(page, 'iframe[name="mainFrame"]', {
+          timeout: 30000,
+          retries: 3
+        })
+        
+        if (!iframeFound) {
+          // Try alternative iframe selectors
+          this.log('NAV', 'Trying alternative iframe selectors')
+          const alternativeSelectors = [
+            'iframe[name="mainframe"]',
+            'iframe#mainFrame',
+            'iframe#mainframe',
+            'iframe[src*="main"]',
+            'iframe:first-of-type'
+          ]
+          
+          let foundWithAlternative = false
+          for (const selector of alternativeSelectors) {
+            const altFound = await this.waitForElementRobustly(page, selector, {
+              timeout: 15000,
+              retries: 1
+            })
+            if (altFound) {
+              this.log('NAV', `Found iframe with alternative selector: ${selector}`)
+              foundWithAlternative = true
+              break
+            }
+          }
+          
+          if (!foundWithAlternative) {
+            throw new Error('mainFrame iframe not found after trying multiple selectors and retries - please check internet connection')
+          }
+        }
+        
+        // Additional wait for frame to be ready
+        await page.waitForTimeout(3000)
         frame = page.frame({ name: 'mainFrame' })
         
         if (!frame) {
-          throw new Error('mainFrame iframe not found')
+          // Try alternative frame names
+          const altFrameNames = ['mainframe', 'main', 'content']
+          for (const frameName of altFrameNames) {
+            frame = page.frame({ name: frameName })
+            if (frame) {
+              this.log('NAV', `Found frame with alternative name: ${frameName}`)
+              break
+            }
+          }
         }
+        
+        if (!frame) {
+          throw new Error('mainFrame iframe element found but frame context not accessible - please check page structure')
+        }
+        
+        this.log('NAV', 'mainFrame iframe successfully located and accessible')
       }      
-      await frame.waitForSelector('a:has-text("Case Update Needed Listing")', { timeout: 5000 })      
+      // Wait for the link with extended timeout and retries for slow connections
+      const linkFound = await this.waitForElementRobustly(page, 'a:has-text("Case Update Needed Listing")', {
+        timeout: 20000,
+        retries: 3,
+        frame: frame
+      })
+      
+      if (!linkFound) {
+        throw new Error('Case Update Needed Listing link not found after multiple attempts')
+      }      
       this.log('NAV', 'Clicking Case Update Needed Listing')
       await frame.click('a:has-text("Case Update Needed Listing")')      
-      await page.waitForLoadState('networkidle')      
+      // Wait for network to be completely idle for slow connections
+      await page.waitForLoadState('networkidle', { timeout: 45000 })      
       this.log('NAV', 'Successfully navigated to case listing')      
       // Store the URL for later use
       if (frame) {
@@ -169,15 +267,21 @@ export class NavigationManager {
     try {
       const caseUrl = `https://app.recoverydatabase.net/alpha_rdn/module/default/case2/?tab=6&case_id=${caseId}`
       
-      this.log('NAV', `Navigating to specific case: ${caseId}`)
+      this.log('NAV', `Navigating to specific case: ${caseId} with extended timeout for slow connections`)
       await page.goto(caseUrl, { 
         waitUntil: 'networkidle',
-        timeout: 30000 
+        timeout: 60000  // Increased from 30 to 60 seconds
       })
       
-      // Wait for case page content to load - the page loads directly with tab 6 (My Summary)
-      // Just wait for the main content section that's present on the My Summary tab
-      await page.waitForSelector('.section__main', { state: 'visible', timeout: 10000 })
+      // Wait for case page content to load with retries for slow connections
+      const contentLoaded = await this.waitForElementRobustly(page, '.section__main', {
+        timeout: 20000,  // Increased from 10 to 20 seconds per attempt
+        retries: 3
+      })
+      
+      if (!contentLoaded) {
+        throw new Error('Case page content failed to load after multiple attempts')
+      }
       this.log('NAV', 'Case page loaded with My Summary tab')
       
       this.log('NAV', `Successfully navigated to case ${caseId}`)

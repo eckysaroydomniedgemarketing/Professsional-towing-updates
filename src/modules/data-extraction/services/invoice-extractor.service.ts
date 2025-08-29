@@ -11,6 +11,11 @@ export interface InvoiceData {
   items: InvoiceItem[];
 }
 
+export interface InvoiceExtractionResult {
+  invoices: InvoiceData[];
+  subStatuses: string[];
+}
+
 export class InvoiceExtractorService {
   constructor(private page: Page) {}
 
@@ -32,6 +37,40 @@ export class InvoiceExtractorService {
     } catch (error) {
       console.error('Error navigating to Invoices tab:', error);
       return false;
+    }
+  }
+
+  async extractSubStatuses(): Promise<string[]> {
+    try {
+      // Find all h5 elements with sub-status badges in the module_10110 section
+      const badgeElements = await this.page.locator('#module_10110 h5.d-inline span.badge').all();
+      
+      if (badgeElements.length < 3) {
+        console.log('No sub-statuses to extract (less than 3 badges total)');
+        return [];
+      }
+
+      const subStatuses: string[] = [];
+      
+      // Skip first 2 badges, start from index 2
+      for (let i = 2; i < badgeElements.length; i++) {
+        const badgeText = await badgeElements[i].textContent();
+        if (badgeText) {
+          // Clean the text (remove any extra whitespace or icons)
+          const cleanText = badgeText.trim().replace(/\s+/g, ' ');
+          // Remove any trailing icon text if present
+          const statusName = cleanText.split('\n')[0].trim();
+          if (statusName) {
+            subStatuses.push(statusName);
+          }
+        }
+      }
+
+      console.log(`Extracted ${subStatuses.length} sub-statuses`);
+      return subStatuses;
+    } catch (error) {
+      console.error('Error extracting sub-statuses:', error);
+      return [];
     }
   }
 
@@ -104,20 +143,23 @@ export class InvoiceExtractorService {
     }
   }
 
-  async processInvoices(caseId: string): Promise<InvoiceData[]> {
+  async processInvoices(caseId: string): Promise<InvoiceExtractionResult> {
     // Navigate to Invoices tab
     const navigationSuccess = await this.navigateToInvoicesTab();
     
     if (!navigationSuccess) {
       console.error('Failed to navigate to Invoices tab');
-      return [];
+      return { invoices: [], subStatuses: [] };
     }
 
     // Extract invoice data
     const invoiceData = await this.extractInvoiceData();
     
-    console.log(`Extracted ${invoiceData.length} invoices for case ${caseId}`);
+    // Extract sub-statuses from the same page
+    const subStatuses = await this.extractSubStatuses();
     
-    return invoiceData;
+    console.log(`Extracted ${invoiceData.length} invoices and ${subStatuses.length} sub-statuses for case ${caseId}`);
+    
+    return { invoices: invoiceData, subStatuses };
   }
 }

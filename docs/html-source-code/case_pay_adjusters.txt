@@ -1,0 +1,1221 @@
+<html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete"><head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>IGNACIO VANEGAS GUEV - 2176786979</title>
+    <style type="text/css">svg:not(:root).svg-inline--fa{overflow:visible}.svg-inline--fa{display:inline-block;font-size:inherit;height:1em;overflow:visible;vertical-align:-.125em}.svg-inline--fa.fa-lg{vertical-align:-.225em}.svg-inline--fa.fa-w-1{width:.0625em}.svg-inline--fa.fa-w-2{width:.125em}.svg-inline--fa.fa-w-3{width:.1875em}.svg-inline--fa.fa-w-4{width:.25em}.svg-inline--fa.fa-w-5{width:.3125em}.svg-inline--fa.fa-w-6{width:.375em}.svg-inline--fa.fa-w-7{width:.4375em}.svg-inline--fa.fa-w-8{width:.5em}.svg-inline--fa.fa-w-9{width:.5625em}.svg-inline--fa.fa-w-10{width:.625em}.svg-inline--fa.fa-w-11{width:.6875em}.svg-inline--fa.fa-w-12{width:.75em}.svg-inline--fa.fa-w-13{width:.8125em}.svg-inline--fa.fa-w-14{width:.875em}.svg-inline--fa.fa-w-15{width:.9375em}.svg-inline--fa.fa-w-16{width:1em}.svg-inline--fa.fa-w-17{width:1.0625em}.svg-inline--fa.fa-w-18{width:1.125em}.svg-inline--fa.fa-w-19{width:1.1875em}.svg-inline--fa.fa-w-20{width:1.25em}.svg-inline--fa.fa-pull-left{margin-right:.3em;width:auto}.svg-inline--fa.fa-pull-right{margin-left:.3em;width:auto}.svg-inline--fa.fa-border{height:1.5em}.svg-inline--fa.fa-li{width:2em}.svg-inline--fa.fa-fw{width:1.25em}.fa-layers svg.svg-inline--fa{bottom:0;left:0;margin:auto;position:absolute;right:0;top:0}.fa-layers{display:inline-block;height:1em;position:relative;text-align:center;vertical-align:-.125em;width:1em}.fa-layers svg.svg-inline--fa{-webkit-transform-origin:center center;transform-origin:center center}.fa-layers-counter,.fa-layers-text{display:inline-block;position:absolute;text-align:center}.fa-layers-text{left:50%;top:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);-webkit-transform-origin:center center;transform-origin:center center}.fa-layers-counter{background-color:#ff253a;border-radius:1em;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;height:1.5em;line-height:1;max-width:5em;min-width:1.5em;overflow:hidden;padding:.25em;right:0;text-overflow:ellipsis;top:0;-webkit-transform:scale(.25);transform:scale(.25);-webkit-transform-origin:top right;transform-origin:top right}.fa-layers-bottom-right{bottom:0;right:0;top:auto;-webkit-transform:scale(.25);transform:scale(.25);-webkit-transform-origin:bottom right;transform-origin:bottom right}.fa-layers-bottom-left{bottom:0;left:0;right:auto;top:auto;-webkit-transform:scale(.25);transform:scale(.25);-webkit-transform-origin:bottom left;transform-origin:bottom left}.fa-layers-top-right{right:0;top:0;-webkit-transform:scale(.25);transform:scale(.25);-webkit-transform-origin:top right;transform-origin:top right}.fa-layers-top-left{left:0;right:auto;top:0;-webkit-transform:scale(.25);transform:scale(.25);-webkit-transform-origin:top left;transform-origin:top left}.fa-lg{font-size:1.3333333333em;line-height:.75em;vertical-align:-.0667em}.fa-xs{font-size:.75em}.fa-sm{font-size:.875em}.fa-1x{font-size:1em}.fa-2x{font-size:2em}.fa-3x{font-size:3em}.fa-4x{font-size:4em}.fa-5x{font-size:5em}.fa-6x{font-size:6em}.fa-7x{font-size:7em}.fa-8x{font-size:8em}.fa-9x{font-size:9em}.fa-10x{font-size:10em}.fa-fw{text-align:center;width:1.25em}.fa-ul{list-style-type:none;margin-left:2.5em;padding-left:0}.fa-ul>li{position:relative}.fa-li{left:-2em;position:absolute;text-align:center;width:2em;line-height:inherit}.fa-border{border:solid .08em #eee;border-radius:.1em;padding:.2em .25em .15em}.fa-pull-left{float:left}.fa-pull-right{float:right}.fa.fa-pull-left,.fab.fa-pull-left,.fal.fa-pull-left,.far.fa-pull-left,.fas.fa-pull-left{margin-right:.3em}.fa.fa-pull-right,.fab.fa-pull-right,.fal.fa-pull-right,.far.fa-pull-right,.fas.fa-pull-right{margin-left:.3em}.fa-spin{-webkit-animation:fa-spin 2s infinite linear;animation:fa-spin 2s infinite linear}.fa-pulse{-webkit-animation:fa-spin 1s infinite steps(8);animation:fa-spin 1s infinite steps(8)}@-webkit-keyframes fa-spin{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes fa-spin{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}.fa-rotate-90{-webkit-transform:rotate(90deg);transform:rotate(90deg)}.fa-rotate-180{-webkit-transform:rotate(180deg);transform:rotate(180deg)}.fa-rotate-270{-webkit-transform:rotate(270deg);transform:rotate(270deg)}.fa-flip-horizontal{-webkit-transform:scale(-1,1);transform:scale(-1,1)}.fa-flip-vertical{-webkit-transform:scale(1,-1);transform:scale(1,-1)}.fa-flip-both,.fa-flip-horizontal.fa-flip-vertical{-webkit-transform:scale(-1,-1);transform:scale(-1,-1)}:root .fa-flip-both,:root .fa-flip-horizontal,:root .fa-flip-vertical,:root .fa-rotate-180,:root .fa-rotate-270,:root .fa-rotate-90{-webkit-filter:none;filter:none}.fa-stack{display:inline-block;height:2em;position:relative;width:2.5em}.fa-stack-1x,.fa-stack-2x{bottom:0;left:0;margin:auto;position:absolute;right:0;top:0}.svg-inline--fa.fa-stack-1x{height:1em;width:1.25em}.svg-inline--fa.fa-stack-2x{height:2em;width:2.5em}.fa-inverse{color:#fff}.sr-only{border:0;clip:rect(0,0,0,0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}.sr-only-focusable:active,.sr-only-focusable:focus{clip:auto;height:auto;margin:0;overflow:visible;position:static;width:auto}.svg-inline--fa .fa-primary{fill:var(--fa-primary-color,currentColor);opacity:1;opacity:var(--fa-primary-opacity,1)}.svg-inline--fa .fa-secondary{fill:var(--fa-secondary-color,currentColor);opacity:.4;opacity:var(--fa-secondary-opacity,.4)}.svg-inline--fa.fa-swap-opacity .fa-primary{opacity:.4;opacity:var(--fa-secondary-opacity,.4)}.svg-inline--fa.fa-swap-opacity .fa-secondary{opacity:1;opacity:var(--fa-primary-opacity,1)}.svg-inline--fa mask .fa-primary,.svg-inline--fa mask .fa-secondary{fill:#000}.fad.fa-inverse{color:#fff}</style><style>
+        
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            #preview_label_image_print {
+                display: none;
+            }
+        }
+
+        #expiration_date {
+            display: none;
+        }
+
+        #sub_system_add {
+            display: none;
+        }
+
+        .warning {
+            background-image: url(/images/exclamation.png);
+            background-color: #fcc;
+            font-weight: bold;
+        }
+
+        .alert .error {
+            background-image: url(/images/exclamation.png);
+            background-color: #fcc;
+            font-weight: bold;
+        }
+
+        
+                
+        .section--top-margin .section {
+            margin-top: 1rem;
+        }
+
+        .nav-link {
+            color: #495057;
+        }
+
+        .modal-open{
+            overflow-y: auto !important;
+        }
+
+        .modal-content{
+            overflow-y: auto !important;
+        }
+        
+        /* Violence alert styling */
+        @keyframes flash-warning {
+            0%, 100% { background-color: #f8d7da; border-color: #f5c6cb; }
+            50% { background-color: #dc3545; border-color: #dc3545; color: white; }
+        }
+        .alert-violent {
+            animation: flash-warning 2s infinite;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .violence-level {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #dc3545;
+        }
+        .violence-details {
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+        .history-link {
+            float: right;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        
+    </style>
+
+
+    <link rel="stylesheet" type="text/css" href="/css/case_pages.css?v=2.78">
+
+            <link rel="stylesheet" href="/css/toolkit.css">
+    
+    <link type="text/css" rel="stylesheet" href="/css/facebox.css">
+    <link type="text/css" rel="stylesheet" href="/css/jquery.ui.all.css?v=2.78">
+    <link rel="stylesheet" type="text/css" href="/css/jquery.spellcheck.css">
+    <link rel="stylesheet" type="text/css" href="/css/case_color.css?v=2.78">
+    <link rel="stylesheet" type="text/css" href="/css/address_color.css?v=2.78">
+    <link rel="stylesheet" type="text/css" href="/css/skip/masterfiles.css?v=2.78">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/jquery-ui-timepicker-addon.css">
+    <link rel="stylesheet" type="text/css" href="/css/jquery.multiselect.css?v=2.78">
+    <link rel="stylesheet" type="text/css" href="/css/jquery.multiselect.filter.css?v=2.78">
+    <link href="/css/bootstrap5.multiselect.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" async="" src="https://widget.intercom.io/widget/rrh9d1kz"></script><script>
+        window.sfBaseUrl = '';
+    </script>
+    <link rel="stylesheet" href="/css/flatpickr.min.css">
+    <script src="/js/fontawesome/all.min.js" async=""></script>
+    <script src="/js/rdn.jquery-loader.js?v=2.78"></script><script src="/js/jquery-3.5.0.min.js" type="text/javascript"></script>
+    <script src="/js/rdn.jquery-ui-loader.js?v=2.78"></script><script src="/js/jquery-ui.min.js?v=1.12.1" type="text/javascript"></script>
+    <script src="/js/alpha_rdn/service.js?v=2.78"></script>
+    <script src="/js/jquery.vertigro.js"></script>
+    <script src="/js/jquery.facebox.js"></script>
+    <script src="/js/jquery.spellcheck.js"></script>
+    <script src="/js/jquery.maskedinput.js"></script>
+    <script src="/js/jquery.send.js"></script>
+    <script src="/js/jstz.min.js?v=2.78"></script>
+    <script src="/js/rdn.json.js?v=2.78"></script>
+    <script src="/js/rdn.alert.js?v=2.78"></script>
+    <script src="/js/rdn.validate.js?v=2.78"></script>
+    <script src="/js/jquery.multiselect.min.js?v=2.78"></script>
+    <script src="/js/jquery.multiselect.filter.min.js?v=2.78"></script>
+    <script src="/js/support_widget.js?v=2.78"></script>
+    <script src="/js/jquery-ui-timepicker-addon.js"></script>
+    <script src="/js/plupload.full.min.2.3.9.js"></script>
+    <script src="/js/bootstrap5.bundle.min.js" defer=""></script>
+    <script src="/js/flatpickr.js"></script>
+    <script>
+        window.switchTabValue = '0';
+        window.current_tab = undefined;
+        window.case_id = 2176786979;
+        window.case_status = 'Repossessed';
+        window.case_disp = '608693';
+        window.tabs = [];
+        window.disableTabs = false;
+
+                tabs[5] = [];
+        tabs[5]["label"] = "Print Order";
+        tabs[5]["isCustomHeader"] = "";
+                tabs[14] = [];
+        tabs[14]["label"] = "Photos / Docs";
+        tabs[14]["isCustomHeader"] = "";
+                tabs[7] = [];
+        tabs[7]["label"] = "Release";
+        tabs[7]["isCustomHeader"] = "";
+                tabs[85] = [];
+        tabs[85]["label"] = "Invoices";
+        tabs[85]["isCustomHeader"] = "";
+                tabs[8] = [];
+        tabs[8]["label"] = "Pay Adjuster";
+        tabs[8]["isCustomHeader"] = "";
+                tabs[9] = [];
+        tabs[9]["label"] = "Reminders";
+        tabs[9]["isCustomHeader"] = "";
+                tabs[3] = [];
+        tabs[3]["label"] = "Office Notes";
+        tabs[3]["isCustomHeader"] = "";
+                tabs[100] = [];
+        tabs[100]["label"] = "Bids / Auction";
+        tabs[100]["isCustomHeader"] = "";
+                tabs[11] = [];
+        tabs[11]["label"] = "Email / Faxes";
+        tabs[11]["isCustomHeader"] = "";
+                tabs[4] = [];
+        tabs[4]["label"] = "History";
+        tabs[4]["isCustomHeader"] = "";
+                tabs[13] = [];
+        tabs[13]["label"] = "Duplicate Case";
+        tabs[13]["isCustomHeader"] = "";
+                tabs[17] = [];
+        tabs[17]["label"] = "Skiptracing";
+        tabs[17]["isCustomHeader"] = "";
+                tabs[102] = [];
+        tabs[102]["label"] = "Complaints";
+        tabs[102]["isCustomHeader"] = "";
+                        tabs[12] = [];
+        tabs[12]["label"] = "Client";
+        tabs[12]["isCustomHeader"] = "";
+                tabs[10] = [];
+        tabs[10]["label"] = "Add Adjuster";
+        tabs[10]["isCustomHeader"] = "";
+                tabs[16] = [];
+        tabs[16]["label"] = "Adjusters";
+        tabs[16]["isCustomHeader"] = "";
+                tabs[6] = [];
+        tabs[6]["label"] = "Updates";
+        tabs[6]["isCustomHeader"] = "";
+                tabs[2] = [];
+        tabs[2]["label"] = "Recovery";
+        tabs[2]["isCustomHeader"] = "";
+                tabs[15] = [];
+        tabs[15]["label"] = "Forms";
+        tabs[15]["isCustomHeader"] = "";
+        
+        window.tz = jstz.determine();
+        window.user_timezone = tz.name();
+
+    </script>
+    <script src="/js/case_pages.js?v=2.78"></script>
+</head>
+<body>
+
+<div id="loading" style="display: none;">
+    <div id="loading_inner" align="center">
+        <div><img src="/images/ajax_progress.gif"> Loading...</div>
+    </div>
+</div>
+<div id="print_label_cover" style="z-index:100;"></div>
+<div id="print_label_prompt">
+    <table border="0" cellpadding="0" cellspacing="0" class="border">
+        <tbody><tr class="whitecell">
+            <td align="center" valign="middle">
+                <div class="text"><img src="/images/ajax_progress.gif"> Loading...</div>
+            </td>
+        </tr>
+    </tbody></table>
+</div>
+
+<div id="preview_label_prompt">
+    <table border="0" cellpadding="0" cellspacing="0" class="border" style="width:350px;">
+        <tbody><tr class="lightcell2">
+            <td class="sectiontitle" align="center" style="font-size: large; color: #FFF;">Label Preview</td>
+        </tr>
+        <tr class="lightcell2">
+            <td align="center" valign="middle" style="height:125px;">
+                <iframe id="preview_label_image" width="336" height="110" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" src="/images/ajax_progress.gif"></iframe>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <iframe id="preview_label_image_print" width="1" height="1" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" src=""></iframe>
+            </td>
+        </tr>
+        <tr class="lightcell2">
+            <td style="color: #FFF; font-family: verdana; font-size: 8pt;" align="center">This is a preview of how this
+                label will look<br>once printed using your Dymo label printer
+            </td>
+        </tr>
+        <tr class="lightcell2">
+            <td align="center">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tbody><tr>
+                        <td width="50%" align="center"><input id="printFileFolderButton" type="button" style="width:100px;" value="Print" onclick="printLabelPreview();"></td>
+                        <td width="50%" align="center"><input type="button" style="width:100px;" value="Done" onclick="hidePrompt('preview_label_prompt');"></td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody></table>
+</div>
+
+<div class="container-fluid">
+        <div class="section">
+        <div class="section__main">
+            <div class="row justify-content-between">
+                <div class="col-auto"><dt>Order Date</dt><dd class="" title="" style="width: auto; float: none; background: none;">2025-08-27</dd></div><div class="col-auto"><dt>Case #</dt><dd class="zero_to_thirty" title="This case is 0-30 days old" style="width: auto; float: none; background: none;">2176786979</dd></div><div class="col-auto"><dt>Ref. Number</dt><dd class="" title="" style="float: none; width: auto;">311508</dd></div>
+                <div class="col-auto"><dt>Client</dt><dd>Millennium Capital and Recovery Corporation</dd></div><div class="col-auto"><dt>Collector</dt><dd>Tonya Sardenelli</dd></div><div class="col-auto"><dt>Lien Holder</dt><dd>Global Lending Services, LLC</dd></div><div class="col-auto"><dt>Client Acct No</dt><dd>2176696960</dd></div><div class="col-auto">
+					<dt>File Folder Labels</dt>
+					<dd class="text-center"><svg class="svg-inline--fa fa-print fa-w-16 btn-link" style="cursor: pointer;" onclick="print_file_folder_label('print_label_prompt','2176786979','71230','CA4088850910');" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="print" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M448 192V77.25c0-8.49-3.37-16.62-9.37-22.63L393.37 9.37c-6-6-14.14-9.37-22.63-9.37H96C78.33 0 64 14.33 64 32v160c-35.35 0-64 28.65-64 64v112c0 8.84 7.16 16 16 16h48v96c0 17.67 14.33 32 32 32h320c17.67 0 32-14.33 32-32v-96h48c8.84 0 16-7.16 16-16V256c0-35.35-28.65-64-64-64zm-64 256H128v-96h256v96zm0-224H128V64h192v48c0 8.84 7.16 16 16 16h48v96zm48 72c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24z"></path></svg><!-- <i class="btn-link fas fa-print" style="cursor:pointer" onclick="print_file_folder_label('print_label_prompt','2176786979','71230','CA4088850910');"></i> Font Awesome fontawesome.com --></dd>
+              </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- cosigner violence banner -->
+        
+  
+        <div class="row flex-nowrap overflow-auto ms-0">
+        <div class="col-auto px-0 mt-3">
+            <ul class="nav nav-bar flex-column" id="newTabsLeft">
+                <li id="default" class="nav-item"><a class="nav-link" onclick="switchTab(0);" href="#"><svg class="svg-inline--fa fa-home fa-w-18 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="home" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"></path></svg><!-- <i class="fas fa-home me-2"></i> Font Awesome fontawesome.com -->My Summary</a></li>
+                                    <li id="tab_5" class="nav-item"><a class="nav-link" href="#" onclick="switchTab(5);return
+                        false;"><span id="tab_label_span_5"><svg class="svg-inline--fa fa-print fa-w-16 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="print" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M448 192V77.25c0-8.49-3.37-16.62-9.37-22.63L393.37 9.37c-6-6-14.14-9.37-22.63-9.37H96C78.33 0 64 14.33 64 32v160c-35.35 0-64 28.65-64 64v112c0 8.84 7.16 16 16 16h48v96c0 17.67 14.33 32 32 32h320c17.67 0 32-14.33 32-32v-96h48c8.84 0 16-7.16 16-16V256c0-35.35-28.65-64-64-64zm-64 256H128v-96h256v96zm0-224H128V64h192v48c0 8.84 7.16 16 16 16h48v96zm48 72c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24z"></path></svg><!-- <i class="fas me-2 fa-print"></i> Font Awesome fontawesome.com --><span class="js-label">Print Order</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_14" class="nav-item"><a class="nav-link" href="#" onclick="switchTab(14);return
+                        false;"><span id="tab_label_span_14"><svg class="svg-inline--fa fa-camera fa-w-16 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="camera" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM376 288c0-66.2-53.8-120-120-120s-120 53.8-120 120 53.8 120 120 120 120-53.8 120-120zm-32 0c0 48.5-39.5 88-88 88s-88-39.5-88-88 39.5-88 88-88 88 39.5 88 88z"></path></svg><!-- <i class="fas me-2 fa-camera"></i> Font Awesome fontawesome.com --><span class="js-label">Photos / Docs</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_7" class="nav-item"><a class="nav-link" href="#" onclick="switchTab(7);return
+                        false;"><span id="tab_label_span_7"><svg class="svg-inline--fa fa-truck-loading fa-w-20 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="truck-loading" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M50.2 375.6c2.3 8.5 11.1 13.6 19.6 11.3l216.4-58c8.5-2.3 13.6-11.1 11.3-19.6l-49.7-185.5c-2.3-8.5-11.1-13.6-19.6-11.3L151 133.3l24.8 92.7-61.8 16.5-24.8-92.7-77.3 20.7C3.4 172.8-1.7 181.6.6 190.1l49.6 185.5zM384 0c-17.7 0-32 14.3-32 32v323.6L5.9 450c-4.3 1.2-6.8 5.6-5.6 9.8l12.6 46.3c1.2 4.3 5.6 6.8 9.8 5.6l393.7-107.4C418.8 464.1 467.6 512 528 512c61.9 0 112-50.1 112-112V0H384zm144 448c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"></path></svg><!-- <i class="fas me-2 fa-truck-loading"></i> Font Awesome fontawesome.com --><span class="js-label">Release</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_85" class="nav-item"><a class="nav-link" href="#" onclick="switchTab(85);return
+                        false;"><span id="tab_label_span_85"><svg class="svg-inline--fa fa-file-invoice fa-w-12 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-invoice" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M288 256H96v64h192v-64zm89-151L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zm-153 31V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zM64 72c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8V72zm0 64c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8v-16zm256 304c0 4.42-3.58 8-8 8h-80c-4.42 0-8-3.58-8-8v-16c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16zm0-200v96c0 8.84-7.16 16-16 16H80c-8.84 0-16-7.16-16-16v-96c0-8.84 7.16-16 16-16h224c8.84 0 16 7.16 16 16z"></path></svg><!-- <i class="fas me-2 fa-file-invoice"></i> Font Awesome fontawesome.com --><span class="js-label">Invoices</span><span class="js-count"><span class="badge rounded-pill d-inline-block ms-2 text-white">1</span></span></span></a>
+                    </li>
+                                    <li id="tab_8" class="nav-item"><a class="nav-link active" href="#" onclick="switchTab(8);return
+                        false;"><span id="tab_label_span_8"><svg class="svg-inline--fa fa-hand-holding-usd fa-w-18 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="hand-holding-usd" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M271.06,144.3l54.27,14.3a8.59,8.59,0,0,1,6.63,8.1c0,4.6-4.09,8.4-9.12,8.4h-35.6a30,30,0,0,1-11.19-2.2c-5.24-2.2-11.28-1.7-15.3,2l-19,17.5a11.68,11.68,0,0,0-2.25,2.66,11.42,11.42,0,0,0,3.88,15.74,83.77,83.77,0,0,0,34.51,11.5V240c0,8.8,7.83,16,17.37,16h17.37c9.55,0,17.38-7.2,17.38-16V222.4c32.93-3.6,57.84-31,53.5-63-3.15-23-22.46-41.3-46.56-47.7L282.68,97.4a8.59,8.59,0,0,1-6.63-8.1c0-4.6,4.09-8.4,9.12-8.4h35.6A30,30,0,0,1,332,83.1c5.23,2.2,11.28,1.7,15.3-2l19-17.5A11.31,11.31,0,0,0,368.47,61a11.43,11.43,0,0,0-3.84-15.78,83.82,83.82,0,0,0-34.52-11.5V16c0-8.8-7.82-16-17.37-16H295.37C285.82,0,278,7.2,278,16V33.6c-32.89,3.6-57.85,31-53.51,63C227.63,119.6,247,137.9,271.06,144.3ZM565.27,328.1c-11.8-10.7-30.2-10-42.6,0L430.27,402a63.64,63.64,0,0,1-40,14H272a16,16,0,0,1,0-32h78.29c15.9,0,30.71-10.9,33.25-26.6a31.2,31.2,0,0,0,.46-5.46A32,32,0,0,0,352,320H192a117.66,117.66,0,0,0-74.1,26.29L71.4,384H16A16,16,0,0,0,0,400v96a16,16,0,0,0,16,16H372.77a64,64,0,0,0,40-14L564,377a32,32,0,0,0,1.28-48.9Z"></path></svg><!-- <i class="fas me-2 fa-hand-holding-usd"></i> Font Awesome fontawesome.com --><span class="js-label">Pay Adjuster</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_9" class="nav-item"><a class="nav-link" href="#" onclick="switchTab(9);return
+                        false;"><span id="tab_label_span_9"><svg class="svg-inline--fa fa-bell fa-w-14 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bell" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M224 512c35.32 0 63.97-28.65 63.97-64H160.03c0 35.35 28.65 64 63.97 64zm215.39-149.71c-19.32-20.76-55.47-51.99-55.47-154.29 0-77.7-54.48-139.9-127.94-155.16V32c0-17.67-14.32-32-31.98-32s-31.98 14.33-31.98 32v20.84C118.56 68.1 64.08 130.3 64.08 208c0 102.3-36.15 133.53-55.47 154.29-6 6.45-8.66 14.16-8.61 21.71.11 16.4 12.98 32 32.1 32h383.8c19.12 0 32-15.6 32.1-32 .05-7.55-2.61-15.27-8.61-21.71z"></path></svg><!-- <i class="fas me-2 fa-bell"></i> Font Awesome fontawesome.com --><span class="js-label">Reminders</span><span class="js-count"><span class="badge rounded-pill d-inline-block ms-2 text-white">1</span></span></span></a>
+                    </li>
+                                    <li id="tab_3" class="nav-item"><a class="nav-link" href="#" onclick="switchTab(3);return
+                        false;"><span id="tab_label_span_3"><svg class="svg-inline--fa fa-clipboard fa-w-12 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="clipboard" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M384 112v352c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V112c0-26.51 21.49-48 48-48h80c0-35.29 28.71-64 64-64s64 28.71 64 64h80c26.51 0 48 21.49 48 48zM192 40c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24m96 114v-20a6 6 0 0 0-6-6H102a6 6 0 0 0-6 6v20a6 6 0 0 0 6 6h180a6 6 0 0 0 6-6z"></path></svg><!-- <i class="fas me-2 fa-clipboard"></i> Font Awesome fontawesome.com --><span class="js-label">Office Notes</span><span class="js-count"><span class="badge rounded-pill d-inline-block ms-2 text-white">0</span></span></span></a>
+                    </li>
+                                    <li id="tab_100" class="nav-item"><a class="nav-link" href="#" onclick="switchTab(100);return
+                        false;"><span id="tab_label_span_100"><svg class="svg-inline--fa fa-gavel fa-w-16 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="gavel" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M504.971 199.362l-22.627-22.627c-9.373-9.373-24.569-9.373-33.941 0l-5.657 5.657L329.608 69.255l5.657-5.657c9.373-9.373 9.373-24.569 0-33.941L312.638 7.029c-9.373-9.373-24.569-9.373-33.941 0L154.246 131.48c-9.373 9.373-9.373 24.569 0 33.941l22.627 22.627c9.373 9.373 24.569 9.373 33.941 0l5.657-5.657 39.598 39.598-81.04 81.04-5.657-5.657c-12.497-12.497-32.758-12.497-45.255 0L9.373 412.118c-12.497 12.497-12.497 32.758 0 45.255l45.255 45.255c12.497 12.497 32.758 12.497 45.255 0l114.745-114.745c12.497-12.497 12.497-32.758 0-45.255l-5.657-5.657 81.04-81.04 39.598 39.598-5.657 5.657c-9.373 9.373-9.373 24.569 0 33.941l22.627 22.627c9.373 9.373 24.569 9.373 33.941 0l124.451-124.451c9.372-9.372 9.372-24.568 0-33.941z"></path></svg><!-- <i class="fas me-2 fa-gavel"></i> Font Awesome fontawesome.com --><span class="js-label">Bids / Auction</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_11" class="nav-item"><a class="nav-link" href="#" onclick="switchTab(11);return
+                        false;"><span id="tab_label_span_11"><svg class="svg-inline--fa fa-mail-bulk fa-w-18 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="mail-bulk" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M160 448c-25.6 0-51.2-22.4-64-32-64-44.8-83.2-60.8-96-70.4V480c0 17.67 14.33 32 32 32h256c17.67 0 32-14.33 32-32V345.6c-12.8 9.6-32 25.6-96 70.4-12.8 9.6-38.4 32-64 32zm128-192H32c-17.67 0-32 14.33-32 32v16c25.6 19.2 22.4 19.2 115.2 86.4 9.6 6.4 28.8 25.6 44.8 25.6s35.2-19.2 44.8-22.4c92.8-67.2 89.6-67.2 115.2-86.4V288c0-17.67-14.33-32-32-32zm256-96H224c-17.67 0-32 14.33-32 32v32h96c33.21 0 60.59 25.42 63.71 57.82l.29-.22V416h192c17.67 0 32-14.33 32-32V192c0-17.67-14.33-32-32-32zm-32 128h-64v-64h64v64zm-352-96c0-35.29 28.71-64 64-64h224V32c0-17.67-14.33-32-32-32H96C78.33 0 64 14.33 64 32v192h96v-32z"></path></svg><!-- <i class="fas me-2 fa-mail-bulk"></i> Font Awesome fontawesome.com --><span class="js-label">Email / Faxes</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_4" class="nav-item"><a class="nav-link" href="#" onclick="switchTab(4);return
+                        false;"><span id="tab_label_span_4"><svg class="svg-inline--fa fa-history fa-w-16 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="history" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M504 255.531c.253 136.64-111.18 248.372-247.82 248.468-59.015.042-113.223-20.53-155.822-54.911-11.077-8.94-11.905-25.541-1.839-35.607l11.267-11.267c8.609-8.609 22.353-9.551 31.891-1.984C173.062 425.135 212.781 440 256 440c101.705 0 184-82.311 184-184 0-101.705-82.311-184-184-184-48.814 0-93.149 18.969-126.068 49.932l50.754 50.754c10.08 10.08 2.941 27.314-11.313 27.314H24c-8.837 0-16-7.163-16-16V38.627c0-14.254 17.234-21.393 27.314-11.314l49.372 49.372C129.209 34.136 189.552 8 256 8c136.81 0 247.747 110.78 248 247.531zm-180.912 78.784l9.823-12.63c8.138-10.463 6.253-25.542-4.21-33.679L288 256.349V152c0-13.255-10.745-24-24-24h-16c-13.255 0-24 10.745-24 24v135.651l65.409 50.874c10.463 8.137 25.541 6.253 33.679-4.21z"></path></svg><!-- <i class="fas me-2 fa-history"></i> Font Awesome fontawesome.com --><span class="js-label">History</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_13" class="nav-item"><a class="nav-link" href="#" onclick="switchTab(13);return
+                        false;"><span id="tab_label_span_13"><svg class="svg-inline--fa fa-clone fa-w-16 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="clone" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M464 0c26.51 0 48 21.49 48 48v288c0 26.51-21.49 48-48 48H176c-26.51 0-48-21.49-48-48V48c0-26.51 21.49-48 48-48h288M176 416c-44.112 0-80-35.888-80-80V128H48c-26.51 0-48 21.49-48 48v288c0 26.51 21.49 48 48 48h288c26.51 0 48-21.49 48-48v-48H176z"></path></svg><!-- <i class="fas me-2 fa-clone"></i> Font Awesome fontawesome.com --><span class="js-label">Duplicate Case</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_17" class="nav-item"><a class="nav-link" href="#" onclick="switchTab(17);return
+                        false;"><span id="tab_label_span_17"><svg class="svg-inline--fa fa-fingerprint fa-w-16 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="fingerprint" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256.12 245.96c-13.25 0-24 10.74-24 24 1.14 72.25-8.14 141.9-27.7 211.55-2.73 9.72 2.15 30.49 23.12 30.49 10.48 0 20.11-6.92 23.09-17.52 13.53-47.91 31.04-125.41 29.48-224.52.01-13.25-10.73-24-23.99-24zm-.86-81.73C194 164.16 151.25 211.3 152.1 265.32c.75 47.94-3.75 95.91-13.37 142.55-2.69 12.98 5.67 25.69 18.64 28.36 13.05 2.67 25.67-5.66 28.36-18.64 10.34-50.09 15.17-101.58 14.37-153.02-.41-25.95 19.92-52.49 54.45-52.34 31.31.47 57.15 25.34 57.62 55.47.77 48.05-2.81 96.33-10.61 143.55-2.17 13.06 6.69 25.42 19.76 27.58 19.97 3.33 26.81-15.1 27.58-19.77 8.28-50.03 12.06-101.21 11.27-152.11-.88-55.8-47.94-101.88-104.91-102.72zm-110.69-19.78c-10.3-8.34-25.37-6.8-33.76 3.48-25.62 31.5-39.39 71.28-38.75 112 .59 37.58-2.47 75.27-9.11 112.05-2.34 13.05 6.31 25.53 19.36 27.89 20.11 3.5 27.07-14.81 27.89-19.36 7.19-39.84 10.5-80.66 9.86-121.33-.47-29.88 9.2-57.88 28-80.97 8.35-10.28 6.79-25.39-3.49-33.76zm109.47-62.33c-15.41-.41-30.87 1.44-45.78 4.97-12.89 3.06-20.87 15.98-17.83 28.89 3.06 12.89 16 20.83 28.89 17.83 11.05-2.61 22.47-3.77 34-3.69 75.43 1.13 137.73 61.5 138.88 134.58.59 37.88-1.28 76.11-5.58 113.63-1.5 13.17 7.95 25.08 21.11 26.58 16.72 1.95 25.51-11.88 26.58-21.11a929.06 929.06 0 0 0 5.89-119.85c-1.56-98.75-85.07-180.33-186.16-181.83zm252.07 121.45c-2.86-12.92-15.51-21.2-28.61-18.27-12.94 2.86-21.12 15.66-18.26 28.61 4.71 21.41 4.91 37.41 4.7 61.6-.11 13.27 10.55 24.09 23.8 24.2h.2c13.17 0 23.89-10.61 24-23.8.18-22.18.4-44.11-5.83-72.34zm-40.12-90.72C417.29 43.46 337.6 1.29 252.81.02 183.02-.82 118.47 24.91 70.46 72.94 24.09 119.37-.9 181.04.14 246.65l-.12 21.47c-.39 13.25 10.03 24.31 23.28 24.69.23.02.48.02.72.02 12.92 0 23.59-10.3 23.97-23.3l.16-23.64c-.83-52.5 19.16-101.86 56.28-139 38.76-38.8 91.34-59.67 147.68-58.86 69.45 1.03 134.73 35.56 174.62 92.39 7.61 10.86 22.56 13.45 33.42 5.86 10.84-7.62 13.46-22.59 5.84-33.43z"></path></svg><!-- <i class="fas me-2 fa-fingerprint"></i> Font Awesome fontawesome.com --><span class="js-label">Skiptracing</span><span class="js-count"></span></span></a>
+                    </li>
+                                    <li id="tab_102" class="nav-item"><a class="nav-link" href="#" onclick="switchTab(102);return
+                        false;"><span id="tab_label_span_102"><svg class="svg-inline--fa fa-exclamation-triangle fa-w-18 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="exclamation-triangle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"></path></svg><!-- <i class="fas me-2 fa-exclamation-triangle"></i> Font Awesome fontawesome.com --><span class="js-label">Complaints</span><span class="js-count"></span></span></a>
+                    </li>
+                            </ul>
+        </div>
+        <div class="col">
+            <!-- BEGIN TOP TABS -->
+            <div id="topcontainer">
+                <ul id="newTabsTop" class="nav nav-bar mt-3">
+                                            <li class="nav-item" id="tab_12">
+                            <a href="#" onclick="switchTab(12);return
+                            false;" class="nav-link"><span id="tab_label_span_12"><svg class="svg-inline--fa fa-university fa-w-16 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="university" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M496 128v16a8 8 0 0 1-8 8h-24v12c0 6.627-5.373 12-12 12H60c-6.627 0-12-5.373-12-12v-12H24a8 8 0 0 1-8-8v-16a8 8 0 0 1 4.941-7.392l232-88a7.996 7.996 0 0 1 6.118 0l232 88A8 8 0 0 1 496 128zm-24 304H40c-13.255 0-24 10.745-24 24v16a8 8 0 0 0 8 8h464a8 8 0 0 0 8-8v-16c0-13.255-10.745-24-24-24zM96 192v192H60c-6.627 0-12 5.373-12 12v20h416v-20c0-6.627-5.373-12-12-12h-36V192h-64v192h-64V192h-64v192h-64V192H96z"></path></svg><!-- <i class="fas fa-university me-2"></i> Font Awesome fontawesome.com --><span class="js-label">Client</span> <span class="js-count"></span> </span></a>
+                        </li>
+                                            <li class="nav-item" id="tab_10">
+                            <a href="#" onclick="switchTab(10);return
+                            false;" class="nav-link"><span id="tab_label_span_10"><svg class="svg-inline--fa fa-plus fa-w-14 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path></svg><!-- <i class="fas fa-plus me-2"></i> Font Awesome fontawesome.com --><span class="js-label">Add Adjuster</span> <span class="js-count"></span> </span></a>
+                        </li>
+                                            <li class="nav-item" id="tab_16">
+                            <a href="#" onclick="switchTab(16);return
+                            false;" class="nav-link"><span id="tab_label_span_16"><svg class="svg-inline--fa fa-users fa-w-20 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="users" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z"></path></svg><!-- <i class="fas fa-users me-2"></i> Font Awesome fontawesome.com --><span class="js-label">Adjusters</span> <span class="js-count"><span class="badge rounded-pill d-inline-block ms-2 text-white">1</span></span> </span></a>
+                        </li>
+                                            <li class="nav-item" id="tab_6">
+                            <a href="#" onclick="switchTab(6);return
+                            false;" class="nav-link"><span id="tab_label_span_6"><svg class="svg-inline--fa fa-info-circle fa-w-16 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="info-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"></path></svg><!-- <i class="fas fa-info-circle me-2"></i> Font Awesome fontawesome.com --><span class="js-label">Updates</span> <span class="js-count"><span class="badge rounded-pill d-inline-block ms-2 text-white">14</span></span> </span></a>
+                        </li>
+                                            <li class="nav-item" id="tab_2">
+                            <a href="#" onclick="switchTab(2);return
+                            false;" class="nav-link"><span id="tab_label_span_2"><svg class="svg-inline--fa fa-truck-pickup fa-w-20 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="truck-pickup" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M624 288h-16v-64c0-17.67-14.33-32-32-32h-48L419.22 56.02A64.025 64.025 0 0 0 369.24 32H256c-17.67 0-32 14.33-32 32v128H64c-17.67 0-32 14.33-32 32v64H16c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h49.61c-.76 5.27-1.61 10.52-1.61 16 0 61.86 50.14 112 112 112s112-50.14 112-112c0-5.48-.85-10.73-1.61-16h67.23c-.76 5.27-1.61 10.52-1.61 16 0 61.86 50.14 112 112 112s112-50.14 112-112c0-5.48-.85-10.73-1.61-16H624c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16zM288 96h81.24l76.8 96H288V96zM176 416c-26.47 0-48-21.53-48-48s21.53-48 48-48 48 21.53 48 48-21.53 48-48 48zm288 0c-26.47 0-48-21.53-48-48s21.53-48 48-48 48 21.53 48 48-21.53 48-48 48z"></path></svg><!-- <i class="fas fa-truck-pickup me-2"></i> Font Awesome fontawesome.com --><span class="js-label">Recovery</span> <span class="js-count"></span> </span></a>
+                        </li>
+                                            <li class="nav-item" id="tab_15">
+                            <a href="#" onclick="switchTab(15);return
+                            false;" class="nav-link"><span id="tab_label_span_15"><svg class="svg-inline--fa fa-folder-open fa-w-18 me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="folder-open" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M572.694 292.093L500.27 416.248A63.997 63.997 0 0 1 444.989 448H45.025c-18.523 0-30.064-20.093-20.731-36.093l72.424-124.155A64 64 0 0 1 152 256h399.964c18.523 0 30.064 20.093 20.73 36.093zM152 224h328v-48c0-26.51-21.49-48-48-48H272l-64-64H48C21.49 64 0 85.49 0 112v278.046l69.077-118.418C86.214 242.25 117.989 224 152 224z"></path></svg><!-- <i class="fas fa-folder-open me-2"></i> Font Awesome fontawesome.com --><span class="js-label">Forms</span> <span class="js-count"></span> </span></a>
+                        </li>
+                                    </ul>
+            </div>
+
+            <!-- BEGIN NEW CONTENT BOX -->
+            <div id="ContentBox">
+                <div id="modalDialog" class="section mt-3" style="display: none">
+                    <div class="section__main">
+                        <h1 id="modalDialog_title" class="section__title"></h1>
+                        <div id="modalDialog_html"></div>
+                        <input class="btn btn-warning mt-2" type="button" onclick="if (modalDialogSubmit())modalDialogSubmitDefault();$('#module_10110').load('_module.php?case_id='+case_id+'&amp;module_id=10110');" value="Submit">
+                        <input class="btn btn-outline-secondary mt-2" type="button" onclick="if (modalDialogCancel()) modalDialogCancelDefault();" value="Cancel">
+                    </div>
+                </div>
+                <div id="ContentLoader" class="section--top-margin"><a name="module_10110"></a><div id="module_10110"><div class="section section__info"><div class="section__main"><div id="staticModuleAlerts"></div><h1 class="d-flex flex-row align-items-center justify-content-start section__title"><div class="pe-2">Repossessed on: 08/27/2025</div><div class="ps-2 border-start">Stored for 2 day(s).</div></h1><div class="row"><div class="col-3"><span id="case_order_type_static"><b>Order To</b><br><h5 class="mb-1 mt-2"><span class="badge-invol">Involuntary Repo</span></h5></span><div class="my-2"><a href="/forms/view/case_id/2176786979/form_id/1" target="_blank">Work Order</a></div><!-- Violence Reporting Modal -->
+      <div class="modal fade" id="reportViolentModal" tabindex="-1" role="dialog" aria-labelledby="reportViolentModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header bg-danger text-white">
+                          <h5 class="modal-title" id="reportViolentModalLabel">Report Violent Person</h5>
+                          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form id="reportViolentForm" method="post" action="/alpha_rdn/ajax/default/report_violent.php">
+                          <div class="modal-body">
+                              <input type="hidden" name="case_id" value="2176786979">
+                              <input type="hidden" name="vin" value="JN1BJ1CP7KW226947">
+                              
+                              <div class="form-group mb-3">
+                                  <label for="personType" class="form-label"><strong>Select Person</strong></label>
+                                  <select class="form-select" id="personType" name="person_type" required="">
+                                      <option value="debtor" selected="">Debtor - JOS IGNACIO VANEGAS GUEV</option>
+                                      <option value="cosigner">Cosigner - GLORI ELENA GOMEZ SIERRA</option>
+                                  </select>
+                              </div>
+                              
+                              <input type="hidden" id="debtor_first_name" name="debtor_first_name" value="JOS">
+                              <input type="hidden" id="debtor_last_name" name="debtor_last_name" value="IGNACIO VANEGAS GUEV">
+                              <input type="hidden" id="cosigner_first_name" name="cosigner_first_name" value="GLORI">
+                              <input type="hidden" id="cosigner_last_name" name="cosigner_last_name" value="ELENA GOMEZ SIERRA">
+                              
+                              <div class="alert alert-warning">
+                                  <strong>Warning:</strong> This will mark the selected person and JN1BJ1CP7KW226947 combination as violent. This information will be visible to all users across RDN and Clearplan.
+                              </div>
+                              
+                              <div class="form-group mb-3">
+                                  <label for="violenceLevel" class="form-label"><strong>Violence Level</strong></label>
+                                  <select class="form-select" id="violenceLevel" name="violence_level" required="">
+                                      <option value="">-- Select Violence Level --</option>
+                                      <option value="1">Level 1 - Verbal Threats</option>
+                                      <option value="2">Level 2 - Threatening Behavior</option>
+                                      <option value="3">Level 3 - Physical Violence</option>
+                                  </select>
+                              </div>
+                              
+                              <div class="form-group">
+                                  <label for="violenceNotes" class="form-label"><strong>Notes</strong> (Required)</label>
+                                  <textarea class="form-control" id="violenceNotes" name="notes" rows="3" required="" placeholder="Describe the incident in detail..."></textarea>
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" id="cancelViolenceReport">Cancel</button>
+                              <button type="submit" class="btn btn-danger">Report as Violent</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div><script>
+$(function() {
+    // Store the modal instance globally to ensure proper cleanup
+    var reportViolentModalInstance;
+    
+    // Initialize the modal when the button is clicked
+    $('[data-bs-toggle="modal"][data-bs-target="#reportViolentModal"]').on('click', function() {
+        var modalElement = document.getElementById('reportViolentModal');
+        reportViolentModalInstance = new bootstrap.Modal(modalElement);
+        reportViolentModalInstance.show();
+    });
+    
+    // Ensure proper cleanup when modal is hidden
+    $('#reportViolentModal').on('hidden.bs.modal', function() {
+        // Remove modal backdrop if it's still present
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open');
+        $('body').css('padding-right', '');
+    });
+    
+    $('#reportViolentForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        if (!confirm('Are you sure you want to report this person as violent? This action cannot be undone and will be visible to all users across RDN and Clearplan.')) {
+            return;
+        }
+        
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    // Use the stored modal instance to hide the modal
+                    if (reportViolentModalInstance) {
+                        reportViolentModalInstance.hide();
+                    } else {
+                        // Fallback if the instance isn't available
+                        $('#reportViolentModal').modal('hide');
+                        // Force cleanup
+                        $('.modal-backdrop').remove();
+                        $('body').removeClass('modal-open');
+                        $('body').css('padding-right', '');
+                    }
+                    
+                    showViolenceNotification('success', 'Debtor successfully reported as violent');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    showViolenceNotification('error', response.message || 'An error occurred');
+                }
+            },
+            error: function() {
+                showViolenceNotification('error', 'An error occurred while processing your request');
+            }
+        });
+    });
+    
+    // Handle cancel button click manually
+    $(document).on('click', '#cancelViolenceReport', function() {
+        if (reportViolentModalInstance) {
+            reportViolentModalInstance.hide();
+        } else {
+            // Fallback if the instance isn't available
+            $('#reportViolentModal').modal('hide');
+            // Force cleanup
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
+            $('body').css('padding-right', '');
+        }
+    });
+    
+    function showViolenceNotification(type, message) {
+        var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        var notification = $('<div class="alert ' + alertClass + ' alert-dismissible fade show" role="alert">' +
+            message +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+            '</div>');
+        
+        $('#reportViolentModal .modal-body').prepend(notification);
+        
+        setTimeout(function() {
+            // Bootstrap 5 way to dismiss alerts
+            var alertInstance = new bootstrap.Alert(notification[0]);
+            alertInstance.close();
+        }, 5000);
+    }
+});
+</script></div><div class="col-3"><strong><span id="case_status_static">Status <h5 class="mb-1 mt-1"><span class="badge-repossessed">Repossessed</span></h5></span></strong><br><button class="btn btn-link" onclick="switchTab(85,function() { createFastInvoice();})">Quick Invoice</button></div><div class="col-3"><b>Add Sub-Status<form name="sub_statis_submit" id="sub_statis_submit" method="POST"><select name="status" class="form-select" id="sub_status" onchange="static_change(id,&quot;sub_status&quot;,value)"><option value=""></option><option value="1 Stop Impound">1 Stop Impound</option><option value="2 Stop Impound ">2 Stop Impound </option><option value="2+ Stop Impound">2+ Stop Impound</option><option value="30 DAY HOLD">30 DAY HOLD</option><option value="A/S Scrub Review">A/S Scrub Review</option><option value="A/S SCRUBBED">A/S SCRUBBED</option><option value="AS IS app">AS IS app</option><option value="AS IS req">AS IS req</option><option value="Asset Photos Received">Asset Photos Received</option><option value="Auction Return">Auction Return</option><option value="Bailout fees approved">Bailout fees approved</option><option value="Bailout fees requested">Bailout fees requested</option><option value="Bakersfield">Bakersfield</option><option value="BIO HAZARD">BIO HAZARD</option><option value="Bonus">Bonus</option><option value="CLOSE REVIEW">CLOSE REVIEW</option><option value="CLOSED - POSTIVE">CLOSED - POSTIVE</option><option value="CLOSED - TRANSFER">CLOSED - TRANSFER</option><option value="CLOSED FRIDAY">CLOSED FRIDAY</option><option value="COLLECT ALL FEES AT TIME OF PICK-UP">COLLECT ALL FEES AT TIME OF PICK-UP</option><option value="Completed">Completed</option><option value="Contact Approved">Contact Approved</option><option value="CR Received">CR Received</option><option value="Dealer Buyback">Dealer Buyback</option><option value="Delivery Required">Delivery Required</option><option value="DO NOT SCRUB">DO NOT SCRUB</option><option value="Doorknock Approved">Doorknock Approved</option><option value="Dry Run Approval">Dry Run Approval</option><option value="Dry Run Req">Dry Run Req</option><option value="Evidence hold">Evidence hold</option><option value="Fee Approval Mismatch">Fee Approval Mismatch</option><option value="Fee Request Declined">Fee Request Declined</option><option value="Field visit fee approved">Field visit fee approved</option><option value="Field visit fee requested">Field visit fee requested</option><option value="Fresno">Fresno</option><option value="Friday ">Friday </option><option value="Fuel surcharge approved">Fuel surcharge approved</option><option value="Fuel surcharge requested">Fuel surcharge requested</option><option value="GPS">GPS</option><option value="GPS DOESNT WORK">GPS DOESNT WORK</option><option value="HOLIDAY HOLD">HOLIDAY HOLD</option><option value="HOOK AND DROP">HOOK AND DROP</option><option value="IBEAM">IBEAM</option><option value="Impound">Impound</option><option value="Keys Approved ">Keys Approved </option><option value="Keys Completed">Keys Completed</option><option value="Keys Denied">Keys Denied</option><option value="Keys Requested">Keys Requested</option><option value="LAURA">LAURA</option><option value="LOCKED OUT ">LOCKED OUT </option><option value="LPR Scrubbed">LPR Scrubbed</option><option value="Mass Hold">Mass Hold</option><option value="Mileage Approved">Mileage Approved</option><option value="Mileage Requested">Mileage Requested</option><option value="Missing Asset Photos">Missing Asset Photos</option><option value="Missing Systemic CR">Missing Systemic CR</option><option value="Modesto">Modesto</option><option value="Monday">Monday</option><option value="NEEDS CALL">NEEDS CALL</option><option value="No Contact">No Contact</option><option value="NO FEES">NO FEES</option><option value="No GPS">No GPS</option><option value="OUTSOURCE TOW">OUTSOURCE TOW</option><option value="Oversize fees approved">Oversize fees approved</option><option value="Oversize fees req">Oversize fees req</option><option value="Pics &amp; CR">Pics &amp; CR</option><option value="Pics and Cr fee approved">Pics and Cr fee approved</option><option value="Pics and Cr fee requested">Pics and Cr fee requested</option><option value="Plate Scrubbed">Plate Scrubbed</option><option value="Previously Spotted">Previously Spotted</option><option value="RACHEL">RACHEL</option><option value="Repeat Repo">Repeat Repo</option><option value="Res Fee Approved">Res Fee Approved</option><option value="Res Fee Req">Res Fee Req</option><option value="Reviewed">Reviewed</option><option value="Sacramento">Sacramento</option><option value="Salinas">Salinas</option><option value="Saturday">Saturday</option><option value="Scheduled">Scheduled</option><option value="Skip Fee Approved">Skip Fee Approved</option><option value="Skip Fee Req">Skip Fee Req</option><option value="Skipped">Skipped</option><option value="Special Handling Approved">Special Handling Approved</option><option value="Special Handling Req">Special Handling Req</option><option value="Specialty Tow Approved">Specialty Tow Approved</option><option value="Specialty Tow Req">Specialty Tow Req</option><option value="Sunday">Sunday</option><option value="Thursday ">Thursday </option><option value="Tier 0/post charge off">Tier 0/post charge off</option><option value="Tier 1">Tier 1</option><option value="Tier 2">Tier 2</option><option value="Tier 3">Tier 3</option><option value="Transport App">Transport App</option><option value="Tuesday">Tuesday</option><option value="Violent ">Violent </option><option value="VSF REQUIRED">VSF REQUIRED</option><option value="Wednesday">Wednesday</option></select><input type="hidden" name="id" id="id" value="2176786979"></form><form id="substatus_add_new_form" action="" method="post"><div id="sub_system_add">Add Sub-<input value="" id="sub_system_add_field" type="text" name="status" class="form-control form-control-sm"><span title="click to add new sub status" onclick="addNewSubStatus(5606)"><img src="/images/create.png"></span></div></form></b></div><div class="col-2"><strong>Jump To</strong><br><form method="GET" onsubmit="this.tab.value=current_tab;return true;"><input type="hidden" name="tab"><input type="text" class="form-control ui-autocomplete-input" name="case_id" id="jump_to_autocomplete" placeholder="Case #" autocomplete="off"></form></div><script>
+			$(function(){
+				$('#jump_to_autocomplete').autocomplete({
+					source: '/ajax/case_lookup.php',
+					select: function(event, ui){
+						this.value = ui.item.id;
+						$(this).parents('form').submit();
+						return false;
+					}
+				}).data('ui-autocomplete')._renderItem = function(ul, item) {
+					return $('<li/>')
+						.data('ui-autocomplete-item', item)
+						.append('<a><strong>'+item.id+'<br/><span style="color: #777777; font-size: 10px;">'+item.debtor+' [Status: '+item.status+']<br />'+item.vehicle+'<br />'+item.vin+'</span></a>')
+						.appendTo(ul);
+				};
+			});
+			
+			function copyVehicleInfo(){
+			    let vehicleInfo = 'Year:\t2019\nMake:\tNISSAN\nModel:\tROGUE SPOR\nV.I.N.:\tJN1BJ1CP7KW226947';
+                navigator.clipboard.writeText(vehicleInfo);
+		        return true;	    
+			}
+     </script><div class="col-1 d-flex flex-column align-items-center"><span id="sync_to_clearplan" class="fw-bold">Sync</span><input type="image" onclick="static_change(id,&quot;sync_to_clearplan&quot;, &quot;true&quot;)" value="Sync to Clearplan" data-toggle="tooltip" class="js-qtip-trigger" title="Sync to Clearplan" src="/images/clearplan-logo-icon.svg" disabled="" style="width: 32px; opacity: 0.7;"><a href="https://clearplan.io/app_/#/maps?vin=JN1BJ1CP7KW226947" target="_blank" class="btn btn-sm btn-link p-0 m-0 disabled">view</a></div></div><div class="row"><div class="col"><dl><div class="row gy-2"><div class="col-6"><dt>Client Phone</dt><dd>330-805-9063</dd></div><div class="col-6"><dt>Client Fax</dt><dd><span class="text-muted">&lt;empty&gt;</span></dd></div><div class="col-6"><dt>Coll Phone</dt><dd><span class="text-muted">&lt;empty&gt;</span></dd></div><div class="col-6"><dt>Coll Ext</dt><dd><span class="text-muted">&lt;empty&gt;</span></dd></div></div></dl></div><div class="col border-start border-end"><dl><div class="row gy-2"><div class="col-6"><dt>Debtor</dt><dd>JOS  IGNACIO VANEGAS GUEV</dd></div><div class="col-6"><dt>Cosigner</dt><dd>GLORI  ELENA GOMEZ SIERRA</dd></div></div></dl></div><div class="col"><dl><div class="row gy-2"><div class="col-6"><dt>Year</dt><dd>2019</dd></div><div class="col-6"><dt>Make</dt><dd>NISSAN</dd></div><div class="col-6"><dt>Model</dt><dd>ROGUE SPOR</dd></div><div class="col-6 text-break"><dt>V.I.N. <button type="button" class="btn btn-link p-0 mb-1" onclick="copyVehicleInfo();"><svg class="svg-inline--fa fa-copy fa-w-14 fw-normal text-secondary cursor-pointer" aria-hidden="true" focusable="false" data-prefix="far" data-icon="copy" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"></path></svg><!-- <i class="far fa-copy fw-normal text-secondary cursor-pointer"></i> Font Awesome fontawesome.com --></button></dt><dd>JN1BJ1CP7KW226947</dd></div></div></dl></div></div><div class="d-flex justify-content-between align-items-center"><div></div><div>
+              <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#reportViolentModal">
+                  <svg class="svg-inline--fa fa-exclamation-triangle fa-w-18" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="exclamation-triangle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"></path></svg><!-- <i class="fas fa-exclamation-triangle"></i> Font Awesome fontawesome.com --> Report Violent
+              </button>
+          </div></div><h5 class="d-inline"><span class="badge bg-dark m-1 p-2">Dispatched <svg style="cursor: pointer;" class="svg-inline--fa fa-times-circle fa-w-16 link-danger" onclick="static_change(id,&quot;sub_status_delete&quot;,&quot;169851988&quot;)" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path></svg><!-- <span style="cursor: pointer;" class="fas fa-times-circle link-danger" onclick="static_change(id,&quot;sub_status_delete&quot;,&quot;169851988&quot;)"></span> Font Awesome fontawesome.com --></span></h5><h5 class="d-inline"><span class="badge bg-dark m-1 p-2">IMPORTANT UPDATE <svg style="cursor: pointer;" class="svg-inline--fa fa-times-circle fa-w-16 link-danger" onclick="static_change(id,&quot;sub_status_delete&quot;,&quot;169850245&quot;)" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path></svg><!-- <span style="cursor: pointer;" class="fas fa-times-circle link-danger" onclick="static_change(id,&quot;sub_status_delete&quot;,&quot;169850245&quot;)"></span> Font Awesome fontawesome.com --></span></h5><h5 class="d-inline"><span class="badge bg-dark m-1 p-2">Ready <svg style="cursor: pointer;" class="svg-inline--fa fa-times-circle fa-w-16 link-danger" onclick="static_change(id,&quot;sub_status_delete&quot;,&quot;169851993&quot;)" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path></svg><!-- <span style="cursor: pointer;" class="fas fa-times-circle link-danger" onclick="static_change(id,&quot;sub_status_delete&quot;,&quot;169851993&quot;)"></span> Font Awesome fontawesome.com --></span></h5><h5 class="d-inline"><span class="badge bg-dark m-1 p-2">Transport Req <svg style="cursor: pointer;" class="svg-inline--fa fa-times-circle fa-w-16 link-danger" onclick="static_change(id,&quot;sub_status_delete&quot;,&quot;169866616&quot;)" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path></svg><!-- <span style="cursor: pointer;" class="fas fa-times-circle link-danger" onclick="static_change(id,&quot;sub_status_delete&quot;,&quot;169866616&quot;)"></span> Font Awesome fontawesome.com --></span></h5><div id="staticModuleErrors"></div></div></div></div><a name="module_8"></a><div id="module_8">
+
+<script>
+"use strict";
+flatpickr('#other_date',
+	{
+		minDate: '01/01/1996',
+		allowInput: true,
+		dateFormat: 'Y-m-d',
+		altInput: true,
+		altFormat: "m/d/Y",
+	});
+
+function sendEditRequest(pos) {
+	const sendPaymentEdit = rdn_update('invoice_item_agent_payment', pos, 'ret_edit_' + pos);
+
+	if (sendPaymentEdit) {
+		if (sendPaymentEdit === true) {
+			rdn_alert('pay_adjuster_module_alerts', 'Item has been modified.', window.case_id, '8');
+		} else {
+			rdn_alert('pay_adjuster_module_alerts', sendPaymentEdit, window.case_id, '8');
+		}
+	} else {
+		rdn_error('pay_adjuster_module_alerts', window.service_error);
+	}
+	$(document).trigger('close.facebox');
+}
+
+function deletePayment(pos) {
+
+	const sendPaymentDelete = rdn_delete('invoice_item_agent_payment', pos);
+
+	if (sendPaymentDelete) {
+		if (sendPaymentDelete === true) {
+			rdn_alert('pay_adjuster_module_alerts', 'Item has been deleted.', window.case_id, '8');
+		} else {
+			rdn_alert('pay_adjuster_module_alerts', sendPaymentDelete, window.case_id, '8');
+		}
+	} else {
+		rdn_error('pay_adjuster_module_alerts', window.service_error);
+	}
+}
+
+function createPayment() {
+
+	// hide edit forms
+	$('#the_payments tr[id^=ret_edit_]:visible').each(
+			function () {
+				$(this).hide();
+				$(this).children().filter(':input').prop('disabled', 'disabled');
+				$('#' + this.id.replace('edit_', '')).show();
+			}
+	);
+
+	if ($('#createPaymentForm input[name=case_id]').length <= 0) {
+		$('#createPaymentForm').append('<input type="hidden" name="case_id" value="' + window.case_id + '" />');
+	}
+
+
+	const sendPaymentCreate = rdn_insert('invoice_item_agent_payment','createPaymentForm');
+
+	if (sendPaymentCreate) {
+		if (sendPaymentCreate === true) {
+			rdn_alert('pay_adjuster_module_alerts', 'New item has been saved.', window.case_id, '8')
+		} else {
+			rdn_alert('pay_adjuster_module_alerts', sendPaymentCreate, window.case_id, '8');
+		}
+	} else {
+		rdn_error('pay_adjuster_module_alerts', window.service_error);
+	}
+}
+
+$("#service_item").change(function() {
+	if($("#js-udb").val() == 'TN8002385889') { // check if UAR
+		$("#amount").val($("#js-rate-" + $(this).val()).val());
+	}
+
+});
+
+$("#edit_service_item").change(function() {
+	if($("#js-udb").val() == 'TN8002385889'){ // check if UAR
+		$("#edit_amount").val($("#js-rate-" + $(this).val()).val());
+	}
+});
+
+ 		  $("span#case_id").html("2176786979");
+	  var y				=	$("span#case_id").html( );
+	  if (!(y)){
+	  	$("span#case_id").html("[-]");
+	  }
+	  	  $("span#inf_client_name").html("Millennium Capital and Recovery Corporation");
+	  var y				=	$("span#inf_client_name").html( );
+	  if (!(y)){
+	  	$("span#inf_client_name").html("[-]");
+	  }
+	  	  $("span#inf_client_phone").html("330-805-9063");
+	  var y				=	$("span#inf_client_phone").html( );
+	  if (!(y)){
+	  	$("span#inf_client_phone").html("[-]");
+	  }
+	  	  $("span#inf_bill_email").html("");
+	  var y				=	$("span#inf_bill_email").html( );
+	  if (!(y)){
+	  	$("span#inf_bill_email").html("[-]");
+	  }
+	  	  $("span#inf_vehicle_vin").html("JN1BJ1CP7KW226947");
+	  var y				=	$("span#inf_vehicle_vin").html( );
+	  if (!(y)){
+	  	$("span#inf_vehicle_vin").html("[-]");
+	  }
+	  	  $("span#inf_vehicle_make").html("NISSAN");
+	  var y				=	$("span#inf_vehicle_make").html( );
+	  if (!(y)){
+	  	$("span#inf_vehicle_make").html("[-]");
+	  }
+	  	  $("span#inf_vehicle_model").html("ROGUE SPOR");
+	  var y				=	$("span#inf_vehicle_model").html( );
+	  if (!(y)){
+	  	$("span#inf_vehicle_model").html("[-]");
+	  }
+	  	  $("span#inf_vehicle_year").html("2019");
+	  var y				=	$("span#inf_vehicle_year").html( );
+	  if (!(y)){
+	  	$("span#inf_vehicle_year").html("[-]");
+	  }
+	  	  $("span#inf_asg_name").html("Sardenelli,Tonya,1370280");
+	  var y				=	$("span#inf_asg_name").html( );
+	  if (!(y)){
+	  	$("span#inf_asg_name").html("[-]");
+	  }
+	  	  $("span#inf_order_date").html("2025-08-27");
+	  var y				=	$("span#inf_order_date").html( );
+	  if (!(y)){
+	  	$("span#inf_order_date").html("[-]");
+	  }
+	  	  $("span#inf_owner_first").html("JOS");
+	  var y				=	$("span#inf_owner_first").html( );
+	  if (!(y)){
+	  	$("span#inf_owner_first").html("[-]");
+	  }
+	  	  $("span#inf_owner_last").html("IGNACIO VANEGAS GUEV");
+	  var y				=	$("span#inf_owner_last").html( );
+	  if (!(y)){
+	  	$("span#inf_owner_last").html("[-]");
+	  }
+	  	  $("span#inf_owner_name").html("JOS IGNACIO VANEGAS GUEV");
+	  var y				=	$("span#inf_owner_name").html( );
+	  if (!(y)){
+	  	$("span#inf_owner_name").html("[-]");
+	  }
+	  	  $("span#assigned_adjusters").html("Array");
+	  var y				=	$("span#assigned_adjusters").html( );
+	  if (!(y)){
+	  	$("span#assigned_adjusters").html("[-]");
+	  }
+	  	  $("span#is_fwding_co").html("");
+	  var y				=	$("span#is_fwding_co").html( );
+	  if (!(y)){
+	  	$("span#is_fwding_co").html("[-]");
+	  }
+	  	  $("span#new_adjuster").html("Array");
+	  var y				=	$("span#new_adjuster").html( );
+	  if (!(y)){
+	  	$("span#new_adjuster").html("[-]");
+	  }
+	  	  $("span#new_service").html("Array");
+	  var y				=	$("span#new_service").html( );
+	  if (!(y)){
+	  	$("span#new_service").html("[-]");
+	  }
+	  	  $("span#new_amount").html("");
+	  var y				=	$("span#new_amount").html( );
+	  if (!(y)){
+	  	$("span#new_amount").html("[-]");
+	  }
+	  	  $("span#new_date").html("");
+	  var y				=	$("span#new_date").html( );
+	  if (!(y)){
+	  	$("span#new_date").html("[-]");
+	  }
+	  	  $("span#new_rate").html("Array");
+	  var y				=	$("span#new_rate").html( );
+	  if (!(y)){
+	  	$("span#new_rate").html("[-]");
+	  }
+	  	  $("span#udb").html("CA4088850910");
+	  var y				=	$("span#udb").html( );
+	  if (!(y)){
+	  	$("span#udb").html("[-]");
+	  }
+	  	  $("span#ret_payments").html("Array");
+	  var y				=	$("span#ret_payments").html( );
+	  if (!(y)){
+	  	$("span#ret_payments").html("[-]");
+	  }
+	  
+	function getAgentServices(agent,value,prefix) {
+		$.get(
+			'/alpha_rdn/ajax/default/invoice_agent_service_info_ajax.php',
+			{ agent_id : agent },
+			function(html){
+				$('#' + prefix + 'service_item').html(html).val(value);
+			}
+		);
+	}
+
+$("#service_item").change(function() {
+	if($("#js-udb").val() == 'TN8002385889') { // check if UAR
+		$("#amount").val($("#js-rate-" + $(this).val()).val());
+	}
+});
+$("#edit_service_item").change(function() {
+	if($("#js-udb").val() == 'TN8002385889'){ // check if UAR
+		$("#edit_amount").val($("#js-rate-" + $(this).val()).val());
+	}
+});
+
+</script>
+
+
+<div id="pay_adjuster_module_alerts"></div>
+
+	<div class="section">
+		<div class="section__main">
+			<h1 class="section__title">
+				Pay Adjuster
+			</h1>
+			<p>Complete the following fields to send a payment to an adjuster</p>
+			<form name="createPaymentForm" id="createPaymentForm" method="post" action="" onsubmit="createPayment(); return false;">
+				<div class="row mb-2">
+					<div class="col">
+						<label for="agent_id" class="form-label">Adjuster</label>
+						<select name="agent_id" id="agent_id" class="form-select form-select-sm" required="">
+							<option value="">- Select One -</option>
+															<optgroup label="Assigned">
+																			<option value="186659">Ayala, Oscar</option>
+																	</optgroup>
+																						<optgroup label="Company Adjuster">
+																			<option value="179439">Aldama, Daniel</option>
+																			<option value="257331">Andrade, Jose</option>
+																			<option value="277525">Angulo, Octavio</option>
+																			<option value="231921">Ayala, Fernando</option>
+																			<option value="186659">Ayala, Oscar</option>
+																			<option value="264537">Barbosa, Jose</option>
+																			<option value="282108">Barnhart, Dalyn</option>
+																			<option value="191684">Barraza, Carlos</option>
+																			<option value="179436">Benavidez, Fred</option>
+																			<option value="278827">Blandon, Sammy</option>
+																			<option value="238898">Bonilla, Pedro</option>
+																			<option value="272465">Booth, Jodice</option>
+																			<option value="179444">Brandt, Preston</option>
+																			<option value="224042">Burns, Dan</option>
+																			<option value="263565">Castro, Sergio</option>
+																			<option value="229493">Cauich, Pedro</option>
+																			<option value="234394">Chanthachak, Joe</option>
+																			<option value="241996">Chavez, Bayron</option>
+																			<option value="258128">Chico, Richard</option>
+																			<option value="258088">Crocker, Robert</option>
+																			<option value="253882">Dang, Tyler</option>
+																			<option value="268237">Davenport, Sean</option>
+																			<option value="254838">De Haro, Jesus</option>
+																			<option value="278491">Diaz, Alexandra</option>
+																			<option value="257653">Diaz, Mike</option>
+																			<option value="231151">Dickerson, Josh</option>
+																			<option value="253775">Espinoza, Joseph</option>
+																			<option value="258127">Estrada, Jesus</option>
+																			<option value="281338">Falcon, Daniel</option>
+																			<option value="275823">Fernandez, Edgar</option>
+																			<option value="273241">Fernandez, Jose</option>
+																			<option value="240085">Garcia, Alberto</option>
+																			<option value="272466">Godoy, Edgar</option>
+																			<option value="230787">Gomez, Pablino</option>
+																			<option value="231148">Gonzales, Joe</option>
+																			<option value="268415">Gonzales, Joel</option>
+																			<option value="185373">Gonzales, Ruben</option>
+																			<option value="255165">Guerra, Jose</option>
+																			<option value="274640">Hernandez, Nina</option>
+																			<option value="264076">Jennings, Amy</option>
+																			<option value="220326">Jetton, Ryan</option>
+																			<option value="278090">Jimenez, Juan</option>
+																			<option value="218821">Johnson, James</option>
+																			<option value="251859">Katagawa, Jimmy</option>
+																			<option value="205604">Keene, Corina</option>
+																			<option value="213994">Keene, Nathan</option>
+																			<option value="259600">King, Jacques</option>
+																			<option value="239171">Kropelnicki, Michael</option>
+																			<option value="273607">Lambert, Michael</option>
+																			<option value="255965">Llamas, Alex</option>
+																			<option value="277526">McCall, Jonathan</option>
+																			<option value="11921">McNeil, James</option>
+																			<option value="278825">Mendoza, Alex</option>
+																			<option value="279765">Montiero, Raymond</option>
+																			<option value="230729">Obregon, Agustin</option>
+																			<option value="179448">Ochoa, Joey</option>
+																			<option value="271194">Oregon, Omar</option>
+																			<option value="251349">Orochena, Leonardo</option>
+																			<option value="264536">Ortiz, Silvano</option>
+																			<option value="247721">Posada, Michael</option>
+																			<option value="273242">Proctor, Taliah</option>
+																			<option value="278307">Purnell, Quincy</option>
+																			<option value="281337">Rangel, Mark</option>
+																			<option value="185924">Rich, William</option>
+																			<option value="253175">Rivera, Ashley</option>
+																			<option value="187500">Robles, Edgar</option>
+																			<option value="267373">Rodriguez, David</option>
+																			<option value="247720">Sandoval, Marco</option>
+																			<option value="180157">Saucedo, Jose</option>
+																			<option value="276570">Solorzano, Alvaro</option>
+																			<option value="239215">Tellez, Juan</option>
+																			<option value="210109">Thomas, Marc</option>
+																			<option value="242750">Torres, Francisco</option>
+																			<option value="249089">Torres, Janeth</option>
+																			<option value="243546">Veimau, Nela</option>
+																			<option value="280188">Vidal, Francisco</option>
+																			<option value="279789">Villa, Juan</option>
+																			<option value="262127">Whitmore, Mike</option>
+																			<option value="215148">Wiest, Edgar</option>
+																			<option value="183761">Wilson, Chris</option>
+																	</optgroup>
+															<optgroup label="Outside Adjuster">
+																			<option value="175232">Camping Companies Inc., Greg </option>
+																			<option value="193170">Shield Recovery, Isa </option>
+																	</optgroup>
+													</select>
+					</div>
+					<div class="col">
+												<input hidden="true" id="js-udb" value="CA4088850910">
+						<label for="service_item" class="form-label">Service</label>
+													<select name="service_item" id="service_item" class="form-select form-select-sm" required="">
+								<option value="">- Select One -</option>
+																	<option value="42458">Involuntary</option>
+																	<option value="42459">Voluntary Repossession</option>
+																	<option value="42532">Additional Fees</option>
+																	<option value="61999">Delivery Fee</option>
+																	<option value="62000">Redemption</option>
+																	<option value="62001">Redemption Storage</option>
+																	<option value="62002">Personal Property Handling Fee</option>
+																	<option value="62003">Personals Storage</option>
+																	<option value="62129">Advanced Funds</option>
+																	<option value="62130">KEY (non-transponder)</option>
+																	<option value="62132">Key - Laser Cut</option>
+																	<option value="62134">Key - Transponder</option>
+																	<option value="62135">Key -- Standard Cut</option>
+																	<option value="62137">Dolly Fee</option>
+																	<option value="62138">Flatbed Fees</option>
+																	<option value="62139">Storage</option>
+																	<option value="62141">Mileage Fee</option>
+																	<option value="62143">LPR Involuntary Repossession</option>
+																	<option value="62144">Close Fee</option>
+																	<option value="62146">Pictures and Condition Report Fee</option>
+																	<option value="62973">Bonus</option>
+																	<option value="63340">Administration Fee</option>
+																	<option value="63429">Specialty Unit</option>
+																	<option value="63520">Dry Run Fee</option>
+																	<option value="63521">Towing</option>
+																	<option value="63530">Processing</option>
+																	<option value="63582">Police Department Release Fee</option>
+																	<option value="63617">KEY- SPECIAL ORDER KEYS</option>
+																	<option value="63618">Key-Laser Flip</option>
+																	<option value="63619">Key-Proximity</option>
+																	<option value="63620">Key-Remote Combo</option>
+																	<option value="63621">Key-Smart</option>
+																	<option value="63622">Fuel Surcharge</option>
+																	<option value="63642">LPR Locate Fee</option>
+																	<option value="64166">Impound Repo Fee</option>
+																	<option value="65761">Tolls</option>
+																	<option value="66830">Investigation Fee</option>
+																	<option value="66850">Service Fee</option>
+																	<option value="67145">Clean out fee</option>
+																	<option value="67718">Covid fee</option>
+																	<option value="67873">Drop Fee</option>
+																	<option value="68010">Oversize Charge</option>
+																	<option value="68948">Surcharge Fee</option>
+																	<option value="68949">COVID SURCHARGE</option>
+																	<option value="69257">Out Source</option>
+																	<option value="69426">Closed Positive Resolution</option>
+																	<option value="70118">Labor</option>
+																	<option value="70931">NPPI Erasure</option>
+																	<option value="71816">Locksmith Fee</option>
+																	<option value="72003">GPS Installation</option>
+																	<option value="80307">Contact/Investigation</option>
+															</select>
+											</div>
+					<div class="col">
+						<label for="amount" class="form-label">Amount</label>
+						<input type="number" step="0.01" name="amount" id="amount" class="form-control form-control-sm" required="">
+					</div>
+				</div>
+				<div class="row mb-2">
+					<div class="col-4">
+						<label for="other_date" class="form-label">Date</label>
+						<input name="other_date" placeholder="mm/dd/yyyy" id="other_date" class="form-control form-control-sm flatpickr-input" type="hidden"><input class="form-control form-control-sm form-control input" placeholder="mm/dd/yyyy" tabindex="0" type="text">
+					</div>
+				</div>
+				<div class="text-center">
+					<button id="submit_new" type="submit" class="btn btn-warning">Post Payment</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="section">
+		<div class="section__main">
+			<h1 class="section__title">Payment History</h1>
+							<table class="table table-striped" id="the_payments">
+					<thead>
+					<tr>
+						<th>Date</th>
+						<th>Adjuster</th>
+						<th>Service</th>
+						<th>Date Paid</th>
+						<th>Check #</th>
+						<th>Amount</th>
+						<th>Balance</th>
+						<th>Actions</th>
+					</tr>
+					</thead>
+					<tbody>
+																														<tr id="ret_21249634">
+							<td id="ret_date_21249634">08/27/2025</td>
+							<td id="ret_adjuster_21249634">Oscar Ayala</td>
+							<td>Impound Repo Fee</td>
+							<td id="ret_date_paid_21249634">unpaid</td>
+							<td id="ret_check_number_21249634"></td>
+							<td id="ret_amount_21249634">$74</td>
+							<td>$74</td>
+							<td>
+								<div class="btn-group">
+																			<button type="button" title="Edit this payment" class="btn btn-outline-secondary" onclick="window.caseModal.load('_module.php?module_id=8&amp;mode=edit&amp;payment=21249634&amp;case_id=' + window.case_id);">
+											<svg class="svg-inline--fa fa-edit fa-w-18" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="edit" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"></path></svg><!-- <i class="fas fa-edit"></i> Font Awesome fontawesome.com -->
+										</button>
+																		<button type="button" class="btn btn-outline-secondary" title="Delete this payment" onclick="if(confirm('Are you sure you want to permanently delete payment #21249634')) deletePayment(21249634); else return false;"><svg class="svg-inline--fa fa-trash fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"></path></svg><!-- <i class="fas fa-trash"></i> Font Awesome fontawesome.com --></button>
+								</div>
+							</td>
+						</tr>
+																														<tr id="ret_21249635">
+							<td id="ret_date_21249635">08/27/2025</td>
+							<td id="ret_adjuster_21249635">Oscar Ayala</td>
+							<td>Flatbed Fees</td>
+							<td id="ret_date_paid_21249635">unpaid</td>
+							<td id="ret_check_number_21249635"></td>
+							<td id="ret_amount_21249635">$16</td>
+							<td>$16</td>
+							<td>
+								<div class="btn-group">
+																			<button type="button" title="Edit this payment" class="btn btn-outline-secondary" onclick="window.caseModal.load('_module.php?module_id=8&amp;mode=edit&amp;payment=21249635&amp;case_id=' + window.case_id);">
+											<svg class="svg-inline--fa fa-edit fa-w-18" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="edit" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"></path></svg><!-- <i class="fas fa-edit"></i> Font Awesome fontawesome.com -->
+										</button>
+																		<button type="button" class="btn btn-outline-secondary" title="Delete this payment" onclick="if(confirm('Are you sure you want to permanently delete payment #21249635')) deletePayment(21249635); else return false;"><svg class="svg-inline--fa fa-trash fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"></path></svg><!-- <i class="fas fa-trash"></i> Font Awesome fontawesome.com --></button>
+								</div>
+							</td>
+						</tr>
+										</tbody>
+				</table>
+					</div>
+
+	</div>
+
+</div></div>
+            </div>
+            <!-- END NEW CONTENT BOX -->
+
+
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <div>Powered By RDN ©1998-2025 Recovery Database Network, Inc. All rights reserved.</div>
+        <div><a href="https://www.recoverydatabase.net/privacy" target="_blank">Privacy Policy</a> | &nbsp;</div>
+        <div>Santosh  Bhadange (Full User)</div>
+    </div>
+
+
+</div>
+
+<div class="modal fade ui-draggable" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="formModal">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            ...
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-5" id="toast-container">
+
+</div>
+
+<template id="toast">
+    <div class="toast bg-success text-white font-weight-bold" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex align-items-center">
+            <div class="toast-body w-100"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</template>
+
+<iframe id="intercom-frame" style="position: absolute !important; opacity: 0 !important; width: 1px !important; height: 1px !important; top: 0 !important; left: 0 !important; border: none !important; display: block !important; z-index: -1 !important; pointer-events: none;" aria-hidden="true" tabindex="-1" title="Intercom"></iframe><div class="intercom-lightweight-app"><div class="intercom-lightweight-app-launcher intercom-launcher" role="button" tabindex="0" aria-label="Open Intercom Messenger" aria-live="polite"><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-open"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 32"><path d="M28 32s-4.714-1.855-8.527-3.34H3.437C1.54 28.66 0 27.026 0 25.013V3.644C0 1.633 1.54 0 3.437 0h21.125c1.898 0 3.437 1.632 3.437 3.645v18.404H28V32zm-4.139-11.982a.88.88 0 00-1.292-.105c-.03.026-3.015 2.681-8.57 2.681-5.486 0-8.517-2.636-8.571-2.684a.88.88 0 00-1.29.107 1.01 1.01 0 00-.219.708.992.992 0 00.318.664c.142.128 3.537 3.15 9.762 3.15 6.226 0 9.621-3.022 9.763-3.15a.992.992 0 00.317-.664 1.01 1.01 0 00-.218-.707z"></path></svg></div><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-minimize"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M18.601 8.39897C18.269 8.06702 17.7309 8.06702 17.3989 8.39897L12 13.7979L6.60099 8.39897C6.26904 8.06702 5.73086 8.06702 5.39891 8.39897C5.06696 8.73091 5.06696 9.2691 5.39891 9.60105L11.3989 15.601C11.7309 15.933 12.269 15.933 12.601 15.601L18.601 9.60105C18.9329 9.2691 18.9329 8.73091 18.601 8.39897Z" fill="currentColor"></path>
+</svg>
+</div></div><style id="intercom-lightweight-app-style" type="text/css">
+  @keyframes intercom-lightweight-app-launcher {
+    from {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes intercom-lightweight-app-gradient {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes intercom-lightweight-app-messenger {
+    0% {
+      opacity: 0;
+      transform: scale(0);
+    }
+    40% {
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .intercom-lightweight-app {
+    position: fixed;
+    z-index: 2147483001;
+    width: 0;
+    height: 0;
+    font-family: intercom-font, "Helvetica Neue", "Apple Color Emoji", Helvetica, Arial, sans-serif;
+  }
+
+  .intercom-lightweight-app-gradient {
+    position: fixed;
+    z-index: 2147483002;
+    width: 500px;
+    height: 500px;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at bottom right,
+      rgba(29, 39, 54, 0.16) 0%,
+      rgba(29, 39, 54, 0) 72%);
+    animation: intercom-lightweight-app-gradient 200ms ease-out;
+  }
+
+  .intercom-lightweight-app-launcher {
+    position: fixed;
+    z-index: 2147483003;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none;
+    bottom: 20px;
+    right: 20px;
+    max-width: 48px;
+    width: 48px;
+    max-height: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #0071b2;
+    cursor: pointer;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06), 0 2px 32px 0 rgba(0, 0, 0, 0.16);
+    transition: transform 167ms cubic-bezier(0.33, 0.00, 0.00, 1.00);
+    box-sizing: content-box;
+  }
+
+
+  .intercom-lightweight-app-launcher:hover {
+    transition: transform 250ms cubic-bezier(0.33, 0.00, 0.00, 1.00);
+    transform: scale(1.1)
+  }
+
+  .intercom-lightweight-app-launcher:active {
+    transform: scale(0.85);
+    transition: transform 134ms cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+
+  .intercom-lightweight-app-launcher:focus {
+    outline: none;
+
+    
+  }
+
+  .intercom-lightweight-app-launcher-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 48px;
+    height: 48px;
+    transition: transform 100ms linear, opacity 80ms linear;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg {
+    height: 44px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-custom-icon-open {
+    max-height: 24px;
+    max-width: 24px;
+
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize {
+    
+        opacity: 0;
+        transform: rotate(-60deg) scale(0);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-messenger {
+    position: fixed;
+    z-index: 2147483003;
+    overflow: hidden;
+    background-color: #ffffff;
+    animation: intercom-lightweight-app-messenger 250ms cubic-bezier(0, 1, 1, 1);
+    transform-origin: bottom right;
+
+    
+        width: 400px;
+        height: calc(100% - 104px);
+        max-height: 704px;
+        min-height: 250px;
+        right: 20px;
+        bottom: 84px;
+        box-shadow: 0 5px 40px rgba(0,0,0,0.16);
+      
+
+    border-radius: 16px;
+  }
+
+  .intercom-lightweight-app-messenger-header {
+    height: 64px;
+    border-bottom: none;
+    background: #ffffff;
+  }
+
+  .intercom-lightweight-app-messenger-footer{
+    position:absolute;
+    bottom:0;
+    width: 100%;
+    height: 80px;
+    background: #ffffff;
+    font-size: 14px;
+    line-height: 21px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.05);
+  }
+
+  @media print {
+    .intercom-lightweight-app {
+      display: none;
+    }
+  }
+</style></div><div class="flatpickr-calendar animate" tabindex="-1"><div class="flatpickr-months"><span class="flatpickr-prev-month"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 17"><g></g><path d="M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z"></path></svg></span><div class="flatpickr-month"><div class="flatpickr-current-month"><select class="flatpickr-monthDropdown-months" aria-label="Month" tabindex="-1"><option class="flatpickr-monthDropdown-month" value="0" tabindex="-1">January</option><option class="flatpickr-monthDropdown-month" value="1" tabindex="-1">February</option><option class="flatpickr-monthDropdown-month" value="2" tabindex="-1">March</option><option class="flatpickr-monthDropdown-month" value="3" tabindex="-1">April</option><option class="flatpickr-monthDropdown-month" value="4" tabindex="-1">May</option><option class="flatpickr-monthDropdown-month" value="5" tabindex="-1">June</option><option class="flatpickr-monthDropdown-month" value="6" tabindex="-1">July</option><option class="flatpickr-monthDropdown-month" value="7" tabindex="-1">August</option><option class="flatpickr-monthDropdown-month" value="8" tabindex="-1">September</option><option class="flatpickr-monthDropdown-month" value="9" tabindex="-1">October</option><option class="flatpickr-monthDropdown-month" value="10" tabindex="-1">November</option><option class="flatpickr-monthDropdown-month" value="11" tabindex="-1">December</option></select><div class="numInputWrapper"><input class="numInput cur-year" type="number" tabindex="-1" aria-label="Year" min="1996"><span class="arrowUp"></span><span class="arrowDown"></span></div></div></div><span class="flatpickr-next-month"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 17"><g></g><path d="M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z"></path></svg></span></div><div class="flatpickr-innerContainer"><div class="flatpickr-rContainer"><div class="flatpickr-weekdays"><div class="flatpickr-weekdaycontainer">
+      <span class="flatpickr-weekday">
+        Sun</span><span class="flatpickr-weekday">Mon</span><span class="flatpickr-weekday">Tue</span><span class="flatpickr-weekday">Wed</span><span class="flatpickr-weekday">Thu</span><span class="flatpickr-weekday">Fri</span><span class="flatpickr-weekday">Sat
+      </span>
+      </div></div><div class="flatpickr-days" tabindex="-1"><div class="dayContainer"><span class="flatpickr-day prevMonthDay" aria-label="July 27, 2025" tabindex="-1">27</span><span class="flatpickr-day prevMonthDay" aria-label="July 28, 2025" tabindex="-1">28</span><span class="flatpickr-day prevMonthDay" aria-label="July 29, 2025" tabindex="-1">29</span><span class="flatpickr-day prevMonthDay" aria-label="July 30, 2025" tabindex="-1">30</span><span class="flatpickr-day prevMonthDay" aria-label="July 31, 2025" tabindex="-1">31</span><span class="flatpickr-day " aria-label="August 1, 2025" tabindex="-1">1</span><span class="flatpickr-day " aria-label="August 2, 2025" tabindex="-1">2</span><span class="flatpickr-day " aria-label="August 3, 2025" tabindex="-1">3</span><span class="flatpickr-day " aria-label="August 4, 2025" tabindex="-1">4</span><span class="flatpickr-day " aria-label="August 5, 2025" tabindex="-1">5</span><span class="flatpickr-day " aria-label="August 6, 2025" tabindex="-1">6</span><span class="flatpickr-day " aria-label="August 7, 2025" tabindex="-1">7</span><span class="flatpickr-day " aria-label="August 8, 2025" tabindex="-1">8</span><span class="flatpickr-day " aria-label="August 9, 2025" tabindex="-1">9</span><span class="flatpickr-day " aria-label="August 10, 2025" tabindex="-1">10</span><span class="flatpickr-day " aria-label="August 11, 2025" tabindex="-1">11</span><span class="flatpickr-day " aria-label="August 12, 2025" tabindex="-1">12</span><span class="flatpickr-day " aria-label="August 13, 2025" tabindex="-1">13</span><span class="flatpickr-day " aria-label="August 14, 2025" tabindex="-1">14</span><span class="flatpickr-day " aria-label="August 15, 2025" tabindex="-1">15</span><span class="flatpickr-day " aria-label="August 16, 2025" tabindex="-1">16</span><span class="flatpickr-day " aria-label="August 17, 2025" tabindex="-1">17</span><span class="flatpickr-day " aria-label="August 18, 2025" tabindex="-1">18</span><span class="flatpickr-day " aria-label="August 19, 2025" tabindex="-1">19</span><span class="flatpickr-day " aria-label="August 20, 2025" tabindex="-1">20</span><span class="flatpickr-day " aria-label="August 21, 2025" tabindex="-1">21</span><span class="flatpickr-day " aria-label="August 22, 2025" tabindex="-1">22</span><span class="flatpickr-day " aria-label="August 23, 2025" tabindex="-1">23</span><span class="flatpickr-day " aria-label="August 24, 2025" tabindex="-1">24</span><span class="flatpickr-day " aria-label="August 25, 2025" tabindex="-1">25</span><span class="flatpickr-day " aria-label="August 26, 2025" tabindex="-1">26</span><span class="flatpickr-day " aria-label="August 27, 2025" tabindex="-1">27</span><span class="flatpickr-day " aria-label="August 28, 2025" tabindex="-1">28</span><span class="flatpickr-day today" aria-label="August 29, 2025" aria-current="date" tabindex="-1">29</span><span class="flatpickr-day " aria-label="August 30, 2025" tabindex="-1">30</span><span class="flatpickr-day " aria-label="August 31, 2025" tabindex="-1">31</span><span class="flatpickr-day nextMonthDay" aria-label="September 1, 2025" tabindex="-1">1</span><span class="flatpickr-day nextMonthDay" aria-label="September 2, 2025" tabindex="-1">2</span><span class="flatpickr-day nextMonthDay" aria-label="September 3, 2025" tabindex="-1">3</span><span class="flatpickr-day nextMonthDay" aria-label="September 4, 2025" tabindex="-1">4</span><span class="flatpickr-day nextMonthDay" aria-label="September 5, 2025" tabindex="-1">5</span><span class="flatpickr-day nextMonthDay" aria-label="September 6, 2025" tabindex="-1">6</span></div></div></div></div></div><ul id="ui-id-3" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul><div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div></body></html>

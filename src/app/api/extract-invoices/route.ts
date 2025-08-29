@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const result = await processor.processInvoicesForCase(caseId);
 
     // Navigate to Updates tab after processing
-    if (result.success && result.invoiceCount > 0) {
+    if (result.success && (result.invoiceCount > 0 || result.subStatusCount > 0 || result.photoCount > 0 || result.paymentCount > 0)) {
       await processor.navigateToUpdatesTab();
     }
 
@@ -36,7 +36,10 @@ export async function POST(request: NextRequest) {
         success: false, 
         message: `Server error: ${error}`,
         invoiceCount: 0,
-        itemCount: 0
+        itemCount: 0,
+        subStatusCount: 0,
+        photoCount: 0,
+        paymentCount: 0
       },
       { status: 500 }
     );
