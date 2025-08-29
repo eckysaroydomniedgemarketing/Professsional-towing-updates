@@ -10,7 +10,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export class CaseValidationService {
   // Valid order types for processing
-  private static readonly VALID_ORDER_TYPES = ['Involuntary Repo', 'Investigate Repo']
+  private static readonly VALID_ORDER_TYPES = ['Involuntary Repo', 'Investigate Repo', 'Investigate/Repo']
   
   // Valid statuses for processing - imported from status normalizer
   private static readonly VALID_STATUSES = VALID_STATUSES
@@ -203,7 +203,7 @@ export class CaseValidationService {
     const hasUserUpdate = userUpdateCheck.hasUserUpdate
     
     if (!orderTypeValid) {
-      reasons.push(`Invalid order type: ${caseData.order_type}. Must be 'Involuntary Repo' or 'Investigate Repo'`)
+      reasons.push(`Invalid order type: ${caseData.order_type}. Must be 'Involuntary Repo', 'Investigate Repo', or 'Investigate/Repo'`)
     }
     
     if (!statusValid) {
