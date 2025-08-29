@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
@@ -13,9 +13,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { CheckCircle2, AlertCircle } from "lucide-react"
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { CheckCircle2, AlertCircle, AlertTriangle, X } from "lucide-react"
 import { ExclusionKeywordResults, CaseAddress } from "../../types/case.types"
 import { DatabaseKeywordResult } from "../../services/keyword-check.service"
+import { validateAgentUpdateAddress } from "../../utils/address-validation"
 
 interface CaseUpdate {
   id?: string
@@ -33,6 +40,7 @@ interface UpdateHistoryDisplayProps {
   databaseKeywordResult?: DatabaseKeywordResult | null
   automaticMode?: boolean
   onAgentUpdateSelected?: (update: CaseUpdate | null) => void
+  selectedAddressId?: string
 }
 
 export function UpdateHistoryDisplay({ 
@@ -41,12 +49,48 @@ export function UpdateHistoryDisplay({
   keywordAnalysis, 
   databaseKeywordResult,
   automaticMode = false,
-  onAgentUpdateSelected
+  onAgentUpdateSelected,
+  selectedAddressId
 }: UpdateHistoryDisplayProps) {
   const [selectedUpdateId, setSelectedUpdateId] = useState<string | null>(null)
+  const [validationError, setValidationError] = useState<string | null>(null)
   
-  // Check if there are any valid addresses
-  const hasValidAddresses = addresses?.some(addr => addr.address_validity !== false) || false
+  // Check if there are any valid addresses - more lenient check for MVP
+  // Allow checkbox if: no addresses provided OR at least one valid address exists
+  const hasValidAddresses = !addresses || addresses.length === 0 || 
+    addresses.some(addr => addr.address_validity !== false)
+  
+  // Debug logging to identify issues
+  useEffect(() => {
+    console.log('UpdateHistoryDisplay Debug:', {
+      hasAddresses: !!addresses,
+      addressCount: addresses?.length,
+      addressDetails: addresses?.map(a => ({
+        type: a.address_type,
+        validity: a.address_validity,
+        isPrimary: a.is_primary
+      })),
+      hasValidAddresses,
+      selectedAddressId,
+      updatesCount: updates?.length,
+      agentUpdates: updates?.filter(u => {
+        const author = u.update_author?.toLowerCase() || ''
+        return author.includes('agent') || author.includes('(agent)')
+      }).map(u => u.update_author),
+      automaticMode
+    })
+  }, [addresses, updates, hasValidAddresses, selectedAddressId, automaticMode])
+  
+  // Auto-dismiss error after 5 seconds
+  useEffect(() => {
+    if (validationError) {
+      const timer = setTimeout(() => {
+        setValidationError(null)
+      }, 5000)
+      
+      return () => clearTimeout(timer)
+    }
+  }, [validationError])
   
   if (!updates || updates.length === 0) {
     return null
@@ -55,19 +99,46 @@ export function UpdateHistoryDisplay({
   // Updates are already the 10 most recent from service (ordered by update_date DESC)
   const recentUpdates = updates
   
-  // Check if update is an agent update
+  // Check if update is an agent update - more robust check
   const isAgentUpdate = (update: CaseUpdate) => {
-    return update.update_author?.toLowerCase().includes('agent') || false
+    if (!update.update_author) return false
+    const author = update.update_author.toLowerCase()
+    // Check for various agent patterns: "agent", "(agent)", "agent)", etc.
+    return author.includes('agent') || author.includes('(agent)') || author.includes('agent)')
   }
   
   // Handle checkbox change
   const handleCheckboxChange = (update: CaseUpdate, checked: boolean) => {
     if (automaticMode) return // Disabled in automatic mode
     
+    // Clear any previous error when user interacts with any checkbox
+    setValidationError(null)
+    
     if (checked) {
+      // Validate address if one is selected
+      if (selectedAddressId && update.details) {
+        const selectedAddress = addresses?.find(a => a.id === selectedAddressId)
+        if (selectedAddress?.full_address) {
+          const validation = validateAgentUpdateAddress(
+            update.details,
+            selectedAddress.full_address
+          )
+          
+          if (!validation.isValid && validation.extractedAddress) {
+            // Show error and don't select the update
+            setValidationError(validation.message || `Selected update is for a different address. Please select an update for "${selectedAddress.full_address}"`)
+            setSelectedUpdateId(null)
+            onAgentUpdateSelected?.(null)
+            return
+          }
+        }
+      }
+      
+      // Select the update (validation passed)
       setSelectedUpdateId(update.id || null)
       onAgentUpdateSelected?.(update)
     } else {
+      // Unchecking
       setSelectedUpdateId(null)
       onAgentUpdateSelected?.(null)
     }
@@ -115,6 +186,22 @@ export function UpdateHistoryDisplay({
       </div>
       <Separator />
       
+      {validationError && (
+        <Alert variant="destructive" className="relative">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Address Mismatch</AlertTitle>
+          <AlertDescription className="pr-8">{validationError}</AlertDescription>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-2 right-2 h-6 w-6"
+            onClick={() => setValidationError(null)}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </Alert>
+      )}
+      
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Recent 10 Updates Analyzed</CardTitle>
@@ -139,6 +226,18 @@ export function UpdateHistoryDisplay({
                 const keywordFound = update.details ? updateHasKeywords(update.details) : false
                 const updateNumber = index + 1
                 const isAgent = isAgentUpdate(update)
+                
+                // Debug log for first agent update
+                if (index === 0 && isAgent) {
+                  console.log('First agent update checkbox check:', {
+                    updateNumber,
+                    author: update.update_author,
+                    isAgent,
+                    hasValidAddresses,
+                    shouldShowCheckbox: isAgent && hasValidAddresses,
+                    automaticMode
+                  })
+                }
                 
                 return (
                   <TableRow key={update.id || index}>

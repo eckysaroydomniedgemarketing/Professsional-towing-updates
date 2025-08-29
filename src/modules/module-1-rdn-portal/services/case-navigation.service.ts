@@ -26,7 +26,7 @@ export class CaseNavigationService {
       }
     }
     
-    const result = await this.navigationManager.navigateToSpecificCase(page, caseId)
+    const result = await this.navigationManager.navigateToSpecificCase(page, caseId, true)
     if (result.success) {
       const updatedState = { ...state }
       updatedState.currentStep = NavigationStep.CASE_DETAIL

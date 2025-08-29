@@ -18,7 +18,7 @@ export class InvoiceProcessorService {
     this.extractorService = new InvoiceExtractorService(page);
     this.storageService = new InvoiceStorageService();
     this.photosExtractorService = new VehiclePhotosExtractorService(page);
-    this.photosStorageService = new VehiclePhotosStorageService();
+    this.photosStorageService = new VehiclePhotosStorageService(page); // Pass page for downloader
     this.paymentsExtractorService = new AdjusterPaymentsExtractorService(page);
     this.paymentsStorageService = new AdjusterPaymentsStorageService();
   }
@@ -70,19 +70,35 @@ export class InvoiceProcessorService {
         };
       }
 
-      // Process vehicle photos
+      // Process vehicle photos - TEMPORARILY COMMENTED OUT
       let photoCount = 0;
+      console.log('Vehicle photos processing temporarily disabled');
+      
+      /*
+      console.log('Processing vehicle photos...');
       const photosResult = await this.photosExtractorService.processVehiclePhotos(caseId);
+      
       if (photosResult.success && photosResult.photos.length > 0) {
+        console.log(`Found ${photosResult.photos.length} photos to process`);
         const photoStoreSuccess = await this.photosStorageService.storeVehiclePhotos(caseId, photosResult.photos);
         if (photoStoreSuccess) {
           photoCount = photosResult.photos.length;
-          console.log(`Stored ${photoCount} vehicle photos`);
+          console.log(`Successfully processed and stored ${photoCount} vehicle photos`);
+        } else {
+          console.log('Failed to store some or all vehicle photos');
         }
+      } else if (!photosResult.tabFound) {
+        console.log('Photos/Docs tab not found for this case');
+      } else {
+        console.log('No photos found in Photos/Docs tab');
       }
+      */
 
-      // Process adjuster payments (only if tab exists)
+      // Process adjuster payments - TEMPORARILY COMMENTED OUT
       let paymentCount = 0;
+      console.log('Adjuster payments processing temporarily disabled');
+      
+      /*
       const paymentsResult = await this.paymentsExtractorService.processAdjusterPayments(caseId);
       if (paymentsResult.success && paymentsResult.tabFound && paymentsResult.payments.length > 0) {
         const paymentStoreSuccess = await this.paymentsStorageService.storeAdjusterPayments(caseId, paymentsResult.payments);
@@ -93,6 +109,7 @@ export class InvoiceProcessorService {
       } else if (!paymentsResult.tabFound) {
         console.log('Pay Adjuster tab not available for this case');
       }
+      */
 
       return {
         success: true,

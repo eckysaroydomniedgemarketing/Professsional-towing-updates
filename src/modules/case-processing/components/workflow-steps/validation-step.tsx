@@ -13,6 +13,7 @@ import { UpdateHistoryDisplay } from "./update-history-display"
 import { ValidationOrderStatus } from "../validation/validation-order-status"
 import { ValidationZipCode } from "../validation/validation-zipcode"
 import { ValidationKeywordAnalysis } from "../validation/validation-keyword-analysis"
+import { findAddressUsedInLastUpdate, selectRandomAddressExcludingLast } from "../../utils/address-validation"
 
 // Import new sections
 import { AgentUpdateSection } from "../validation-sections/agent-update-section"
@@ -46,6 +47,16 @@ export function ValidationStep({
 }: ValidationStepProps) {
   // Track selected agent update
   const [selectedAgentUpdate, setSelectedAgentUpdate] = useState<any>(null)
+  // Track selected address - exclude last used and randomly select
+  const [selectedAddressId, setSelectedAddressId] = useState<string>(() => {
+    if (!caseData?.addresses || !caseData?.updates) return ''
+    
+    // Find address used in last update
+    const lastUsedAddress = findAddressUsedInLastUpdate(caseData.updates)
+    
+    // Select random address excluding the last used one
+    return selectRandomAddressExcludingLast(caseData.addresses, lastUsedAddress)
+  })
   
   // Use custom hooks
   const { validationResult, isLoading, showClientExclusion } = useValidationLogic(
@@ -262,6 +273,7 @@ export function ValidationStep({
                 databaseKeywordResult={databaseKeywordResult}
                 automaticMode={automaticMode}
                 onAgentUpdateSelected={setSelectedAgentUpdate}
+                selectedAddressId={selectedAddressId}
               />
             )}
 

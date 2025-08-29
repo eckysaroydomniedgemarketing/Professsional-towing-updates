@@ -1,14 +1,30 @@
 import { createClient } from '@supabase/supabase-js';
 import { VehiclePhoto } from './vehicle-photos-extractor.service';
+import { VehiclePhotosDownloaderService } from './vehicle-photos-downloader.service';
+import { Page } from 'playwright';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// Use service role key for storage operations if available (bypasses RLS)
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 export class VehiclePhotosStorageService {
   private supabase;
+  private storageSupabase;
+  private downloaderService?: VehiclePhotosDownloaderService;
 
-  constructor() {
-    this.supabase = createClient(supabaseUrl, supabaseKey);
+  constructor(page?: Page) {
+    // Regular client for database operations
+    this.supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
+    // Use service role key for storage if available, otherwise use anon key
+    this.storageSupabase = supabaseServiceKey 
+      ? createClient(supabaseUrl, supabaseServiceKey)
+      : this.supabase;
+    
+    if (page) {
+      this.downloaderService = new VehiclePhotosDownloaderService(page);
+    }
   }
 
   async storeVehiclePhotos(caseId: string, photos: VehiclePhoto[]): Promise<boolean> {
@@ -18,29 +34,97 @@ export class VehiclePhotosStorageService {
         return true;
       }
 
-      // Prepare data for insertion
-      const dataToInsert = photos.map(photo => ({
-        case_id: caseId,
-        photo_name: photo.photoName,
-        rdn_photo_url: photo.rdnPhotoUrl || null,
-        is_present: photo.isPresent,
-        upload_date: new Date().toISOString()
-      }));
-
       // Delete existing photos for this case to avoid duplicates
       await this.deleteVehiclePhotos(caseId);
 
-      // Insert new photo records
-      const { data, error } = await this.supabase
-        .from('case_vehicle_photos')
-        .insert(dataToInsert);
-
-      if (error) {
-        console.error('Error storing vehicle photos:', error);
-        return false;
+      // Process each photo: download and upload to storage
+      for (const photo of photos) {
+        try {
+          let storageUrl = null;
+          
+          // If we have a downloader service and RDN URL, download and upload the photo
+          if (this.downloaderService && photo.rdnPhotoUrl) {
+            console.log(`Processing photo: ${photo.photoName}`);
+            
+            // Download the photo from RDN
+            const downloadResult = await this.downloaderService.downloadPhoto(
+              photo.rdnPhotoUrl, 
+              photo.photoName
+            );
+            
+            if (downloadResult.success && downloadResult.photoBlob) {
+              // Upload to Supabase storage
+              storageUrl = await this.uploadPhotoToStorage(
+                caseId, 
+                photo.photoName, 
+                downloadResult.photoBlob
+              );
+              
+              if (storageUrl) {
+                console.log(`Successfully uploaded ${photo.photoName} to storage`);
+              } else {
+                console.log(`Failed to upload ${photo.photoName} to storage`);
+              }
+            } else {
+              console.log(`Failed to download ${photo.photoName}: ${downloadResult.error}`);
+            }
+          }
+          
+          // Insert photo record with storage URL if available
+          const { error } = await this.supabase
+            .from('case_vehicle_photos')
+            .insert({
+              case_id: caseId,
+              photo_name: photo.photoName,
+              rdn_photo_url: photo.rdnPhotoUrl || null,
+              storage_bucket_url: storageUrl,
+              is_present: photo.isPresent,
+              upload_date: new Date().toISOString(),
+              mime_type: storageUrl ? this.getMimeType(photo.photoName) : null
+            });
+          
+          if (error) {
+            // Check if it's a foreign key constraint error
+            if (error.code === '23503' && error.message?.includes('case_updates')) {
+              console.error(`Case ${caseId} doesn't exist in case_updates table. Skipping photo storage.`);
+              // Try to create the case_updates record with a default status
+              const { error: insertError } = await this.supabase
+                .from('case_updates')
+                .insert({ case_id: caseId, status: 'pending' })
+                .select()
+                .single();
+              
+              if (!insertError) {
+                // Retry photo record insertion
+                const { error: retryError } = await this.supabase
+                  .from('case_vehicle_photos')
+                  .insert({
+                    case_id: caseId,
+                    photo_name: photo.photoName,
+                    rdn_photo_url: photo.rdnPhotoUrl || null,
+                    storage_bucket_url: storageUrl,
+                    is_present: photo.isPresent,
+                    upload_date: new Date().toISOString(),
+                    mime_type: storageUrl ? this.getMimeType(photo.photoName) : null
+                  });
+                
+                if (retryError) {
+                  console.error(`Retry failed for ${photo.photoName}:`, retryError);
+                } else {
+                  console.log(`Successfully stored photo record for ${photo.photoName} after creating case_updates entry`);
+                }
+              }
+            } else {
+              console.error(`Error storing photo record for ${photo.photoName}:`, error);
+            }
+          }
+        } catch (photoError) {
+          console.error(`Error processing photo ${photo.photoName}:`, photoError);
+          // Continue with next photo even if one fails
+        }
       }
 
-      console.log(`Stored ${photos.length} photos for case ${caseId}`);
+      console.log(`Processed ${photos.length} photos for case ${caseId}`);
       return true;
     } catch (error) {
       console.error('Error in storeVehiclePhotos:', error);
@@ -52,24 +136,40 @@ export class VehiclePhotosStorageService {
     try {
       const fileName = `${caseId}/${photoName}`;
       
-      // Upload to Supabase storage
-      const { data, error } = await this.supabase.storage
+      // Convert Blob to ArrayBuffer for Supabase
+      let uploadData: ArrayBuffer | Blob = photoBlob;
+      
+      // If it's our custom Blob-like object, use the arrayBuffer
+      if (!photoBlob.constructor.name.includes('Blob') && photoBlob.arrayBuffer) {
+        uploadData = await photoBlob.arrayBuffer();
+      }
+      
+      // Upload to Supabase storage using the storage-specific client (with service role if available)
+      const { data, error } = await this.storageSupabase.storage
         .from('vehicle-photos')
-        .upload(fileName, photoBlob, {
-          contentType: photoBlob.type,
+        .upload(fileName, uploadData, {
+          contentType: photoBlob.type || 'image/jpeg',
           upsert: true
         });
 
       if (error) {
         console.error('Error uploading photo to storage:', error);
+        // Log more details for debugging
+        console.error('Upload details:', {
+          bucket: 'vehicle-photos',
+          fileName,
+          contentType: photoBlob.type || 'image/jpeg',
+          hasServiceKey: !!supabaseServiceKey
+        });
         return null;
       }
 
       // Get public URL
-      const { data: { publicUrl } } = this.supabase.storage
+      const { data: { publicUrl } } = this.storageSupabase.storage
         .from('vehicle-photos')
         .getPublicUrl(fileName);
 
+      console.log(`Photo uploaded successfully: ${fileName}`);
       return publicUrl;
     } catch (error) {
       console.error('Error in uploadPhotoToStorage:', error);
@@ -77,28 +177,6 @@ export class VehiclePhotosStorageService {
     }
   }
 
-  async updatePhotoWithStorageUrl(caseId: string, photoName: string, storageUrl: string): Promise<boolean> {
-    try {
-      const { error } = await this.supabase
-        .from('case_vehicle_photos')
-        .update({ 
-          storage_bucket_url: storageUrl,
-          mime_type: this.getMimeType(photoName)
-        })
-        .eq('case_id', caseId)
-        .eq('photo_name', photoName);
-
-      if (error) {
-        console.error('Error updating photo with storage URL:', error);
-        return false;
-      }
-
-      return true;
-    } catch (error) {
-      console.error('Error in updatePhotoWithStorageUrl:', error);
-      return false;
-    }
-  }
 
   async getVehiclePhotos(caseId: string) {
     try {

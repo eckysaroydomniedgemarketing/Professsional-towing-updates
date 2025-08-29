@@ -43,56 +43,88 @@ export class VehiclePhotosExtractorService {
     try {
       const photos: VehiclePhoto[] = [];
       
-      // Look for photo elements in various possible containers
-      // Try to find uploaded files list
-      const photoElements = await this.page.locator('[id*="uploaded"]').all();
+      // Look for image thumbnails with onclick handlers (common pattern in RDN)
+      const imageThumbnails = await this.page.locator('img.ImageThumbnail').all();
       
-      if (photoElements.length === 0) {
-        // Try alternative selectors for photos
-        const alternativePhotos = await this.page.locator('div:has-text(".jpg"), div:has-text(".png"), div:has-text(".jpeg")').all();
+      for (const thumbnail of imageThumbnails) {
+        try {
+          // Get the image source URL
+          const src = await thumbnail.getAttribute('src');
+          if (!src) continue;
+          
+          // Extract photo name from URL or parent element
+          const parentLink = await thumbnail.evaluateHandle(el => el.closest('a'));
+          const onclickAttr = await parentLink.evaluate((el: any) => el?.getAttribute('onclick'));
+          
+          let photoName = 'photo_' + Date.now();
+          let rdnPhotoUrl = src;
+          
+          // Parse onclick to get better photo info
+          if (onclickAttr && onclickAttr.includes('displayFullImage')) {
+            const match = onclickAttr.match(/displayFullImage\('([^']+)',\s*\d+,\s*'([^']+)'\)/);
+            if (match) {
+              rdnPhotoUrl = match[1];
+              // Extract filename from URL
+              const urlParts = rdnPhotoUrl.split('/');
+              photoName = urlParts[urlParts.length - 1] || photoName;
+            }
+          }
+          
+          // Alternative: extract from src URL
+          if (photoName.startsWith('photo_') && src.includes('/name/')) {
+            const nameMatch = src.match(/\/name\/([^\/]+)/);
+            if (nameMatch) {
+              photoName = nameMatch[1];
+            }
+          }
+          
+          photos.push({
+            photoName,
+            rdnPhotoUrl,
+            isPresent: true
+          });
+        } catch (err) {
+          console.log('Error processing thumbnail:', err);
+        }
+      }
+      
+      // Fallback: Look for links with photo URLs
+      if (photos.length === 0) {
+        const photoLinks = await this.page.locator('a[onclick*="displayFullImage"], img[src*="/rdn.php/photo/"]').all();
         
-        for (const element of alternativePhotos) {
-          const text = await element.textContent();
-          if (text && (text.includes('.jpg') || text.includes('.png') || text.includes('.jpeg'))) {
-            photos.push({
-              photoName: text.trim(),
-              isPresent: true
-            });
-          }
-        }
-      } else {
-        // Extract from found elements
-        for (const element of photoElements) {
-          const photoText = await element.textContent();
-          if (photoText) {
-            const cleanName = photoText.trim().replace(/\s+\(.*?\)/, ''); // Remove size info if present
-            photos.push({
-              photoName: cleanName,
-              isPresent: true
-            });
-          }
-        }
-      }
-
-      // Try to extract photo URLs if available
-      const imageLinks = await this.page.locator('a[href*="/photos/"], a[href*="/images/"]').all();
-      for (const link of imageLinks) {
-        const href = await link.getAttribute('href');
-        const text = await link.textContent();
-        if (href && text) {
-          const existingPhoto = photos.find(p => text.includes(p.photoName));
-          if (existingPhoto) {
-            existingPhoto.rdnPhotoUrl = href;
-          } else {
-            photos.push({
-              photoName: text.trim(),
-              rdnPhotoUrl: href,
-              isPresent: true
-            });
+        for (const element of photoLinks) {
+          try {
+            let photoUrl = '';
+            let photoName = '';
+            
+            if (await element.evaluate(el => el.tagName === 'IMG')) {
+              photoUrl = await element.getAttribute('src') || '';
+            } else {
+              const onclick = await element.getAttribute('onclick') || '';
+              const match = onclick.match(/displayFullImage\('([^']+)'/);
+              if (match) {
+                photoUrl = match[1];
+              }
+            }
+            
+            if (photoUrl) {
+              // Extract name from URL
+              const urlParts = photoUrl.split('/');
+              photoName = urlParts[urlParts.length - 1] || `photo_${photos.length + 1}`;
+              
+              photos.push({
+                photoName,
+                rdnPhotoUrl: photoUrl,
+                isPresent: true
+              });
+            }
+          } catch (err) {
+            console.log('Error processing photo link:', err);
           }
         }
       }
 
+      console.log(`Extracted ${photos.length} photo URLs from Photos/Docs tab`);
       return photos;
     } catch (error) {
       console.error('Error extracting photo data:', error);

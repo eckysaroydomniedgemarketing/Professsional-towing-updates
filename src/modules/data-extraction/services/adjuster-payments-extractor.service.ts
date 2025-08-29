@@ -75,31 +75,50 @@ export class AdjusterPaymentsExtractorService {
       for (const row of rows) {
         const cells = await row.locator('td').all();
         
-        if (cells.length >= 5) {
-          // Extract payment ID from first cell
-          const paymentIdText = await cells[0].textContent();
-          const paymentId = paymentIdText?.replace('#', '').trim() || '';
+        if (cells.length >= 6) {
+          // Based on actual HTML structure:
+          // Cell 0: Date (08/27/2025)
+          // Cell 1: Adjuster Name
+          // Cell 2: Payment Type (if exists)
+          // Cell 3: Date Paid Status ("unpaid" or date)
+          // Cell 4: Check Number
+          // Cell 5: Amount
           
-          // Extract adjuster name from second cell (has id like ret_adjuster_21249634)
-          const adjusterName = await cells[1].textContent();
-          
-          // Extract amount from third cell
-          const amountText = await cells[2].textContent();
-          const amount = this.parseAmount(amountText || '0');
-          
-          // Extract type from fourth cell
-          const paymentType = await cells[3].textContent();
-          
-          // Extract date from fifth cell
-          const dateText = await cells[4].textContent();
+          // Extract date from first cell
+          const dateText = await cells[0].textContent();
           const paymentDate = this.parseDate(dateText || '');
           
-          if (paymentId && adjusterName) {
+          // Extract adjuster name from second cell
+          const adjusterName = await cells[1].textContent();
+          
+          // Extract payment type (if column exists)
+          let paymentType = '';
+          if (cells.length > 2) {
+            const typeText = await cells[2].textContent();
+            paymentType = typeText?.trim() || '';
+          }
+          
+          // Extract amount from the 5th or 6th cell (depending on table structure)
+          let amount = 0;
+          if (cells.length === 6) {
+            const amountText = await cells[5].textContent();
+            amount = this.parseAmount(amountText || '0');
+          } else if (cells.length === 7) {
+            // Some tables might have an extra column
+            const amountText = await cells[5].textContent();
+            amount = this.parseAmount(amountText || '0');
+          }
+          
+          // Extract payment ID from the row ID attribute if available
+          const rowId = await row.getAttribute('id');
+          const paymentId = rowId ? rowId.replace('ret_', '') : `payment_${Date.now()}`;
+          
+          if (adjusterName && paymentDate) {
             payments.push({
               paymentId: paymentId,
               adjusterName: adjusterName?.trim() || '',
               amount: amount,
-              paymentType: paymentType?.trim() || '',
+              paymentType: paymentType,
               paymentDate: paymentDate
             });
           }
@@ -121,17 +140,34 @@ export class AdjusterPaymentsExtractorService {
 
   private parseDate(dateText: string): string {
     try {
+      // Handle empty or invalid date strings
+      if (!dateText || dateText.trim() === '' || dateText.toLowerCase() === 'unpaid') {
+        return ''; // Return empty string which will be stored as NULL in database
+      }
+      
       // Expected format: MM/DD/YYYY
-      const parts = dateText.trim().split('/');
+      const trimmedDate = dateText.trim();
+      const parts = trimmedDate.split('/');
+      
       if (parts.length === 3) {
         const month = parts[0].padStart(2, '0');
         const day = parts[1].padStart(2, '0');
         const year = parts[2];
-        return `${year}-${month}-${day}`;
+        
+        // Basic validation
+        const monthNum = parseInt(month);
+        const dayNum = parseInt(day);
+        const yearNum = parseInt(year);
+        
+        if (monthNum >= 1 && monthNum <= 12 && dayNum >= 1 && dayNum <= 31 && yearNum > 1900) {
+          return `${year}-${month}-${day}`;
+        }
       }
-      return dateText.trim();
+      
+      // If date doesn't match expected format, return empty string
+      return '';
     } catch {
-      return dateText.trim();
+      return '';
     }
   }
 

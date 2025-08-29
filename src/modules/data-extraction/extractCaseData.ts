@@ -33,6 +33,8 @@ export async function extractCaseData(
 ): Promise<ExtractionResult> {
   let recordsInserted = 0;
   let sessionId: string | null = null;
+  let photoCount = 0;
+  let paymentCount = 0;
   
   try {
     console.log(`Starting data extraction for case ${caseId}`);
@@ -74,6 +76,18 @@ export async function extractCaseData(
       // Extract case details including Additional Info from My Summary
       caseDetails = await extractCaseDetails(page, caseId);
       
+      // Validate that status was extracted early for invoice processing
+      if (!caseDetails.status) {
+        const errorMsg = `Failed to extract status for case ${caseId}. Cannot proceed with data extraction.`;
+        console.error(errorMsg);
+        throw new Error(errorMsg);
+      }
+      
+      // Insert parent record in case_updates table BEFORE invoice processing (needed for photos FK)
+      console.log(`Creating case update record with status: ${caseDetails.status}`);
+      await insertCaseUpdate(caseId, caseDetails.status);
+      recordsInserted++;
+      
       // Navigate to Invoices tab to extract invoice data
       console.log('Navigating to Invoices tab...');
       const invoiceProcessor = new InvoiceProcessorService(page);
@@ -82,6 +96,17 @@ export async function extractCaseData(
       if (invoiceResult.success) {
         console.log(`Invoice extraction: ${invoiceResult.message}`);
         recordsInserted += invoiceResult.itemCount;
+        
+        // Store and log photo and payment extraction results
+        photoCount = invoiceResult.photoCount || 0;
+        paymentCount = invoiceResult.paymentCount || 0;
+        
+        if (photoCount > 0) {
+          console.log(`Extracted ${photoCount} vehicle photos`);
+        }
+        if (paymentCount > 0) {
+          console.log(`Extracted ${paymentCount} adjuster payments`);
+        }
       } else {
         console.log(`Warning: Invoice extraction failed: ${invoiceResult.message}`);
       }
@@ -108,28 +133,31 @@ export async function extractCaseData(
     } else {
       // Already on Updates tab, just extract case details
       caseDetails = await extractCaseDetails(page, caseId);
+      
+      // Validate that status was extracted
+      if (!caseDetails.status) {
+        const errorMsg = `Failed to extract status for case ${caseId}. Cannot proceed with data extraction.`;
+        console.error(errorMsg);
+        throw new Error(errorMsg);
+      }
+      
+      // Insert parent record in case_updates table (needed for FK constraints)
+      console.log(`Creating case update record with status: ${caseDetails.status}`);
+      await insertCaseUpdate(caseId, caseDetails.status);
+      recordsInserted++;
     }
-    
-    // Validate that status was extracted
-    if (!caseDetails.status) {
-      const errorMsg = `Failed to extract status for case ${caseId}. Cannot proceed with data extraction.`;
-      console.error(errorMsg);
-      throw new Error(errorMsg);
-    }
-    
-    // Step 0: Insert parent record in case_updates table with extracted status
-    console.log(`Creating case update record with status: ${caseDetails.status}`);
-    await insertCaseUpdate(caseId, caseDetails.status);
-    recordsInserted++;
     
     await insertCaseDetails(caseDetails, sessionId);
     recordsInserted++;
     
-    // Step 2: Extract vehicle information with session ID
+    // Step 2: Extract vehicle information - TEMPORARILY COMMENTED OUT
+    console.log('Vehicle information extraction temporarily disabled');
+    /*
     console.log('Extracting vehicle information...');
     const vehicle = await extractVehicle(page, caseId);
     await insertVehicle(vehicle, sessionId);
     recordsInserted++;
+    */
     
     // Step 3: Extract addresses with session ID
     console.log('Extracting addresses...');
@@ -163,7 +191,7 @@ export async function extractCaseData(
       extractionTime: new Date().toISOString()
     });
     
-    console.log(`Data extraction completed. ${recordsInserted} records inserted.`);
+    console.log(`Data extraction completed. ${recordsInserted} records inserted, ${photoCount} photos, ${paymentCount} payments.`);
     
     return {
       success: true,

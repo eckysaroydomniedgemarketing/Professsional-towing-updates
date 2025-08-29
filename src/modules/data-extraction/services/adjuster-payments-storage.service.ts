@@ -25,7 +25,7 @@ export class AdjusterPaymentsStorageService {
         adjuster_name: payment.adjusterName,
         amount: payment.amount,
         payment_type: payment.paymentType,
-        payment_date: payment.paymentDate
+        payment_date: payment.paymentDate || null // Store NULL if date is empty
       }));
 
       // Delete existing payments for this case to avoid duplicates
